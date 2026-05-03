@@ -21,7 +21,7 @@
             --red: #ef4444;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -29,6 +29,7 @@
             color: var(--text);
             min-height: 100vh;
             overflow-x: hidden;
+            padding-bottom: 40px;
         }
 
         body::before {
@@ -36,8 +37,8 @@
             position: fixed;
             inset: 0;
             background: 
-                radial-gradient(ellipse at 15% 20%, rgba(255,107,53,0.07) 0%, transparent 45%),
-                radial-gradient(ellipse at 85% 80%, rgba(0,180,216,0.07) 0%, transparent 45%);
+                radial-gradient(ellipse at 15% 20%, rgba(255,107,53,0.08) 0%, transparent 45%),
+                radial-gradient(ellipse at 85% 80%, rgba(0,180,216,0.06) 0%, transparent 45%);
             pointer-events: none;
             z-index: 0;
         }
@@ -47,53 +48,57 @@
             z-index: 1;
             max-width: 900px;
             margin: 0 auto;
-            padding: 16px 12px 40px;
+            padding: 12px;
         }
 
         /* Header */
         header {
             text-align: center;
-            padding: 24px 8px 28px;
+            padding: 24px 8px 20px;
+            position: relative;
         }
 
         .badge {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
             background: linear-gradient(90deg, var(--primary), var(--accent));
             color: #000;
             font-family: 'Oswald', sans-serif;
             font-weight: 700;
-            font-size: 0.7rem;
-            letter-spacing: 2.5px;
+            font-size: 0.65rem;
+            letter-spacing: 2px;
             text-transform: uppercase;
-            padding: 5px 16px;
-            border-radius: 30px;
-            margin-bottom: 14px;
-            box-shadow: 0 0 18px var(--primary-glow);
+            padding: 4px 14px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+            box-shadow: 0 0 15px var(--primary-glow);
         }
 
         header h1 {
             font-family: 'Oswald', sans-serif;
-            font-size: clamp(1.8rem, 6vw, 2.8rem);
+            font-size: clamp(1.8rem, 7vw, 2.6rem);
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            background: linear-gradient(135deg, #fff 30%, var(--accent), var(--primary));
+            letter-spacing: 1.5px;
+            background: linear-gradient(135deg, #fff 20%, var(--accent), var(--primary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            line-height: 1.05;
+            line-height: 1.1;
         }
 
         header p {
             color: var(--text-dim);
-            margin-top: 8px;
-            font-size: 0.9rem;
+            margin-top: 6px;
+            font-size: 0.85rem;
+            font-weight: 400;
         }
 
         .divider {
-            width: 60px; height: 3px;
+            width: 50px; height: 3px;
             background: linear-gradient(90deg, var(--primary), var(--accent));
-            margin: 16px auto 0;
+            margin: 14px auto 0;
             border-radius: 2px;
         }
 
@@ -110,12 +115,12 @@
         }
 
         .section-icon {
-            width: 38px; height: 38px;
-            border-radius: 10px;
+            width: 34px; height: 34px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             flex-shrink: 0;
         }
 
@@ -124,10 +129,10 @@
 
         .section-head h2 {
             font-family: 'Oswald', sans-serif;
-            font-size: 1.25rem;
+            font-size: 1.15rem;
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.8px;
         }
 
         .section-head h2 span { color: var(--accent); }
@@ -136,10 +141,12 @@
             margin-left: auto;
             background: var(--bg-card);
             border: 1px solid var(--border);
-            padding: 3px 10px;
-            border-radius: 14px;
-            font-size: 0.75rem;
+            padding: 3px 9px;
+            border-radius: 12px;
+            font-size: 0.7rem;
             color: var(--text-dim);
+            font-family: 'Oswald', sans-serif;
+            letter-spacing: 0.5px;
         }
 
         /* Loading */
@@ -147,12 +154,12 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 36px 12px;
-            gap: 14px;
+            padding: 30px 12px;
+            gap: 12px;
         }
 
         .spinner {
-            width: 40px; height: 40px;
+            width: 36px; height: 36px;
             border: 3px solid var(--border);
             border-top-color: var(--primary);
             border-radius: 50%;
@@ -161,7 +168,7 @@
 
         @keyframes rotate { to { transform: rotate(360deg); } }
 
-        .loader-text { color: var(--text-dim); font-size: 0.85rem; }
+        .loader-text { color: var(--text-dim); font-size: 0.8rem; }
 
         /* Ranking Table */
         .rank-wrap {
@@ -170,22 +177,22 @@
             border: 1px solid var(--border);
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
         }
 
         .rank-table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 320px;
+            min-width: 340px;
             font-size: 0.85rem;
         }
 
         .rank-table thead th {
-            background: rgba(255,107,53,0.1);
+            background: rgba(255,107,53,0.12);
             padding: 11px 10px;
             font-family: 'Oswald', sans-serif;
             font-weight: 600;
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             text-transform: uppercase;
             letter-spacing: 0.8px;
             text-align: center;
@@ -200,10 +207,10 @@
 
         .rank-table tbody tr {
             border-bottom: 1px solid var(--border);
-            transition: background 0.15s;
+            transition: background 0.2s;
         }
 
-        .rank-table tbody tr:hover { background: rgba(255,107,53,0.04); }
+        .rank-table tbody tr:hover { background: rgba(255,107,53,0.05); }
         .rank-table tbody tr:last-child { border-bottom: none; }
 
         .rank-table td {
@@ -232,7 +239,7 @@
             font-size: 0.78rem;
         }
 
-        .r1 { background: linear-gradient(135deg, #ffd700, #ffaa00); color: #000; box-shadow: 0 0 8px rgba(255,215,0,0.5); }
+        .r1 { background: linear-gradient(135deg, #ffd700, #ffaa00); color: #000; box-shadow: 0 0 8px rgba(255,215,0,0.4); }
         .r2 { background: linear-gradient(135deg, #c0c0c0, #8a8a8a); color: #000; }
         .r3 { background: linear-gradient(135deg, #cd7f32, #a05a18); color: #fff; }
         .r0 { background: var(--bg-card-hover); color: var(--text-dim); }
@@ -248,19 +255,19 @@
             border-radius: 14px;
             border: 1px solid var(--border);
             overflow: hidden;
-            transition: all 0.25s ease;
-            animation: fadeUp 0.45s ease forwards;
+            transition: all 0.2s ease;
+            animation: fadeUp 0.4s ease forwards;
             opacity: 0;
         }
 
         .match-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 28px rgba(255,107,53,0.12);
-            border-color: rgba(255,107,53,0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255,107,53,0.1);
+            border-color: rgba(255,107,53,0.2);
         }
 
         @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(14px); }
+            from { opacity: 0; transform: translateY(12px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
@@ -268,47 +275,47 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 9px 14px;
-            background: rgba(255,255,255,0.015);
+            padding: 8px 14px;
+            background: rgba(255,255,255,0.02);
             border-bottom: 1px solid var(--border);
         }
 
         .mc-round {
             font-family: 'Oswald', sans-serif;
-            font-size: 0.72rem;
+            font-size: 0.7rem;
             font-weight: 500;
-            letter-spacing: 1px;
+            letter-spacing: 0.8px;
             text-transform: uppercase;
             color: var(--text-dim);
             background: var(--bg-card-hover);
-            padding: 3px 10px;
-            border-radius: 12px;
+            padding: 3px 9px;
+            border-radius: 10px;
             border: 1px solid var(--border);
         }
 
         .mc-status {
-            font-size: 0.68rem;
+            font-size: 0.65rem;
             font-weight: 600;
-            padding: 3px 9px;
-            border-radius: 12px;
+            padding: 3px 8px;
+            border-radius: 10px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.4px;
         }
 
         .mc-status.done {
-            background: rgba(34,197,94,0.15);
+            background: rgba(34,197,94,0.12);
             color: var(--green);
-            border: 1px solid rgba(34,197,94,0.3);
+            border: 1px solid rgba(34,197,94,0.25);
         }
 
         .mc-status.wait {
-            background: rgba(255,209,102,0.15);
+            background: rgba(255,209,102,0.12);
             color: var(--accent);
-            border: 1px solid rgba(255,209,102,0.3);
+            border: 1px solid rgba(255,209,102,0.25);
         }
 
         .mc-body {
-            padding: 16px 12px;
+            padding: 14px 10px;
         }
 
         .mc-teams {
@@ -323,42 +330,42 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 5px;
+            gap: 4px;
             text-align: center;
         }
 
         .mc-team-label {
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 1.2px;
+            letter-spacing: 1px;
             color: var(--text-dim);
         }
 
         .mc-team-names {
             font-weight: 600;
-            font-size: 0.85rem;
-            line-height: 1.45;
+            font-size: 0.82rem;
+            line-height: 1.4;
         }
 
         .mc-team-names .amp {
             display: block;
             color: var(--text-dim);
             font-weight: 400;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
         }
 
         .mc-vs {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
             flex-shrink: 0;
-            min-width: 70px;
+            min-width: 60px;
         }
 
         .vs-circle {
-            width: 36px; height: 36px;
+            width: 34px; height: 34px;
             border-radius: 50%;
             background: linear-gradient(135deg, var(--primary), var(--accent));
             display: flex;
@@ -366,41 +373,41 @@
             justify-content: center;
             font-family: 'Oswald', sans-serif;
             font-weight: 700;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: #000;
         }
 
         .mc-score-row {
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 4px;
         }
 
         .mc-score {
             font-family: 'Oswald', sans-serif;
-            font-size: 1.4rem;
+            font-size: 1.35rem;
             font-weight: 700;
-            min-width: 30px;
+            min-width: 28px;
             text-align: center;
-            padding: 2px 6px;
-            border-radius: 6px;
+            padding: 2px 5px;
+            border-radius: 5px;
         }
 
         .mc-score.s1 {
             color: var(--primary);
             background: rgba(255,107,53,0.12);
-            border: 1px solid rgba(255,107,53,0.25);
+            border: 1px solid rgba(255,107,53,0.2);
         }
 
         .mc-score.s2 {
             color: var(--secondary);
             background: rgba(0,180,216,0.12);
-            border: 1px solid rgba(0,180,216,0.25);
+            border: 1px solid rgba(0,180,216,0.2);
         }
 
         .mc-score.sep {
             color: var(--text-dim);
-            font-size: 1rem;
+            font-size: 0.9rem;
             padding: 0;
             background: none;
             border: none;
@@ -409,31 +416,8 @@
 
         .mc-noscore {
             color: var(--text-dim);
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             font-style: italic;
-        }
-
-        .mc-footer {
-            margin-top: 12px;
-            padding-top: 10px;
-            border-top: 1px solid var(--border);
-            display: flex;
-            justify-content: center;
-            gap: 14px;
-        }
-
-        .mc-wins {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 0.78rem;
-            color: var(--text-dim);
-        }
-
-        .mc-wins strong {
-            color: var(--accent);
-            font-family: 'Oswald', sans-serif;
-            font-size: 1rem;
         }
 
         /* Error */
@@ -441,35 +425,25 @@
             background: rgba(239,68,68,0.08);
             border: 1px solid rgba(239,68,68,0.25);
             border-radius: 12px;
-            padding: 20px 16px;
+            padding: 18px 14px;
             text-align: center;
         }
 
-        .err-box h3 { color: var(--red); margin-bottom: 6px; font-size: 1rem; }
-        .err-box p { color: var(--text-dim); font-size: 0.85rem; }
+        .err-box h3 { color: var(--red); margin-bottom: 6px; font-size: 0.95rem; }
+        .err-box p { color: var(--text-dim); font-size: 0.8rem; }
 
         /* Footer */
         footer {
             text-align: center;
-            padding: 30px 12px 10px;
+            padding: 24px 10px;
             color: var(--text-dim);
-            font-size: 0.78rem;
+            font-size: 0.72rem;
         }
 
         /* Scrollbar */
-        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: var(--bg-card-hover); border-radius: 3px; }
-
-        /* Responsive tweaks */
-        @media (max-width: 420px) {
-            .mc-team-names { font-size: 0.8rem; }
-            .mc-score { font-size: 1.25rem; min-width: 26px; }
-            .vs-circle { width: 32px; height: 32px; font-size: 0.7rem; }
-            .mc-vs { min-width: 60px; }
-            .rank-table { font-size: 0.8rem; }
-            .rank-table th, .rank-table td { padding: 9px 6px; }
-        }
+        ::-webkit-scrollbar-thumb { background: var(--bg-card-hover); border-radius: 2px; }
     </style>
 </head>
 <body>
@@ -530,7 +504,7 @@
         const el = document.getElementById('rank-area');
         const t = data.table;
         if (!t || !t.rows || t.rows.length === 0) {
-            el.innerHTML = '<div class="err-box"><h3>Không có dữ liệu</h3></div>';
+            el.innerHTML = '<div class="err-box"><h3>Không có dữ liệu</h3><p>Không tìm thấy bảng xếp hạng.</p></div>';
             return;
         }
         const hdrs = t.cols.map(c => c.label || '');
@@ -559,12 +533,12 @@
         const cnt = document.getElementById('mc-count');
         const t = data.table;
         if (!t || !t.rows || t.rows.length === 0) {
-            el.innerHTML = '<div class="err-box"><h3>Không có dữ liệu</h3></div>';
+            el.innerHTML = '<div class="err-box"><h3>Không có dữ liệu</h3><p>Không tìm thấy lịch thi đấu.</p></div>';
             cnt.textContent = '';
             return;
         }
 
-        // Columns: A=0(round) B=1(t1p1) C=2(t1p2) D=3(t2p1) E=4(t2p2) F=5 G=6(score1) H=7(score2)
+        // Columns: A=0, B=1(t1p1), C=2(t1p2), D=3(t2p1), E=4(t2p2), F=5(score1), G=6(score2)
         let count = 0;
         let h = '<div class="match-grid">';
 
@@ -578,12 +552,12 @@
             const t1p2 = val(row, 2);
             const t2p1 = val(row, 3);
             const t2p2 = val(row, 4);
-            const s1 = val(row, 6);
-            const s2 = val(row, 7);
+            const s1 = val(row, 5);
+            const s2 = val(row, 6);
             const hasScore = s1 !== '' && s2 !== '';
             const stCls = hasScore ? 'done' : 'wait';
             const stTxt = hasScore ? 'Hoàn thành' : 'Chờ đấu';
-            const delay = Math.min(idx * 0.04, 1.5);
+            const delay = Math.min(idx * 0.03, 1.2);
 
             h += `<div class="match-card" style="animation-delay:${delay}s">`;
             h += `<div class="mc-head"><span class="mc-round">${round || 'Trận ' + count}</span><span class="mc-status ${stCls}">${stTxt}</span></div>`;
@@ -613,7 +587,7 @@
         try {
             const [rankRes, matchRes] = await Promise.all([
                 getSheet('danhsachvdv', 'E1:I25'),
-                getSheet('lichthidau', 'A2:H100')
+                getSheet('lichthidau', 'A2:G100')
             ]);
             renderRanking(rankRes);
             renderMatches(matchRes);
