@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pickleball Robin Round</title>
+<title>Pickleball Manager</title>
 
 <style>
 body {
@@ -29,7 +29,7 @@ input, textarea {
 
 button {
   margin-top: 10px;
-  padding: 10px;
+  padding: 12px;
   width: 100%;
   border: none;
   border-radius: 8px;
@@ -39,8 +39,11 @@ button {
   cursor: pointer;
 }
 
-.hidden {
-  display: none;
+.hidden { display: none; }
+
+.status {
+  margin-top: 10px;
+  font-size: 14px;
 }
 </style>
 </head>
@@ -60,13 +63,12 @@ button {
   <div id="mainBox" class="hidden">
     <h2>🏓 Quản lý giải Pickleball</h2>
 
-    <textarea id="players" rows="8" placeholder="Nhập danh sách VĐV (mỗi dòng 1 người)"></textarea>
+    <textarea id="players" rows="10" placeholder="Nhập danh sách VĐV (mỗi dòng 1 người)"></textarea>
 
     <button onclick="savePlayers()">💾 Lưu danh sách</button>
-
     <button onclick="createSchedule()">🔥 Tạo lịch thi đấu</button>
 
-    <p id="status"></p>
+    <div class="status" id="status"></div>
   </div>
 
 </div>
@@ -74,10 +76,9 @@ button {
 <script>
 const PASSWORD = "123";
 
-// 🔗 Apps Script của bạn
 const API_URL = "https://script.google.com/macros/s/AKfycby13pq30wM3eb3RktdlZE_1CVNKsFkFN97UCYDzWUcqEaP2TN5cF6z4YnUfm0iA4SDT8g/exec";
 
-// ===== LOGIN =====
+// LOGIN
 function login() {
   let pass = document.getElementById("pass").value;
 
@@ -89,7 +90,7 @@ function login() {
   }
 }
 
-// ===== LƯU DANH SÁCH =====
+// LƯU DANH SÁCH (A2:A100)
 function savePlayers() {
   let text = document.getElementById("players").value.trim();
 
@@ -100,6 +101,8 @@ function savePlayers() {
 
   let players = text.split("\n").map(x => x.trim()).filter(x => x);
 
+  document.getElementById("status").innerText = "⏳ Đang lưu...";
+
   fetch(API_URL, {
     method: "POST",
     body: JSON.stringify({
@@ -108,16 +111,18 @@ function savePlayers() {
     })
   })
   .then(res => res.json())
-  .then(data => {
-    document.getElementById("status").innerText = "✅ Đã lưu danh sách!";
+  .then(() => {
+    document.getElementById("status").innerText = "✅ Đã lưu danh sách (A2:A100)";
   })
-  .catch(err => {
+  .catch(() => {
     document.getElementById("status").innerText = "❌ Lỗi lưu!";
   });
 }
 
-// ===== TẠO LỊCH =====
+// TẠO LỊCH
 function createSchedule() {
+  document.getElementById("status").innerText = "⏳ Đang tạo lịch...";
+
   fetch(API_URL, {
     method: "POST",
     body: JSON.stringify({
@@ -125,10 +130,10 @@ function createSchedule() {
     })
   })
   .then(res => res.json())
-  .then(data => {
+  .then(() => {
     document.getElementById("status").innerText = "🔥 Đã tạo lịch!";
   })
-  .catch(err => {
+  .catch(() => {
     document.getElementById("status").innerText = "❌ Lỗi tạo lịch!";
   });
 }
