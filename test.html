@@ -1,374 +1,138 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROBIN ROUND PICKLEBALL</title>
-    <link href="https://cdn.jsdelivr.net/npm/@fontsource/roboto@5.1.0/index.css" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #00e676;
-            --primary-dk: #00c853;
-            --accent: #ffd600;
-            --bg-dark: #0a0e17;
-            --bg-card: #111827;
-            --bg-hover: #1a2332;
-            --text-main: #ffffff;
-            --text-sub: #94a3b8;
-            --border: #1e293b;
-            --grad-green: linear-gradient(135deg, #00c853, #00e676, #69f0ae);
-            --grad-gold: linear-gradient(135deg, #ffd600, #ffab00);
-            --shadow: 0 0 30px rgba(0, 230, 118, 0.12);
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Roboto', sans-serif;
-            background: linear-gradient(180deg, #0a0e17 0%, #0d1520 100%);
-            color: var(--text-main);
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-        .bg-fx { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
-        .bg-fx::before {
-            content: ''; position: absolute; top: -10%; left: -10%; width: 50%; height: 50%;
-            background: radial-gradient(circle, rgba(0, 200, 83, 0.06) 0%, transparent 70%);
-            animation: f1 20s ease-in-out infinite;
-        }
-        .bg-fx::after {
-            content: ''; position: absolute; bottom: -10%; right: -10%; width: 50%; height: 50%;
-            background: radial-gradient(circle, rgba(255, 214, 0, 0.04) 0%, transparent 70%);
-            animation: f2 25s ease-in-out infinite;
-        }
-        @keyframes f1 { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(40px, 30px); } }
-        @keyframes f2 { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(-50px, -40px); } }
-        .container { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 0 20px 40px; }
-        header { padding: 30px 0 20px; text-align: center; position: relative; }
-        header::after {
-            content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
-            width: 60%; height: 2px; background: linear-gradient(90deg, transparent, var(--primary), transparent);
-        }
-        .logo-box { display: inline-flex; align-items: center; gap: 16px; margin-bottom: 10px; }
-        .ball {
-            width: 64px; height: 64px; background: var(--grad-green); border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 0 30px rgba(0, 200, 83, 0.35); animation: pulse 2.5s infinite;
-        }
-        @keyframes pulse { 0%, 100% { transform: scale(1); box-shadow: 0 0 30px rgba(0, 200, 83, 0.3); } 50% { transform: scale(1.05); box-shadow: 0 0 50px rgba(0, 200, 83, 0.5); } }
-        .ball svg { width: 36px; height: 36px; fill: #0a0e17; }
-        h1 {
-            font-size: 2.4rem; font-weight: 900; background: var(--grad-green);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            text-transform: uppercase; letter-spacing: 2px; line-height: 1.1;
-        }
-        .sub { font-size: 0.8rem; color: var(--text-sub); letter-spacing: 5px; text-transform: uppercase; margin-top: 5px; }
-        .nav { display: flex; justify-content: center; gap: 12px; margin: 25px 0 20px; flex-wrap: wrap; }
-        .btn {
-            padding: 12px 28px; border: 2px solid var(--border); background: var(--bg-card);
-            color: var(--text-sub); font-size: 0.9rem; font-weight: 700; text-transform: uppercase;
-            letter-spacing: 2px; cursor: pointer; border-radius: 12px; transition: all 0.3s;
-        }
-        .btn:hover { border-color: var(--primary); color: var(--text-main); transform: translateY(-2px); }
-        .btn.on { background: var(--grad-green); border-color: transparent; color: var(--bg-dark); box-shadow: 0 8px 25px rgba(0, 200, 83, 0.25); transform: translateY(-2px); }
-        .panel { display: none; animation: up 0.4s ease; }
-        .panel.on { display: block; }
-        @keyframes up { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-        .head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
-        .ttl { font-size: 1.3rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 10px; }
-        .ttl i { display: inline-block; width: 34px; height: 34px; background: var(--grad-gold); border-radius: 8px; text-align: center; line-height: 34px; font-size: 1.1rem; font-style: normal; }
-        .upd { font-size: 0.75rem; color: var(--text-sub); font-style: italic; }
-        .box { background: var(--bg-card); border-radius: 14px; overflow: hidden; border: 1px solid var(--border); box-shadow: var(--shadow); }
-        .wrap { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; }
-        table th {
-            background: linear-gradient(135deg, #1a2332, #0d1520); padding: 13px 16px;
-            text-align: center; font-weight: 700; text-transform: uppercase; font-size: 0.75rem;
-            color: var(--primary); border-bottom: 2px solid var(--primary); white-space: nowrap;
-        }
-        table tr { border-bottom: 1px solid rgba(30, 41, 59, 0.5); transition: background 0.2s; }
-        table tr:hover { background: var(--bg-hover); }
-        table td { padding: 11px 16px; text-align: center; font-size: 0.88rem; color: var(--text-main); white-space: nowrap; }
-        .rk {
-            display: inline-flex; width: 30px; height: 30px; border-radius: 50%;
-            align-items: center; justify-content: center; font-weight: 800; font-size: 0.78rem;
-        }
-        .rk-1 { background: var(--grad-gold); color: #000; box-shadow: 0 0 15px rgba(255, 214, 0, 0.3); }
-        .rk-2 { background: linear-gradient(135deg, #b0bec5, #90a4ae); color: #000; }
-        .rk-3 { background: linear-gradient(135deg, #cd7f32, #a0522d); color: #fff; }
-        .rk-d { background: var(--bg-hover); color: var(--text-sub); border: 1px solid var(--border); }
-        .pod { display: flex; justify-content: center; align-items: flex-end; gap: 10px; margin-bottom: 20px; padding: 10px 0; }
-        .pi {
-            text-align: center; padding: 12px; border-radius: 12px 12px 0 0; background: var(--bg-card);
-            border: 1px solid var(--border); min-width: 80px; transition: transform 0.3s;
-        }
-        .pi:hover { transform: translateY(-3px); }
-        .p1 { height: 130px; background: linear-gradient(180deg, rgba(255, 214, 0, 0.08), var(--bg-card)); border-color: rgba(255, 214, 0, 0.25); order: 2; }
-        .p2 { height: 105px; background: linear-gradient(180deg, rgba(176, 190, 197, 0.06), var(--bg-card)); border-color: rgba(176, 190, 197, 0.2); order: 1; }
-        .p3 { height: 90px; background: linear-gradient(180deg, rgba(205, 127, 50, 0.06), var(--bg-card)); border-color: rgba(205, 127, 50, 0.2); order: 3; }
-        .pe { font-size: 1.4rem; }
-        .pn { font-weight: 800; font-size: 0.85rem; margin-bottom: 2px; }
-        .pv { font-size: 0.72rem; color: var(--text-sub); }
-        .mc { background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border); margin-bottom: 12px; transition: all 0.3s; }
-        .mc:hover { border-color: rgba(0, 230, 118, 0.3); box-shadow: var(--shadow); transform: translateY(-2px); }
-        .mt { background: linear-gradient(135deg, #1a2332, #0d1520); padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid var(--primary); }
-        .md { font-size: 0.8rem; color: var(--primary); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
-        .mr { background: var(--grad-gold); color: var(--bg-dark); padding: 2px 10px; border-radius: 15px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; }
-        .mb { padding: 16px; display: flex; align-items: center; justify-content: space-between; gap: 15px; flex-wrap: wrap; }
-        .tm { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 130px; }
-        .tr { flex-direction: row-reverse; text-align: right; }
-        .td { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.85rem; flex-shrink: 0; }
-        .th { background: linear-gradient(135deg, #1565c0, #42a5f5); }
-        .ta { background: linear-gradient(135deg, #c62828, #ef5350); }
-        .tn { font-weight: 700; font-size: 0.92rem; }
-        .ts { font-size: 0.72rem; color: var(--text-sub); }
-        .team-score {
-            display: inline-flex; align-items: center; gap: 4px;
-            background: linear-gradient(135deg, rgba(255, 214, 0, 0.2), rgba(255, 171, 0, 0.1));
-            border: 1px solid rgba(255, 214, 0, 0.3);
-            padding: 3px 8px; border-radius: 8px; margin-top: 4px;
-            font-size: 0.8rem; color: var(--accent); font-weight: 800;
-        }
-        .vs { background: var(--grad-green); color: var(--bg-dark); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 0.75rem; flex-shrink: 0; }
-        .mx { padding: 0 16px 12px; display: flex; gap: 16px; flex-wrap: wrap; }
-        .mi { display: flex; align-items: center; gap: 5px; font-size: 0.8rem; color: var(--text-sub); }
-        .ld { display: flex; flex-direction: column; align-items: center; padding: 40px; gap: 15px; }
-        .sp { width: 38px; height: 38px; border: 3px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.7s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .lt { color: var(--text-sub); font-size: 0.82rem; }
-        .er { text-align: center; padding: 30px; color: #ff5252; }
-        .er i { font-size: 2rem; font-style: normal; display: block; margin-bottom: 8px; }
-        footer { text-align: center; padding: 20px 0 5px; border-top: 1px solid var(--border); color: var(--text-sub); font-size: 0.78rem; margin-top: 30px; }
-        footer b { color: var(--primary); }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pickleball Robin Round</title>
+
+<style>
+body {
+  font-family: Arial;
+  background: #0f172a;
+  color: white;
+  text-align: center;
+  padding: 20px;
+}
+
+.container {
+  max-width: 500px;
+  margin: auto;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 8px;
+  border: none;
+}
+
+button {
+  margin-top: 10px;
+  padding: 10px;
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+  background: #22c55e;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}
+</style>
 </head>
+
 <body>
-    <div class="bg-fx"></div>
-    <div class="container">
-        <header>
-            <div class="logo-box">
-                <div class="ball">
-                    <svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="26" fill="none" stroke="#0a0e17" stroke-width="2.5"/><circle cx="32" cy="32" r="7" fill="#0a0e17" opacity="0.7"/><line x1="32" y1="6" x2="32" y2="25" stroke="#0a0e17" stroke-width="2"/><line x1="32" y1="39" x2="32" y2="58" stroke="#0a0e17" stroke-width="2"/><line x1="6" y1="32" x2="25" y2="32" stroke="#0a0e17" stroke-width="2"/><line x1="39" y1="32" x2="58" y2="32" stroke="#0a0e17" stroke-width="2"/></svg>
-                </div>
-                <div>
-                    <h1>MINA MINƠ<br>Robin Round</h1>
-                    <div class="sub">PICKLEBALL</div>
-                </div>
-            </div>
-        </header>
-        <nav class="nav">
-            <button class="btn on" data-t="tab1">🏆 Bảng Xếp Hạng</button>
-            <button class="btn" data-t="tab2">📅 Lịch Đấu</button>
-        </nav>
-        <section id="tab1" class="panel on">
-            <div class="head">
-                <div class="ttl"><i>🏆</i>Bảng Xếp Hạng</div>
-                <div class="upd" id="ur"></div>
-            </div>
-            <div id="cr"><div class="ld"><div class="sp"></div><div class="lt">Đang tải bảng xếp hạng...</div></div></div>
-        </section>
-        <section id="tab2" class="panel">
-            <div class="head">
-                <div class="ttl"><i>📅</i>Lịch Đấu Đội</div>
-                <div class="upd" id="us"></div>
-            </div>
-            <div id="cs"><div class="ld"><div class="sp"></div><div class="lt">Đang tải lịch đấu...</div></div></div>
-        </section>
-        <footer>© 2026 <b>ROBIN ROUND PICKLEBALL</b> — Designed by KARAOKE RITA</footer>
-    </div>
 
-    <script>
-        const SID = '1cDNrI43tQApk12oOB_SjQ6aPMcGbd18ToDqWLlfhD-c';
-        const GVIZ = `https://docs.google.com/spreadsheets/d/${SID}/gviz/tq?tqx=out:csv`;
+<div class="container">
 
-        document.querySelectorAll('.btn').forEach(b => b.addEventListener('click', () => {
-            document.querySelectorAll('.btn').forEach(x => x.classList.remove('on'));
-            document.querySelectorAll('.panel').forEach(x => x.classList.remove('on'));
-            b.classList.add('on');
-            document.getElementById(b.dataset.t).classList.add('on');
-        }));
+  <!-- LOGIN -->
+  <div id="loginBox">
+    <h2>🔐 Đăng nhập</h2>
+    <input type="password" id="pass" placeholder="Nhập mật khẩu">
+    <button onclick="login()">Đăng nhập</button>
+  </div>
 
-        async function fetchData(sheet, range) {
-            const u = `${GVIZ}&sheet=${encodeURIComponent(sheet)}&range=${encodeURIComponent(range)}`;
-            const res = await fetch(u);
-            if (!res.ok) throw new Error(res.status);
-            return parseCSV(await res.text());
-        }
+  <!-- MAIN -->
+  <div id="mainBox" class="hidden">
+    <h2>🏓 Quản lý giải Pickleball</h2>
 
-        function parseCSV(raw) {
-            const R = []; let cell = '', q = false, row = [];
-            for (let i = 0; i < raw.length; i++) {
-                const ch = raw[i], nx = raw[i + 1];
-                if (q) {
-                    if (ch === '"' && nx === '"') { cell += '"'; i++; }
-                    else if (ch === '"') q = false;
-                    else cell += ch;
-                } else {
-                    if (ch === '"') q = true;
-                    else if (ch === ',') { row.push(cell.trim()); cell = ''; }
-                    else if (ch === '\n' || ch === '\r') {
-                        if (ch === '\r' && nx === '\n') i++;
-                        row.push(cell.trim());
-                        if (row.some(v => v !== '')) R.push(row);
-                        row = []; cell = '';
-                    } else cell += ch;
-                }
-            }
-            if (cell || row.length) { row.push(cell.trim()); if (row.some(v => v !== '')) R.push(row); }
-            return R;
-        }
+    <textarea id="players" rows="8" placeholder="Nhập danh sách VĐV (mỗi dòng 1 người)"></textarea>
 
-        // Render Rankings
-        function renderRankings(data) {
-            const el = document.getElementById('cr');
-            if (!data || data.length === 0) { el.innerHTML = '<div class="er"><i>📭</i>Không có dữ liệu</div>'; return; }
-            const dr = data.filter(r => r.some(v => v !== ''));
-            if (!dr.length) { el.innerHTML = '<div class="er"><i>📭</i>Không có dữ liệu</div>'; return; }
+    <button onclick="savePlayers()">💾 Lưu danh sách</button>
 
-            let h = ['Hạng', 'Dữ Liệu'], bodyRows = dr;
-            const fr = dr[0];
-            if (fr.some(v => isNaN(parseFloat(v)) && v && !v.match(/^\d/))) { h = fr; bodyRows = dr.slice(1); }
+    <button onclick="createSchedule()">🔥 Tạo lịch thi đấu</button>
 
-            // Podium
-            let pod = '';
-            if (bodyRows.length >= 3) {
-                const top = [bodyRows[0], bodyRows[1], bodyRows[2]];
-                const order = [{i:1, c:'p2', e:'🥈'}, {i:0, c:'p1', e:'🥇'}, {i:2, c:'p3', e:'🥉'}];
-                pod = '<div class="pod">';
-                order.forEach(x => {
-                    const row = top[x.i];
-                    let nameVal = '', scoreVal = '';
-                    for (let c = 0; c < row.length; c++) {
-                        const v = row[c];
-                        if (isNaN(parseFloat(v)) || !v.match(/^[\d,.]+$/)) { if (!nameVal) nameVal = v; }
-                        else { if (!scoreVal) scoreVal = v; }
-                    }
-                    if (!nameVal) nameVal = row[0] || row[1] || '';
-                    if (!scoreVal) scoreVal = row[1] || row[0] || '';
-                    pod += `<div class="pi ${x.c}"><div class="pe">${x.e}</div><div class="pn">${nameVal}</div><div class="pv">${scoreVal}</div></div>`;
-                });
-                pod += '</div>';
-            }
+    <p id="status"></p>
+  </div>
 
-            // Table
-            let tb = '<div class="box"><div class="wrap"><table><thead><tr><th>#</th>';
-            h.forEach(x => tb += `<th>${x}</th>`);
-            tb += '</tr></thead><tbody>';
-            bodyRows.forEach((row, i) => {
-                const rn = i + 1;
-                const rc = rn === 1 ? 'rk-1' : rn === 2 ? 'rk-2' : rn === 3 ? 'rk-3' : 'rk-d';
-                tb += `<tr><td><span class="rk ${rc}">${rn}</span></td>`;
-                row.forEach(v => tb += `<td>${v || '—'}</td>`);
-                tb += '</tr>';
-            });
-            tb += '</tbody></table></div></div>';
-            el.innerHTML = pod + tb;
-            document.getElementById('ur').textContent = `Cập nhật: ${new Date().toLocaleString('vi-VN')}`;
-        }
+</div>
 
-        // Render Schedule with explicit E (index 4) and F (index 5) scores
-        function renderSchedule(data) {
-            const el = document.getElementById('cs');
-            if (!data || data.length <= 1) { el.innerHTML = '<div class="er"><i>📭</i>Không có dữ liệu</div>'; return; }
-            const h = data[0], bodyRows = data.slice(1).filter(r => r.some(v => v !== ''));
-            if (!bodyRows.length) { el.innerHTML = '<div class="er"><i>📭</i>Không có dữ liệu</div>'; return; }
+<script>
+const PASSWORD = "123";
 
-            // Map columns
-            const fc = k => h.findIndex(x => x.toLowerCase().includes(k));
-            const cd = fc('ngày') >= 0 ? fc('ngày') : fc('date') >= 0 ? fc('date') : fc('thời') >= 0 ? fc('thời') : 0;
-            const cRd = fc('vòng') >= 0 ? fc('vòng') : fc('round') >= 0 ? fc('round') : -1;
-            const c1 = fc('đội 1') >= 0 ? fc('đội 1') : fc('team 1') >= 0 ? fc('team 1') : fc('nhà') >= 0 ? fc('nhà') : 2;
-            const c2 = fc('đội 2') >= 0 ? fc('đội 2') : fc('team 2') >= 0 ? fc('team 2') : fc('khách') >= 0 ? fc('khách') : 3;
-            const cSt = fc('trạng') >= 0 ? fc('trạng') : fc('status') >= 0 ? fc('status') : fc('kết') >= 0 ? fc('kết') : 6;
-            
-            // Explicit column mapping for scores from columns E and F
-            // A=0, B=1, C=2, D=3, E=4, F=5, G=6
-            const cScore1 = 4; // Cột E
-            const cScore2 = 5; // Cột F
+// 🔗 Apps Script của bạn
+const API_URL = "https://script.google.com/macros/s/AKfycbxEIhfIFpojLRXod8UuFkbh0sy1n35CUpffA7r6Sh62rhTMffG4p7t-Jm1f6q5IppK1Hg/exec";
 
-            let cards = '';
-            bodyRows.forEach((row) => {
-                const dt = row[cd] || '';
-                const rd = cRd >= 0 ? (row[cRd] || '') : '';
-                const t1 = c1 >= 0 ? (row[c1] || 'Đội 1') : 'Đội 1';
-                const t2 = c2 >= 0 ? (row[c2] || 'Đội 2') : 'Đội 2';
-                const st = cSt >= 0 ? (row[cSt] || '') : '';
-                
-                // Read scores directly from columns E and F
-                const score1 = row[cScore1] || '-';
-                const score2 = row[cScore2] || '-';
+// ===== LOGIN =====
+function login() {
+  let pass = document.getElementById("pass").value;
 
-                let ds = "";
-                if (dt) { try { const d = new Date(dt); if (!isNaN(d)) ds = d.toLocaleDateString('vi-VN', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' }); } catch(e) {} }
+  if (pass === PASSWORD) {
+    document.getElementById("loginBox").classList.add("hidden");
+    document.getElementById("mainBox").classList.remove("hidden");
+  } else {
+    alert("Sai mật khẩu!");
+  }
+}
 
-                const i1 = t1.substring(0, 2).toUpperCase();
-                const i2 = t2.substring(0, 2).toUpperCase();
+// ===== LƯU DANH SÁCH =====
+function savePlayers() {
+  let text = document.getElementById("players").value.trim();
 
-                let sh = '';
-                if (st) {
-                    const l = st.toLowerCase();
-                    if (l.includes('xong') || l.includes('hoàn') || l.includes('kết')) sh = '<span style="color:var(--primary);font-weight:700">✅ Đã đấu</span>';
-                    else if (l.includes('hủy')) sh = '<span style="color:#ff5252;font-weight:700">❌ Hủy</span>';
-                    else if (l.includes('đang')) sh = '<span style="color:var(--accent);font-weight:700">🔴 Đang đấu</span>';
-                    else sh = '<span style="color:var(--text-sub)">⏳ Đã diễn ra</span>';
-                }
+  if (!text) {
+    alert("Nhập danh sách VĐV!");
+    return;
+  }
 
-                cards += `
-                <div class="mc">
-                    <div class="mt">
-                        <div class="md">${ds || 'Chưa xác định'}</div>
-                        ${rd ? `<div class="mr">${rd}</div>` : ''}
-                    </div>
-                    <div class="mb">
-                        <div class="tm">
-                            <div class="td th">${i1}</div>
-                            <div>
-                                <div class="tn">${t1}</div>
-                                <div class="ts"> </div>
-                                <div class="team-score">⭐ ${score1} </div>
-                            </div>
-                        </div>
-                        <div class="vs">VS</div>
-                        <div class="tm tr">
-                            <div class="td ta">${i2}</div>
-                            <div>
-                                <div class="tn">${t2}</div>
-                                <div class="ts"> </div>
-                                <div class="team-score">⭐ ${score2} </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mx">
-                        ${st ? `<div class="mi">${sh}</div>` : ''}
-                    </div>
-                </div>`;
-            });
-            el.innerHTML = cards;
-            document.getElementById('us').textContent = `Cập nhật: ${new Date().toLocaleString('vi-VN')}`;
-        }
+  let players = text.split("\n").map(x => x.trim()).filter(x => x);
 
-        async function init() {
-            try {
-                const [rankData, schedData] = await Promise.all([
-                    fetchData('BangXepHang', 'K1:L9'),
-                    fetchData('LichDauDoi', 'A1:G15')
-                ]);
-                renderRankings(rankData);
-                renderSchedule(schedData);
-            } catch (e) {
-                console.error('Error:', e);
-                try {
-                    const [rankData, schedData] = await Promise.all([
-                        fetchData('BangXepHang', ''),
-                        fetchData('LichDauDoi', '')
-                    ]);
-                    renderRankings(rankData);
-                    renderSchedule(schedData);
-                } catch (e2) {
-                    document.getElementById('cr').innerHTML = '<div class="er"><i>⚠️</i>Lỗi kết nối Google Sheets</div>';
-                    document.getElementById('cs').innerHTML = '<div class="er"><i>⚠️</i>Lỗi kết nối Google Sheets</div>';
-                }
-            }
-        }
-        init();
-    </script>
+  fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      action: "savePlayers",
+      players: players
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById("status").innerText = "✅ Đã lưu danh sách!";
+  })
+  .catch(err => {
+    document.getElementById("status").innerText = "❌ Lỗi lưu!";
+  });
+}
+
+// ===== TẠO LỊCH =====
+function createSchedule() {
+  fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      action: "createSchedule"
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById("status").innerText = "🔥 Đã tạo lịch!";
+  })
+  .catch(err => {
+    document.getElementById("status").innerText = "❌ Lỗi tạo lịch!";
+  });
+}
+</script>
+
 </body>
 </html>
