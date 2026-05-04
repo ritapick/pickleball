@@ -1,19 +1,4 @@
-
-                        <!DOCTYPE html>
-                        <html lang="en">
-                        <head>
-                            <meta charset="UTF-8">
-                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <style>
-                body {
-                  background-color: white; /* Ensure the iframe has a white background */
-                }
-
-                
-              </style>
-                        </head>
-                        <body>
-                            <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
@@ -24,41 +9,47 @@
 :root { --bg: #0f172a; --card: #1e293b; --text: #e2e8f0; --green: #22c55e; --orange: #f59e0b; --purple: #6366f1; --red: #ef4444; --blue: #0ea5e9; }
 * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
 body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; justify-content: center; padding: 20px; }
-.container { width: 100%; max-width: 480px; display: flex; flex-direction: column; gap: 20px; }
+.container { width: 100%; max-width: 480px; display: flex; flex-direction: column; gap: 20px; position: relative; }
 
 .card { background: var(--card); border-radius: 16px; padding: 20px; border: 1px solid #334155; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
-h1, h2 { text-align: center; }
-h1 { font-size: 24px; margin-bottom: 8px; background: linear-gradient(to right, #4ade80, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-h2 { font-size: 18px; color: #94a3b8; margin-bottom: 15px; }
+h1 { font-size: 24px; text-align: center; margin-bottom: 8px; background: linear-gradient(to right, #4ade80, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+h2 { font-size: 16px; color: #94a3b8; margin-bottom: 12px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
 
 input, textarea { width: 100%; background: #0f172a; border: 1px solid #475569; color: white; padding: 12px; border-radius: 10px; font-size: 15px; margin-bottom: 10px; transition: 0.2s; }
 input:focus, textarea:focus { border-color: #3b82f6; box-shadow: 0 0 0 2px rgba(59,130,246,0.2); }
-textarea { min-height: 150px; font-family: monospace; resize: vertical; }
+textarea { min-height: 180px; font-family: monospace; resize: vertical; line-height: 1.5; }
 
-.btn { width: 100%; padding: 14px; border: none; border-radius: 12px; font-weight: 600; font-size: 15px; cursor: pointer; transition: transform 0.1s, box-shadow 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; color: white; margin-top: 5px; }
+.btn { width: 100%; padding: 14px; border: none; border-radius: 12px; font-weight: 600; font-size: 15px; cursor: pointer; transition: all 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; color: white; margin-top: 5px; position: relative; overflow: hidden; }
 .btn:active { transform: scale(0.98); }
 .btn-green { background: var(--green); box-shadow: 0 4px 12px rgba(34,197,94,0.25); }
 .btn-orange { background: var(--orange); box-shadow: 0 4px 12px rgba(245,158,11,0.25); }
-.btn-purple { background: var(--purple); box-shadow: 0 4px 12px rgba(99,102,241,0.25); }
 .btn-blue { background: var(--blue); box-shadow: 0 4px 12px rgba(14,165,233,0.25); }
 .btn-red { background: var(--red); }
+.btn-purple { background: var(--purple); box-shadow: 0 4px 12px rgba(99,102,241,0.25); }
 
 .hidden { display: none !important; }
+.fade-in { animation: fadeUp 0.4s ease forwards; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-.status { padding: 12px; border-radius: 8px; text-align: center; font-size: 13px; font-weight: 500; margin-top: 10px; }
+.badge { display: inline-block; background: rgba(34,197,94,0.15); color: #4ade80; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; margin-left: auto; }
+
+.status { padding: 10px; border-radius: 8px; text-align: center; font-size: 13px; font-weight: 500; margin-top: 10px; transition: all 0.3s; }
 .status.loading { background: rgba(245,158,11,0.1); color: #fcd34d; }
 .status.success { background: rgba(34,197,94,0.1); color: #86efac; }
 .status.error { background: rgba(239,68,68,0.1); color: #fca5a5; }
-.badge { display: inline-block; background: rgba(34,197,94,0.2); color: #4ade80; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; margin-bottom: 10px; }
-
-.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(4px); display: flex; justify-content: center; align-items: center; z-index: 100; }
-.modal { background: var(--card); padding: 24px; border-radius: 16px; width: 90%; max-width: 350px; text-align: center; border: 1px solid #475569; }
-.modal p { color: #94a3b8; margin: 10px 0 20px; font-size: 14px; }
-.btn-group { display: flex; gap: 10px; }
-.btn-group button { flex: 1; }
 
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-.loader { width: 18px; height: 18px; border: 2px solid white; border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite; display: inline-block; }
+.loader { width: 16px; height: 16px; border: 2px solid white; border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite; display: inline-block; margin-right: 6px; }
+
+/* Floating Action Button for New Game */
+.fab-container { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 50; display: flex; gap: 10px; width: 100%; max-width: 480px; padding: 0 16px; }
+.fab-btn { flex: 1; padding: 16px; border: none; border-radius: 16px; font-weight: 700; font-size: 15px; cursor: pointer; transition: all 0.2s; box-shadow: 0 8px 24px rgba(0,0,0,0.4); display: flex; justify-content: center; align-items: center; gap: 8px; color: white; }
+.fab-btn:active { transform: scale(0.96); }
+.fab-new { background: linear-gradient(135deg, #22c55e, #16a34a); }
+.fab-score { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+
+.toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: #1e293b; border: 1px solid #334155; color: #e2e8f0; padding: 12px 20px; border-radius: 12px; font-size: 14px; font-weight: 500; z-index: 100; box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; align-items: center; gap: 8px; }
+.toast.show { transform: translateX(-50%) translateY(0); }
 </style>
 </head>
 <body>
@@ -66,64 +57,60 @@ textarea { min-height: 150px; font-family: monospace; resize: vertical; }
 <div class="container">
   
   <!-- LOGIN SCREEN -->
-  <div id="screenLogin" class="card">
+  <div id="screenLogin" class="card fade-in">
     <div style="text-align:center; font-size:40px; margin-bottom:10px;">🏓</div>
     <h1>Pickleball Manager</h1>
-    <p style="text-align:center; color:#64748b; font-size:13px; margin-bottom:20px;">Nhập mật khẩu để quản lý giải đấu</p>
+    <p style="text-align:center; color:#64748b; font-size:13px; margin-bottom:20px;">Nhập mật khẩu quản trị để tiếp tục</p>
     <input type="password" id="passInput" placeholder="Mật khẩu..." onkeydown="if(event.key==='Enter')login()">
     <button class="btn btn-green" onclick="login()">🔓 Đăng nhập</button>
     <div id="loginMsg" class="status error hidden" style="margin-top:12px"></div>
   </div>
 
   <!-- MAIN DASHBOARD -->
-  <div id="screenMain" class="hidden">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-      <h1 style="margin:0; font-size:20px;">🏓 Dashboard</h1>
-      <button class="btn btn-red" style="width:auto; padding:8px 12px; font-size:12px;" onclick="logout()">Đăng xuất</button>
+  <div id="screenMain" class="hidden fade-in">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span style="font-size:24px;">🏓</span>
+        <h1 style="margin:0; font-size:20px; text-align:left;">Dashboard</h1>
+      </div>
+      <button class="btn btn-red" style="width:auto; padding:6px 12px; font-size:12px; margin:0;" onclick="logout()">Đăng xuất</button>
     </div>
 
-    <!-- DANH SÁCH VĐV -->
     <div class="card">
-      <h2>📋 Danh sách vận động viên</h2>
-      <div id="countBadge" class="badge hidden">0 VĐV</div>
-      <textarea id="playersList" placeholder="Đang tải danh sách..."></textarea>
-      <button class="btn btn-purple" onclick="savePlayers()">💾 Lưu danh sách (A2:A)</button>
+      <h2>📋 Danh sách vận động viên <span id="countBadge" class="badge hidden">0 VĐV</span></h2>
+      <textarea id="playersList" placeholder="Đang tải danh sách..." oninput="checkChanges()"></textarea>
+      <div id="statusIndicator" class="status loading hidden">Đang tải dữ liệu...</div>
     </div>
-
-    <!-- HÀNH ĐỘNG -->
-    <div class="card">
-      <h2>⚡ Điều khiển</h2>
-      <button class="btn btn-orange" onclick="showNewGameModal()" style="margin-bottom:8px;">🚀 Tạo Game Mới (Lưu & Lịch)</button>
-      <button class="btn btn-green" onclick="createSchedule()" style="margin-bottom:8px;">📅 Tạo lại lịch thi đấu</button>
-      <button class="btn btn-blue" onclick="goScore()" style="margin-bottom:8px;">🏆 Chuyển trang Nhập tỷ số ➡️</button>
-    </div>
-
-    <div id="mainStatus" class="status loading hidden"></div>
   </div>
 
 </div>
 
+<!-- FLOATING BUTTONS -->
+<div id="fabContainer" class="fab-container hidden">
+  <button class="fab-btn fab-new" onclick="showNewGameModal()">🚀 Tạo Game Mới</button>
+  <button class="fab-btn fab-score" onclick="goScore()">🏆 Nhập Tỷ Số</button>
+</div>
+
 <!-- MODAL XÁC NHẬN -->
-<div id="confirmModal" class="modal-overlay hidden">
-  <div class="modal">
-    <div style="font-size:30px;">⚠️</div>
-    <h3 style="margin-top:10px;">Xác nhận tạo game mới?</h3>
-    <p>Hệ thống sẽ ghi đè toàn bộ danh sách vào Sheet và xóa lịch cũ để tạo lịch mới.</p>
-    <div class="btn-group">
+<div id="confirmModal" class="modal-overlay hidden" onclick="if(event.target===this)closeModal()">
+  <div class="card fade-in" style="width:90%; max-width:350px; text-align:center;">
+    <div style="font-size:32px; margin-bottom:8px;">⚠️</div>
+    <h2 style="margin:0 0 10px; font-size:18px; color:white;">Xác nhận tạo game mới?</h2>
+    <p style="color:#94a3b8; margin-bottom:20px; font-size:14px;">Hệ thống sẽ lưu danh sách hiện tại vào Sheet và tự động tạo lịch thi đấu mới. Lịch cũ sẽ bị ghi đè.</p>
+    <div style="display:flex; gap:10px;">
       <button class="btn btn-red" onclick="closeModal()">Hủy</button>
-      <button class="btn btn-green" onclick="executeNewGame()">Đồng ý</button>
+      <button class="btn btn-green" onclick="executeNewGame()">Tiến hành</button>
     </div>
   </div>
 </div>
 
 <script>
-// ================= CẤU HÌNH =================
 const PASSWORD = "123";
 const SCORE_PAGE_URL = "https://ductrong49.github.io/ritapickleball/tyso.html";
-// ⚠️ PASTE ĐÚNG URL WEB APP CỦA BẠN VÀO ĐÂY
 const API_URL = "https://script.google.com/macros/s/AKfycbx6DwY0sjXIv2ye2MIkEbihO5_buy4ZXYp8Zz7lCbgkj2LQF_RI4vOi4NT4skgcgdRJtQ/exec";
 
-// ================= XỬ LÝ LOGIC =================
+let originalData = "";
+let hasChanges = false;
 
 function login() {
   const p = document.getElementById('passInput').value;
@@ -131,6 +118,7 @@ function login() {
   if (p === PASSWORD) {
     document.getElementById('screenLogin').classList.add('hidden');
     document.getElementById('screenMain').classList.remove('hidden');
+    document.getElementById('fabContainer').classList.remove('hidden');
     loadData();
   } else {
     msg.textContent = "❌ Sai mật khẩu!";
@@ -140,199 +128,161 @@ function login() {
 
 function logout() { location.reload(); }
 
-function showStatus(elId, msg, type) {
-  const el = document.getElementById(elId);
+function showStatus(msg, type) {
+  const el = document.getElementById('statusIndicator');
   el.innerHTML = msg;
   el.className = `status ${type}`;
+  el.classList.remove('hidden');
+  setTimeout(() => el.classList.add('hidden'), 4000);
 }
 
-// 🛠️ HÀM GỌI API
-async function fetchAPI(action, method = "GET", body = null) {
-  // Gửi action trong URL để đảm bảo Script luôn nhận được
-  const url = API_URL + "?action=" + encodeURIComponent(action);
-  
-  const options = { method: method };
+function showToast(msg, type = 'success') {
+  const toast = document.createElement('div');
+  toast.className = `toast ${type === 'error' ? 'status error' : 'status success'}`;
+  toast.innerHTML = `${type === 'error' ? '❌' : '✅'} ${msg}`;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.classList.add('show'), 50);
+  setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 400); }, 3000);
+}
 
+async function fetchAPI(action, method = "GET", body = null) {
+  const url = API_URL + "?action=" + encodeURIComponent(action);
+  const options = { method };
   if (body) {
     options.body = JSON.stringify(body);
-    // Dùng text/plain để tránh lỗi CORS preflight chặn request
     options.headers = { "Content-Type": "text/plain;charset=utf-8" };
   }
-
-  try {
-    const res = await fetch(url, options);
-    const text = await res.text();
-
-    if (text.trim().startsWith("<")) {
-      throw new Error("Lỗi API: Server trả về HTML. Kiểm tra quyền truy cập Web App (Anyone).");
-    }
-
-    const json = JSON.parse(text);
-    if (!json.success) throw new Error(json.error || "Lỗi không xác định từ Server");
-    return json;
-  } catch (err) {
-    throw err;
-  }
+  const res = await fetch(url, options);
+  const text = await res.text();
+  if (text.trim().startsWith("<")) throw new Error("Lỗi API: Server trả về HTML. Kiểm tra quyền 'Anyone'.");
+  const json = JSON.parse(text);
+  if (!json.success) throw new Error(json.error || "Lỗi từ Server");
+  return json;
 }
 
-// 🔥 TẢI DỮ LIỆU
 async function loadData() {
-  showStatus('mainStatus', '<span class="loader"></span> Đang tải danh sách...', 'loading');
+  showStatus('<span class="loader"></span> Đang tải danh sách...', 'loading');
   const txtBox = document.getElementById('playersList');
   txtBox.disabled = true;
-
   try {
-    const data = await fetchAPI("getPlayers"); // Gửi action="getPlayers"
-    
+    const data = await fetchAPI("getPlayers");
     txtBox.value = data.players.join('\n');
     txtBox.disabled = false;
+    originalData = txtBox.value;
     
     const badge = document.getElementById('countBadge');
-    badge.textContent = `✅ ${data.players.length} VĐV`;
+    badge.textContent = `${data.players.length} VĐV`;
     badge.classList.remove('hidden');
     
-    showStatus('mainStatus', '✅ Tải danh sách thành công!', 'success');
+    showStatus('✅ Đã tải danh sách thành công', 'success');
   } catch (err) {
     txtBox.disabled = false;
-    showStatus('mainStatus', '❌ ' + err.message, 'error');
+    showStatus('❌ ' + err.message, 'error');
   }
 }
 
-// 💾 LƯU DỮ LIỆU
-async function savePlayers() {
-  const text = document.getElementById('playersList').value;
-  const list = text.split('\n').map(s => s.trim()).filter(s => s);
-  if (list.length === 0) { alert("Danh sách trống!"); return; }
-
-  showStatus('mainStatus', '<span class="loader"></span> Đang lưu...', 'loading');
-  try {
-    // Gửi action="savePlayers" và dữ liệu players
-    const data = await fetchAPI("savePlayers", "POST", { players: list });
-    
-    showStatus('mainStatus', `✅ ${data.message}`, 'success');
-    loadData();
-  } catch (err) {
-    showStatus('mainStatus', '❌ ' + err.message, 'error');
-  }
+function checkChanges() {
+  const current = document.getElementById('playersList').value;
+  hasChanges = current !== originalData;
 }
 
-// 📅 TẠO LỊCH
-async function createSchedule() {
-  showStatus('mainStatus', '<span class="loader"></span> Đang tạo lịch...', 'loading');
-  try {
-    const data = await fetchAPI("createSchedule", "POST", {});
-    showStatus('mainStatus', `✅ ${data.message}`, 'success');
-  } catch (err) {
-    showStatus('mainStatus', '❌ ' + err.message, 'error');
+function showNewGameModal() {
+  if (!hasChanges && document.getElementById('playersList').value.trim() === "") {
+    showToast("Danh sách trống hoặc chưa thay đổi!", "error");
+    return;
   }
+  document.getElementById('confirmModal').classList.remove('hidden');
 }
 
-// 🚀 TẠO GAME MỚI
-function showNewGameModal() { document.getElementById('confirmModal').classList.remove('hidden'); }
 function closeModal() { document.getElementById('confirmModal').classList.add('hidden'); }
 
 async function executeNewGame() {
   closeModal();
-  showStatus('mainStatus', '<span class="loader"></span> Bước 1/2: Lưu danh sách...', 'loading');
+  showStatus('<span class="loader"></span> Bước 1/2: Lưu danh sách...', 'loading');
   
+  const text = document.getElementById('playersList').value;
+  const list = text.split('\n').map(s => s.trim()).filter(s => s);
+  
+  if (list.length === 0) { showToast("Danh sách không được để trống!", "error"); return; }
+
   try {
-    const text = document.getElementById('playersList').value;
-    const list = text.split('\n').map(s => s.trim()).filter(s => s);
-
-    // Bước 1: Lưu
     await fetchAPI("savePlayers", "POST", { players: list });
-
-    // Bước 2: Tạo lịch
-    showStatus('mainStatus', '<span class="loader"></span> Bước 2/2: Tạo lịch thi đấu...', 'loading');
+    
+    showStatus('<span class="loader"></span> Bước 2/2: Tạo lịch thi đấu...', 'loading');
     await fetchAPI("createSchedule", "POST", {});
-
-    showStatus('mainStatus', '🎉 HOÀN TẤT! Đã tạo Game mới thành công.', 'success');
+    
+    showStatus('✅ Hoàn tất! Đã tạo Game & Lịch mới', 'success');
+    showToast("🎉 Tạo game mới thành công!");
+    
+    originalData = document.getElementById('playersList').value;
+    hasChanges = false;
     loadData();
   } catch (err) {
-    showStatus('mainStatus', '❌ ' + err.message, 'error');
+    showStatus('❌ ' + err.message, 'error');
+    showToast(err.message, "error");
   }
 }
 
 function goScore() { window.location.href = SCORE_PAGE_URL; }
 </script>
 
+<!-- 
+  ==========================================
+  GOOGLE APPS SCRIPT (Dán vào file Code.gs)
+  ==========================================
+  const SPREADSHEET_ID = "1GUr4TFhq_Ha65en9vthhtii35-RWg28qeEcLiVJaVek";
+  const SHEET_NAME = "DanhSachVDV";
+
+  function doGet(e) { return processRequest(e); }
+  function doPost(e) { return processRequest(e); }
+
+  function processRequest(e) {
+    var lock = LockService.getScriptLock();
+    lock.tryLock(10000);
+    try {
+      var action = (e.parameter && e.parameter.action) ? e.parameter.action : "";
+      var bodyData = {};
+      if (e.postData && e.postData.contents) {
+        try { bodyData = JSON.parse(e.postData.contents); } catch(err) {}
+      }
+      switch(action) {
+        case "getPlayers": return reply(getPlayers());
+        case "savePlayers": return reply(savePlayers(bodyData.players));
+        case "createSchedule": return reply(createSchedule());
+        default: return reply({ success: false, error: "Action không hợp lệ" });
+      }
+    } catch(err) { return reply({ success: false, error: err.message }); }
+    finally { lock.releaseLock(); }
+  }
+
+  function getPlayers() {
+    var sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(SHEET_NAME);
+    if(!sheet) throw new Error("Không tìm thấy sheet");
+    var last = sheet.getLastRow();
+    if(last < 2) return { success: true, players: [] };
+    var data = sheet.getRange(2, 1, last - 1, 1).getValues().flat();
+    return { success: true, players: data.filter(p => p !== null && String(p).trim() !== "").map(String) };
+  }
+
+  function savePlayers(arr) {
+    var sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(SHEET_NAME);
+    if(!sheet) throw new Error("Không tìm thấy sheet");
+    sheet.getRange("A2:A").clearContent();
+    if(!Array.isArray(arr)) return { success: true, message: "Đã xóa" };
+    var clean = arr.filter(p => String(p).trim() !== "").map(p => [String(p).trim()]);
+    if(clean.length > 0) sheet.getRange(2, 1, clean.length, 1).setValues(clean);
+    return { success: true, message: "Đã lưu " + clean.length + " VĐV" };
+  }
+
+  function createSchedule() {
+    // Thêm logic tạo lịch tại đây
+    return { success: true, message: "Đã kích hoạt tạo lịch" };
+  }
+
+  function reply(obj) {
+    return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
+  }
+-->
 </body>
 </html>
 
-
-
-              <script>
-                              /* FILE: Code.gs */
-var SPREADSHEET_ID = "1GUr4TFhq_Ha65en9vthhtii35-RWg28qeEcLiVJaVek";
-var SHEET_NAME = "DanhSachVDV";
-
-function doGet(e) { return processRequest(e); }
-function doPost(e) { return processRequest(e); }
-
-function processRequest(e) {
-  // 1. Tìm action trong URL (?action=...)
-  var action = (e.parameter && e.parameter.action) ? e.parameter.action : "";
-
-  // 2. Nếu không có trong URL, tìm trong Body JSON
-  if (!action && e.postData && e.postData.contents) {
-    try {
-      var body = JSON.parse(e.postData.contents);
-      if (body.action) action = body.action;
-    } catch (err) {}
-  }
-
-  // 3. Xử lý lệnh
-  switch (action) {
-    case "getPlayers": return reply(getPlayers());
-    case "savePlayers":
-      var payload = e.postData ? JSON.parse(e.postData.contents) : {};
-      return reply(savePlayers(payload.players));
-    case "createSchedule": return reply(createSchedule());
-    default:
-      return reply({ success: false, error: "Action không hợp lệ hoặc bị thiếu: " + action });
-  }
-}
-
-function getTargetSheet() {
-  var ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-  var sheet = ss.getSheetByName(SHEET_NAME);
-  if (!sheet) throw new Error("Không tìm thấy sheet " + SHEET_NAME);
-  return sheet;
-}
-
-function getPlayers() {
-  var sheet = getTargetSheet();
-  var lastRow = sheet.getLastRow();
-  if (lastRow < 2) return { success: true, players: [], count: 0 };
-  
-  var data = sheet.getRange(2, 1, lastRow - 1, 1).getValues().flat();
-  var list = data.filter(function(p){ return p !== null && String(p).trim() !== ""; }).map(String);
-  return { success: true, players: list, count: list.length };
-}
-
-function savePlayers(arr) {
-  var sheet = getTargetSheet();
-  sheet.getRange("A2:A").clearContent();
-  
-  if (!Array.isArray(arr) || arr.length === 0) {
-    return { success: true, message: "Đã xóa danh sách cũ", count: 0 };
-  }
-  
-  var clean = arr.filter(function(p){ return String(p).trim() !== ""; }).map(function(p){ return [String(p).trim()]; });
-  if (clean.length > 0) sheet.getRange(2, 1, clean.length, 1).setValues(clean);
-  return { success: true, message: "Đã lưu " + clean.length + " VĐV", count: clean.length };
-}
-
-function createSchedule() {
-  return { success: true, message: "Đã kích hoạt tạo lịch" };
-}
-
-function reply(obj) {
-  return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
-}
-
-
-              </script>
-                        </body>
-                        </html>
-                    
