@@ -50,6 +50,9 @@ textarea { min-height: 180px; font-family: monospace; resize: vertical; line-hei
 
 .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: #1e293b; border: 1px solid #334155; color: #e2e8f0; padding: 12px 20px; border-radius: 12px; font-size: 14px; font-weight: 500; z-index: 100; box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; align-items: center; gap: 8px; }
 .toast.show { transform: translateX(-50%) translateY(0); }
+
+/* Modal styles */
+.modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; z-index: 90; backdrop-filter: blur(4px); }
 </style>
 </head>
 <body>
@@ -96,7 +99,7 @@ textarea { min-height: 180px; font-family: monospace; resize: vertical; line-hei
   <div class="card fade-in" style="width:90%; max-width:350px; text-align:center;">
     <div style="font-size:32px; margin-bottom:8px;">⚠️</div>
     <h2 style="margin:0 0 10px; font-size:18px; color:white;">Xác nhận tạo game mới?</h2>
-    <p style="color:#94a3b8; margin-bottom:20px; font-size:14px;">Hệ thống sẽ lưu danh sách hiện tại vào Sheet và tự động tạo lịch thi đấu mới. Lịch cũ sẽ bị ghi đè.</p>
+    <p style="color:#94a3b8; margin-bottom:20px; font-size:14px;">Hệ thống sẽ lưu danh sách hiện tại vào Sheet và tự động tạo lịch thi đấu mới theo thuật toán tối ưu. Lịch cũ sẽ bị ghi đè.</p>
     <div style="display:flex; gap:10px;">
       <button class="btn btn-red" onclick="closeModal()">Hủy</button>
       <button class="btn btn-green" onclick="executeNewGame()">Tiến hành</button>
@@ -187,9 +190,17 @@ function checkChanges() {
 }
 
 function showNewGameModal() {
-  if (!hasChanges && document.getElementById('playersList').value.trim() === "") {
-    showToast("Danh sách trống hoặc chưa thay đổi!", "error");
+  const list = document.getElementById('playersList').value.split('\n').map(s => s.trim()).filter(s => s);
+  if (list.length < 5) {
+    showToast("Cần tối thiểu 5 VĐV để tạo lịch!", "error");
     return;
+  }
+  if (list.length > 12) {
+    showToast("Tối đa hỗ trợ 12 VĐV!", "error");
+    return;
+  }
+  if (!hasChanges && list.length === originalData.split('\n').filter(s=>s.trim()).length) {
+    // Vẫn cho phép tạo lại nếu muốn
   }
   document.getElementById('confirmModal').classList.remove('hidden');
 }
@@ -198,21 +209,26 @@ function closeModal() { document.getElementById('confirmModal').classList.add('h
 
 async function executeNewGame() {
   closeModal();
-  showStatus('<span class="loader"></span> Bước 1/2: Lưu danh sách...', 'loading');
+  showStatus('<span class="loader"></span> Bước 1/3: Lưu danh sách...', 'loading');
   
   const text = document.getElementById('playersList').value;
   const list = text.split('\n').map(s => s.trim()).filter(s => s);
   
-  if (list.length === 0) { showToast("Danh sách không được để trống!", "error"); return; }
+  if (list.length < 5 || list.length > 12) { 
+    showToast("Số lượng VĐV phải từ 5-12!", "error"); 
+    return; 
+  }
 
   try {
     await fetchAPI("savePlayers", "POST", { players: list });
     
-    showStatus('<span class="loader"></span> Bước 2/2: Tạo lịch thi đấu...', 'loading');
-    await fetchAPI("createSchedule", "POST", {});
+    showStatus('<span class="loader"></span> Bước 2/3: Tạo lịch thi đấu tối ưu...', 'loading');
+    const scheduleResult = await fetchAPI("createSchedule", "POST", {});
+    
+    showStatus('<span class="loader"></span> Bước 3/3: Hoàn tất...', 'loading');
     
     showStatus('✅ Hoàn tất! Đã tạo Game & Lịch mới', 'success');
-    showToast("🎉 Tạo game mới thành công!");
+    showToast(`🎉 Tạo game thành công! ${scheduleResult.matches} trận, Mode: ${scheduleResult.mode}`);
     
     originalData = document.getElementById('playersList').value;
     hasChanges = false;
@@ -230,59 +246,206 @@ function goScore() { window.location.href = SCORE_PAGE_URL; }
   ==========================================
   GOOGLE APPS SCRIPT (Dán vào file Code.gs)
   ==========================================
-  const SPREADSHEET_ID = "1GUr4TFhq_Ha65en9vthhtii35-RWg28qeEcLiVJaVek";
-  const SHEET_NAME = "DanhSachVDV";
+*/
 
-  function doGet(e) { return processRequest(e); }
-  function doPost(e) { return processRequest(e); }
+const SPREADSHEET_ID = "1GUr4TFhq_Ha65en9vthhtii35-RWg28qeEcLiVJaVek";
+const SHEET_NAME_PLAYERS = "DanhSachVDV";
+const SHEET_NAME_SCHEDULE = "LichThiDau";
 
-  function processRequest(e) {
-    var lock = LockService.getScriptLock();
-    lock.tryLock(10000);
-    try {
-      var action = (e.parameter && e.parameter.action) ? e.parameter.action : "";
-      var bodyData = {};
-      if (e.postData && e.postData.contents) {
-        try { bodyData = JSON.parse(e.postData.contents); } catch(err) {}
+function doGet(e) { return processRequest(e); }
+function doPost(e) { return processRequest(e); }
+
+function processRequest(e) {
+  var lock = LockService.getScriptLock();
+  lock.tryLock(30000); // Tăng thời gian lock cho thuật toán chạy
+  try {
+    var action = (e.parameter && e.parameter.action) ? e.parameter.action : "";
+    var bodyData = {};
+    if (e.postData && e.postData.contents) {
+      try { bodyData = JSON.parse(e.postData.contents); } catch(err) {}
+    }
+    switch(action) {
+      case "getPlayers": return reply(getPlayers());
+      case "savePlayers": return reply(savePlayers(bodyData.players));
+      case "createSchedule": return reply(createSchedule());
+      default: return reply({ success: false, error: "Action không hợp lệ" });
+    }
+  } catch(err) { 
+    Logger.log("Error: " + err);
+    return reply({ success: false, error: err.message }); 
+  }
+  finally { lock.releaseLock(); }
+}
+
+function getPlayers() {
+  var ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  var sheet = ss.getSheetByName(SHEET_NAME_PLAYERS);
+  if(!sheet) throw new Error("Không tìm thấy sheet '" + SHEET_NAME_PLAYERS + "'");
+  var last = sheet.getLastRow();
+  if(last < 2) return { success: true, players: [] };
+  var data = sheet.getRange(2, 1, last - 1, 1).getValues().flat();
+  return { 
+    success: true, 
+    players: data.filter(p => p !== null && String(p).trim() !== "").map(String) 
+  };
+}
+
+function savePlayers(arr) {
+  var ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  var sheet = ss.getSheetByName(SHEET_NAME_PLAYERS);
+  if(!sheet) throw new Error("Không tìm thấy sheet '" + SHEET_NAME_PLAYERS + "'");
+  sheet.getRange("A2:A").clearContent();
+  if(!Array.isArray(arr)) return { success: true, message: "Đã xóa" };
+  var clean = arr.filter(p => String(p).trim() !== "").map(p => [String(p).trim()]);
+  if(clean.length > 0) sheet.getRange(2, 1, clean.length, 1).setValues(clean);
+  return { success: true, message: "Đã lưu " + clean.length + " VĐV" };
+}
+
+// ===== HÀM TẠO LỊCH TỐI ƯU (Web App Compatible) =====
+function createSchedule() {
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const shP = ss.getSheetByName(SHEET_NAME_PLAYERS);
+  const shM = ss.getSheetByName(SHEET_NAME_SCHEDULE);
+  
+  if(!shP) throw new Error("Không tìm thấy sheet '" + SHEET_NAME_PLAYERS + "'");
+  if(!shM) {
+    // Tạo sheet lịch nếu chưa có
+    ss.insertSheet(SHEET_NAME_SCHEDULE);
+  }
+
+  let players = shP.getRange("A2:A").getValues().flat().filter(p => p && String(p).trim() !== "").map(String);
+
+  if (players.length < 5 || players.length > 12) {
+    throw new Error("Chỉ hỗ trợ 5–12 VĐV. Hiện có: " + players.length);
+  }
+
+  const N = players.length;
+  const target = N - 1;
+
+  // ===== AUTO MODE =====
+  let mode = "";
+  if (N <= 6) mode = "NO_REPEAT";
+  else if (N <= 8) mode = "HYBRID";
+  else mode = "FULL_MATCH";
+
+  // ===== STATS =====
+  let playerMatch = {};
+  let pairCount = {};
+  let opponentCount = {};
+  players.forEach(p => playerMatch[p] = 0);
+
+  function pairKey(a,b){
+    return [a,b].sort().join("-");
+  }
+
+  let matches = [];
+  let loop = 8000; // Tăng loop cho N lớn
+
+  while (loop-- > 0) {
+    let done;
+    if (mode === "NO_REPEAT") {
+      done = false;
+    } else {
+      done = players.every(p => playerMatch[p] >= target);
+    }
+    if (done) break;
+
+    let best = null;
+    let bestScore = Infinity;
+
+    for (let i = 0; i < players.length; i++) {
+      for (let j = i+1; j < players.length; j++) {
+        for (let k = 0; k < players.length; k++) {
+          for (let l = k+1; l < players.length; l++) {
+            let t1 = [players[i], players[j]];
+            let t2 = [players[k], players[l]];
+            let all = [...t1, ...t2];
+            if (new Set(all).size < 4) continue;
+
+            let score = 0;
+            let k1 = pairKey(t1[0], t1[1]);
+            let k2 = pairKey(t2[0], t2[1]);
+
+            if (mode === "NO_REPEAT") {
+              if (pairCount[k1] || pairCount[k2]) continue;
+            }
+            if (mode === "HYBRID") {
+              if ((pairCount[k1] || pairCount[k2]) && Math.random() < 0.7) continue;
+            }
+
+            // Ưu tiên người ít trận
+            all.forEach(p => { score += playerMatch[p] * 5; });
+            // Phạt trùng partner
+            score += (pairCount[k1] || 0) * 50;
+            score += (pairCount[k2] || 0) * 50;
+            // Phạt trùng đối thủ
+            t1.forEach(p1 => {
+              t2.forEach(p2 => {
+                let key = pairKey(p1,p2);
+                score += (opponentCount[key] || 0) * 10;
+              });
+            });
+
+            if (score < bestScore) {
+              bestScore = score;
+              best = [t1, t2];
+            }
+          }
+        }
       }
-      switch(action) {
-        case "getPlayers": return reply(getPlayers());
-        case "savePlayers": return reply(savePlayers(bodyData.players));
-        case "createSchedule": return reply(createSchedule());
-        default: return reply({ success: false, error: "Action không hợp lệ" });
-      }
-    } catch(err) { return reply({ success: false, error: err.message }); }
-    finally { lock.releaseLock(); }
+    }
+
+    if (!best) break;
+    matches.push(best);
+    let [t1,t2] = best;
+    [...t1,...t2].forEach(p => playerMatch[p]++);
+
+    let k1 = pairKey(t1[0], t1[1]);
+    let k2 = pairKey(t2[0], t2[1]);
+    pairCount[k1] = (pairCount[k1] || 0) + 1;
+    pairCount[k2] = (pairCount[k2] || 0) + 1;
+
+    t1.forEach(p1 => {
+      t2.forEach(p2 => {
+        let key = pairKey(p1,p2);
+        opponentCount[key] = (opponentCount[key] || 0) + 1;
+      });
+    });
   }
 
-  function getPlayers() {
-    var sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(SHEET_NAME);
-    if(!sheet) throw new Error("Không tìm thấy sheet");
-    var last = sheet.getLastRow();
-    if(last < 2) return { success: true, players: [] };
-    var data = sheet.getRange(2, 1, last - 1, 1).getValues().flat();
-    return { success: true, players: data.filter(p => p !== null && String(p).trim() !== "").map(String) };
-  }
+  // ===== OUTPUT TO SHEET =====
+  shM.clearContents();
+  shM.appendRow(["Trận","P1","P2","P3","P4","Điểm1","Điểm2","Thắng1","Thắng2"]);
+  shM.getRange(1,1,1,9).setFontWeight("bold").setBackground("#1e293b").setFontColor("#e2e8f0");
 
-  function savePlayers(arr) {
-    var sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(SHEET_NAME);
-    if(!sheet) throw new Error("Không tìm thấy sheet");
-    sheet.getRange("A2:A").clearContent();
-    if(!Array.isArray(arr)) return { success: true, message: "Đã xóa" };
-    var clean = arr.filter(p => String(p).trim() !== "").map(p => [String(p).trim()]);
-    if(clean.length > 0) sheet.getRange(2, 1, clean.length, 1).setValues(clean);
-    return { success: true, message: "Đã lưu " + clean.length + " VĐV" };
-  }
+  matches.forEach((m,i)=>{
+    let row = i + 2;
+    shM.appendRow([
+      i+1,
+      m[0][0], m[0][1],
+      m[1][0], m[1][1],
+      "", "",
+      `=IF(F${row}>G${row};1;0)`,
+      `=IF(G${row}>F${row};1;0)`
+    ]);
+  });
+  
+  // Auto resize columns
+  shM.autoResizeColumns(1, 9);
 
-  function createSchedule() {
-    // Thêm logic tạo lịch tại đây
-    return { success: true, message: "Đã kích hoạt tạo lịch" };
-  }
+  // ===== RETURN STATS =====
+  let summary = {};
+  players.forEach(p => summary[p] = playerMatch[p]);
 
-  function reply(obj) {
-    return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
-  }
--->
-</body>
-</html>
+  return { 
+    success: true, 
+    message: "Đã tạo " + matches.length + " trận",
+    matches: matches.length,
+    mode: mode,
+    stats: summary
+  };
+}
 
+function reply(obj) {
+  return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
+}
