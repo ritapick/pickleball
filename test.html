@@ -7,13 +7,16 @@
 <link href="https://cdn.jsdelivr.net/npm/fontsource-inter@5.0.0/index.css" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
+
   body {
     font-family: 'Inter', sans-serif;
     background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
     color: #e2e8f0;
-    min-height: 100vh; min-height: 100dvh;
+    min-height: 100vh;
+    min-height: 100dvh;
     overflow-x: hidden;
   }
+
   .bg-animation {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     z-index: 0; overflow: hidden; pointer-events: none;
@@ -26,17 +29,21 @@
   .bg-animation .circle:nth-child(1) { width: 400px; height: 400px; top: -100px; left: -100px; }
   .bg-animation .circle:nth-child(2) { width: 300px; height: 300px; bottom: -50px; right: -50px; animation-delay: -5s; background: rgba(34, 197, 94, 0.06); }
   .bg-animation .circle:nth-child(3) { width: 200px; height: 200px; top: 50%; left: 50%; animation-delay: -10s; }
+
   @keyframes float {
     0%, 100% { transform: translate(0, 0) scale(1); }
     33% { transform: translate(50px, -50px) scale(1.1); }
     66% { transform: translate(-30px, 30px) scale(0.9); }
   }
+
   .container { position: relative; z-index: 1; max-width: 480px; margin: 0 auto; padding: 16px; }
-  
+
+  /* LOGIN */
   #loginBox {
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     min-height: 100vh; min-height: 100dvh; animation: fadeIn 0.5s ease;
   }
+
   .login-card {
     background: rgba(30, 27, 75, 0.7); backdrop-filter: blur(20px);
     border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 24px;
@@ -50,6 +57,7 @@
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   }
   .login-card p { color: #94a3b8; font-size: 13px; margin-bottom: 20px; text-align: center; }
+
   .input-group { margin-bottom: 14px; }
   .input-group input {
     width: 100%; padding: 14px 16px; border-radius: 12px;
@@ -57,8 +65,17 @@
     color: #e2e8f0; font-size: 16px; font-family: inherit;
     transition: all 0.3s; outline: none;
   }
-  .input-group input:focus { border-color: #6366f1; box-shadow: 0 0 20px rgba(99, 102, 241, 0.3); }
-  
+  .input-group input:focus {
+    border-color: #6366f1; box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+  }
+
+  .remember-row {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 16px; font-size: 13px; color: #94a3b8; cursor: pointer;
+  }
+  .remember-row input[type="checkbox"] {
+    accent-color: #6366f1; width: 16px; height: 16px; cursor: pointer;
+  }
+
   .btn {
     padding: 14px 24px; width: 100%; border: none; border-radius: 14px;
     font-size: 15px; font-weight: 600; font-family: inherit; cursor: pointer;
@@ -74,12 +91,25 @@
     background: linear-gradient(135deg, #f59e0b, #d97706); color: white;
     box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
   }
+  .btn-success {
+    background: linear-gradient(135deg, #22c55e, #16a34a); color: white;
+    box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
+  }
+  .btn-info {
+    background: linear-gradient(135deg, #06b6d4, #0891b2); color: white;
+    box-shadow: 0 4px 15px rgba(6, 182, 212, 0.4);
+  }
   .btn-link {
     background: linear-gradient(135deg, #06b6d4, #0891b2); color: white;
     box-shadow: 0 4px 15px rgba(6, 182, 212, 0.4); text-decoration: none;
   }
-  
+  .btn-sm {
+    padding: 8px 14px; font-size: 12px; border-radius: 10px;
+  }
+
+  /* MAIN */
   #mainBox { animation: fadeIn 0.5s ease; }
+
   .header { text-align: center; margin-bottom: 20px; padding-top: 10px; position: relative; }
   .header h1 {
     font-size: 22px; font-weight: 800;
@@ -87,13 +117,15 @@
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   }
   .header p { color: #64748b; font-size: 12px; margin-top: 4px; }
+
   .logout-btn {
     position: absolute; top: 5px; right: 0;
     background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.25);
     color: #fca5a5; padding: 6px 12px; border-radius: 8px;
     font-size: 12px; cursor: pointer; font-family: inherit; transition: all 0.3s;
   }
-  
+
+  /* Stats */
   .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
   .stat-card {
     background: rgba(30, 27, 75, 0.4); backdrop-filter: blur(10px);
@@ -103,7 +135,8 @@
   .stat-icon { font-size: 22px; margin-bottom: 4px; }
   .stat-value { font-size: 26px; font-weight: 700; color: #a78bfa; }
   .stat-label { font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
-  
+
+  /* Card */
   .card {
     background: rgba(30, 27, 75, 0.4); backdrop-filter: blur(10px);
     border: 1px solid rgba(99, 102, 241, 0.12); border-radius: 16px;
@@ -115,6 +148,7 @@
     background: rgba(99, 102, 241, 0.15); color: #a78bfa; padding: 3px 10px;
     border-radius: 16px; font-size: 11px; font-weight: 600;
   }
+
   textarea {
     width: 100%; padding: 14px; border-radius: 12px;
     border: 2px solid rgba(99, 102, 241, 0.15); background: rgba(15, 23, 42, 0.6);
@@ -122,6 +156,7 @@
     outline: none; resize: vertical; line-height: 1.7;
   }
   textarea:focus { border-color: #6366f1; }
+
   .player-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
   .player-tag {
     background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(139, 92, 246, 0.15));
@@ -129,8 +164,12 @@
     border-radius: 16px; font-size: 12px; font-weight: 500; animation: tagIn 0.3s ease;
   }
   @keyframes tagIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+
+  /* Action Buttons */
   .action-buttons { display: flex; flex-direction: column; gap: 10px; }
-  
+  .action-row { display: flex; gap: 10px; }
+  .action-row .btn { flex: 1; }
+
   .status {
     margin-top: 14px; padding: 12px 16px; border-radius: 12px;
     font-size: 13px; font-weight: 500; display: none; align-items: center; gap: 10px;
@@ -145,23 +184,44 @@
     border-top-color: currentColor; border-radius: 50%; animation: spin 0.8s linear infinite;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
+
   .footer { text-align: center; margin-top: 30px; padding: 16px 0; color: #475569; font-size: 11px; }
+
   .hidden { display: none !important; }
   .fade-in { animation: fadeIn 0.5s ease; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  .auto-save-indicator {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 11px; color: #64748b; margin-top: 8px;
+    transition: opacity 0.3s; opacity: 0;
+  }
+  .auto-save-indicator.show { opacity: 1; }
+  .auto-save-dot {
+    width: 6px; height: 6px; border-radius: 50%; background: #22c55e;
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
   @media (max-width: 360px) {
     .container { padding: 12px; }
     .stat-value { font-size: 22px; }
     .card { padding: 14px; }
+    .action-row { flex-direction: column; }
   }
 </style>
 </head>
 <body>
+
 <div class="bg-animation">
-  <div class="circle"></div><div class="circle"></div><div class="circle"></div>
+  <div class="circle"></div>
+  <div class="circle"></div>
+  <div class="circle"></div>
 </div>
 
 <div class="container">
+
+  <!-- LOGIN -->
   <div id="loginBox">
     <div class="login-card">
       <div class="logo">🏓</div>
@@ -170,10 +230,17 @@
       <div class="input-group">
         <input type="password" id="pass" placeholder="🔒 Mật khẩu" onkeydown="if(event.key==='Enter')login()">
       </div>
-      <button class="btn btn-primary" onclick="login()"><span>Đăng nhập</span><span>→</span></button>
+      <label class="remember-row">
+        <input type="checkbox" id="rememberMe" checked>
+        <span>Ghi nhớ đăng nhập</span>
+      </label>
+      <button class="btn btn-primary" id="loginBtn" onclick="login()">
+        <span>Đăng nhập</span><span>→</span>
+      </button>
     </div>
   </div>
 
+  <!-- MAIN -->
   <div id="mainBox" class="hidden">
     <div class="header">
       <h1>🏓 PICKLEBALL MANAGER PRO</h1>
@@ -182,9 +249,21 @@
     </div>
 
     <div class="stats-grid">
-      <div class="stat-card"><div class="stat-icon">👥</div><div class="stat-value" id="playerCount">0</div><div class="stat-label">VĐV</div></div>
-      <div class="stat-card"><div class="stat-icon">🎯</div><div class="stat-value" id="matchCount">0</div><div class="stat-label">Trận</div></div>
-      <div class="stat-card"><div class="stat-icon">⚡</div><div class="stat-value" id="roundCount">0</div><div class="stat-label">Vòng</div></div>
+      <div class="stat-card">
+        <div class="stat-icon">👥</div>
+        <div class="stat-value" id="playerCount">0</div>
+        <div class="stat-label">VĐV</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🎯</div>
+        <div class="stat-value" id="matchCount">0</div>
+        <div class="stat-label">Trận</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">⚡</div>
+        <div class="stat-value" id="roundCount">0</div>
+        <div class="stat-label">Vòng</div>
+      </div>
     </div>
 
     <div class="card fade-in">
@@ -193,49 +272,51 @@
         <span class="card-badge" id="listStatus">Đang tải...</span>
       </div>
       <textarea id="players" rows="6" placeholder="Nhập danh sách VĐV (mỗi dòng 1 người)"></textarea>
+      <div class="auto-save-indicator" id="autoSaveIndicator">
+        <span class="auto-save-dot"></span>
+        <span id="autoSaveText">Đang lưu...</span>
+      </div>
       <div class="player-list" id="playerTags"></div>
     </div>
 
     <div class="card fade-in">
       <div class="card-title" style="margin-bottom: 14px;">⚙️ Điều khiển</div>
       <div class="action-buttons">
-        <button class="btn btn-warning" onclick="createGame()">🚀 Tạo game mới & Chạy lịch thi đấu</button>
+        <div class="action-row">
+          <button class="btn btn-warning" onclick="createGame()">🚀 Tạo game mới</button>
+          <button class="btn btn-info btn-sm" onclick="loadPlayers()" title="Tải lại dữ liệu">🔄 Tải lại</button>
+        </div>
+        <div class="action-row">
+          <button class="btn btn-success btn-sm" onclick="savePlayersOnly()">💾 Lưu danh sách VĐV</button>
+          <button class="btn btn-sm" style="background: rgba(99,102,241,0.2); border: 1px solid rgba(99,102,241,0.3); color: #a78bfa;" onclick="refreshStats()">📊 Cập nhật stats</button>
+        </div>
         <a href="#" target="_blank" class="btn btn-link" id="scoreLink">📝 Vào trang nhập điểm →</a>
       </div>
     </div>
 
     <div class="status" id="status"></div>
+
     <div class="footer">© 2026 Pickleball Manager Pro</div>
   </div>
+
 </div>
 
 <script>
 var PASSWORD = "123";
 var API_URL = "https://script.google.com/macros/s/AKfycbxyjSKqBHxBoIuMIrmx8niKyYPVeAkMFVA3czmi5Zm5DG_LY_7MzkQhXF2TghhF0Dpu3Q/exec";
+var autoSaveTimer = null;
+var isDataLoaded = false;
 
-// FIX: Gọi API ổn định với Google Apps Script (tránh CORS, cache, và lỗi parse HTML)
-function callAPI(action, extraData) {
-  var url = API_URL + "?t=" + Date.now();
-  var payload = Object.assign({ action: action }, extraData || {});
-  
-  return fetch(url, {
-    method: "POST",
-    body: JSON.stringify(payload)
-  })
-  .then(function(res) {
-    if (!res.ok) throw new Error("HTTP " + res.status);
-    return res.text();
-  })
-  .then(function(raw) {
-    // GAS đôi khi trả về HTML bao quanh JSON do redirect
-    var jsonMatch = raw.match(/\{[\s\S]*?\}/g);
-    if (!jsonMatch || jsonMatch.length === 0) {
-      console.error("Response không phải JSON:", raw);
-      throw new Error("Dữ liệu trả về không hợp lệ");
-    }
-    // Lấy JSON object cuối cùng (thường là kết quả thực sự)
-    var jsonStr = jsonMatch[jsonMatch.length - 1];
-    return JSON.parse(jsonStr);
+function callAPI(action, data) {
+  var payload = { action: action };
+  if (data) {
+    for (var k in data) { payload[k] = data[k]; }
+  }
+  return fetch(API_URL, { method: "POST", body: JSON.stringify(payload) })
+  .then(function(res) { return res.text(); })
+  .then(function(text) {
+    try { return JSON.parse(text); }
+    catch(e) { console.error("Parse error:", text); throw new Error("Invalid response"); }
   });
 }
 
@@ -252,22 +333,48 @@ function showStatus(msg, type) {
   }
 }
 
+function setLoggedIn() {
+  if (document.getElementById("rememberMe").checked) {
+    localStorage.setItem("pb_ok", "1");
+  } else {
+    sessionStorage.setItem("pb_ok", "1");
+  }
+}
+
+function isLoggedIn() {
+  return localStorage.getItem("pb_ok") === "1" || sessionStorage.getItem("pb_ok") === "1";
+}
+
+function clearLogin() {
+  localStorage.removeItem("pb_ok");
+  sessionStorage.removeItem("pb_ok");
+}
+
+function showMainBox() {
+  document.getElementById("loginBox").className = "hidden";
+  document.getElementById("mainBox").className = "";
+  if (!isDataLoaded) {
+    loadPlayers();
+    isDataLoaded = true;
+  }
+}
+
 function login() {
   var pass = document.getElementById("pass").value;
   if (pass === PASSWORD) {
-    sessionStorage.setItem("pb_ok", "1");
-    document.getElementById("loginBox").classList.add("hidden");
-    document.getElementById("mainBox").classList.remove("hidden");
-    loadPlayers();
+    setLoggedIn();
+    isDataLoaded = false;
+    showMainBox();
   } else {
     alert("Sai mật khẩu!");
   }
 }
 
 function logout() {
-  sessionStorage.removeItem("pb_ok");
-  document.getElementById("mainBox").classList.add("hidden");
-  document.getElementById("loginBox").classList.remove("hidden");
+  clearLogin();
+  isDataLoaded = false;
+  document.getElementById("mainBox").className = "hidden";
+  document.getElementById("loginBox").className = "";
   document.getElementById("pass").value = "";
 }
 
@@ -294,28 +401,46 @@ function updatePlayerTags() {
     var tag = document.createElement("div");
     tag.className = "player-tag";
     tag.style.animationDelay = (i * 0.03) + "s";
-    tag.textContent = "👤 " + p;
+    tag.textContent = "\uD83D\uDC64 " + p;
     container.appendChild(tag);
   });
   updateStats(list.length);
 }
 
+function showAutoSave(text) {
+  var indicator = document.getElementById("autoSaveIndicator");
+  var autoSaveTextEl = document.getElementById("autoSaveText");
+  autoSaveTextEl.textContent = text;
+  indicator.className = "auto-save-indicator show";
+}
+
+function hideAutoSave() {
+  document.getElementById("autoSaveIndicator").className = "auto-save-indicator";
+}
+
+function scheduleAutoSave() {
+  if (autoSaveTimer) clearTimeout(autoSaveTimer);
+  showAutoSave("⏳ Sẽ tự động lưu sau 3 giây...");
+  autoSaveTimer = setTimeout(function() {
+    savePlayersOnly(true);
+  }, 3000);
+}
+
 function loadPlayers() {
-  showStatus("⏳ Đang tải danh sách từ Google Sheets...", "loading");
+  showStatus("\u23F3 Đang tải danh sách...", "loading");
   document.getElementById("listStatus").textContent = "Đang tải...";
 
   callAPI("loadPlayers")
   .then(function(data) {
-    console.log("Load success:", data);
-    if (data.players && Array.isArray(data.players) && data.players.length > 0) {
+    if (data.players && data.players.length > 0) {
       document.getElementById("players").value = data.players.join("\n");
-      document.getElementById("listStatus").textContent = "✅ " + data.players.length + " VĐV";
+      document.getElementById("listStatus").textContent = "\u2705 " + data.players.length + " VĐV";
       document.getElementById("listStatus").style.background = "rgba(34,197,94,0.15)";
       document.getElementById("listStatus").style.color = "#86efac";
       updatePlayerTags();
       if (data.matchCount) document.getElementById("matchCount").textContent = data.matchCount;
       if (data.roundCount) document.getElementById("roundCount").textContent = data.roundCount;
-      showStatus("✅ Đã tải " + data.players.length + " VĐV thành công!", "success");
+      showStatus("\u2705 Đã tải " + data.players.length + " VĐV!", "success");
     } else {
       document.getElementById("listStatus").textContent = "⚠️ Trống";
       document.getElementById("listStatus").style.background = "rgba(245,158,11,0.15)";
@@ -324,12 +449,48 @@ function loadPlayers() {
     }
   })
   .catch(function(err) {
-    console.error("Lỗi tải danh sách:", err);
+    console.error(err);
     document.getElementById("listStatus").textContent = "❌ Lỗi";
     document.getElementById("listStatus").style.background = "rgba(239,68,68,0.15)";
     document.getElementById("listStatus").style.color = "#fca5a5";
-    showStatus("❌ Không kết nối được. Kiểm tra App Script đã deploy đúng chưa.", "error");
+    showStatus("❌ Không kết nối được Google Sheets.", "error");
   });
+}
+
+function savePlayersOnly(silent) {
+  var text = document.getElementById("players").value.trim();
+  if (!text) {
+    if (!silent) alert("Danh sách VĐV trống!");
+    hideAutoSave();
+    return;
+  }
+  var list = text.split("\n").map(function(x){ return x.trim(); }).filter(function(x){ return x; });
+
+  if (!silent) showAutoSave("💾 Đang lưu...");
+
+  callAPI("savePlayers", { players: list })
+  .then(function() {
+    if (!silent) showStatus("\u2705 Đã lưu danh sách VĐV!", "success");
+    else showAutoSave("\u2705 Đã tự động lưu!");
+    setTimeout(hideAutoSave, silent ? 2000 : 4000);
+  })
+  .catch(function() {
+    if (!silent) showStatus("⚠️ Lỗi khi lưu.", "error");
+    else showAutoSave("❌ Lỗi lưu!");
+    setTimeout(hideAutoSave, 3000);
+  });
+}
+
+function refreshStats() {
+  showStatus("\u23F3 Đang cập nhật stats...", "loading");
+  var text = document.getElementById("players").value.trim();
+  if (text) {
+    var list = text.split("\n").map(function(x){ return x.trim(); }).filter(function(x){ return x; });
+    updateStats(list.length);
+    showStatus("\u2705 Stats đã cập nhật (" + list.length + " VĐV)!", "success");
+  } else {
+    showStatus("⚠️ Chưa có danh sách VĐV.", "error");
+  }
 }
 
 function createGame() {
@@ -338,39 +499,39 @@ function createGame() {
 
   var list = text.split("\n").map(function(x){ return x.trim(); }).filter(function(x){ return x; });
   if (list.length < 5 || list.length > 12) {
-    alert("Cần từ 5 đến 12 VĐV để chạy thuật toán!");
+    alert("Cần từ 5 đến 12 VĐV!");
     return;
   }
   if (!confirm("Tạo game mới và chạy lại lịch?\n\n" + list.length + " VĐV")) return;
 
-  showStatus("⏳ Đang lưu danh sách và tạo lịch...", "loading");
+  showStatus("\u23F3 Đang tạo game mới...", "loading");
 
   callAPI("savePlayers", { players: list })
   .then(function() { return callAPI("createSchedule"); })
   .then(function(data) {
-    console.log("Schedule created:", data);
     if (data.matchCount) document.getElementById("matchCount").textContent = data.matchCount;
     if (data.roundCount) document.getElementById("roundCount").textContent = data.roundCount;
-    showStatus("🚀 Đã tạo game mới & lịch thi đấu thành công!", "success");
+    showStatus("\uD83D\uDD25 Đã tạo game mới thành công!", "success");
   })
-  .catch(function(err) {
-    console.error("Lỗi tạo game:", err);
-    showStatus("⚠️ Lỗi khi gọi API. Vui lòng kiểm tra Google Sheets.", "error");
+  .catch(function() {
+    showStatus("⚠️ Có thể đã tạo xong. Kiểm tra Google Sheets.", "error");
   });
 }
 
-// KHỞI CHẠY
+// Init
 document.addEventListener("DOMContentLoaded", function() {
-  document.getElementById("players").addEventListener("input", updatePlayerTags);
-  
-  if (sessionStorage.getItem("pb_ok") === "1") {
-    document.getElementById("loginBox").classList.add("hidden");
-    document.getElementById("mainBox").classList.remove("hidden");
-    // Đợi 300ms để đảm bảo DOM đã render hoàn tất trước khi fetch
-    setTimeout(loadPlayers, 300);
+  document.getElementById("players").addEventListener("input", function() {
+    updatePlayerTags();
+    scheduleAutoSave();
+  });
+
+  if (isLoggedIn()) {
+    isDataLoaded = false;
+    showMainBox();
   }
 });
 </script>
+
 </body>
 </html>
 
