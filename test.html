@@ -2,20 +2,39 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pickleball Manager Pro</title>
-<link href="https://cdn.jsdelivr.net/npm/fontsource-inter@5.0.0/index.css" rel="stylesheet">
 
 <style>
-/* ===== GIỮ NGUYÊN CSS CỦA BẠN ===== */
-*{margin:0;padding:0;box-sizing:border-box}
 body{
-  font-family:'Inter',sans-serif;
-  background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 50%,#0f172a 100%);
-  color:#e2e8f0;min-height:100vh;overflow-x:hidden;
+  font-family:Arial;
+  background:#0f172a;
+  color:#fff;
+  margin:0;
+  padding:20px;
 }
-/* (rút gọn vì giữ nguyên toàn bộ như bạn gửi) */
-.hidden{display:none!important}
+.container{max-width:500px;margin:auto}
+input,textarea{
+  width:100%;
+  padding:12px;
+  border-radius:8px;
+  border:none;
+  margin-top:10px;
+}
+button{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:8px;
+  margin-top:10px;
+  font-weight:bold;
+  cursor:pointer;
+}
+.btn-primary{background:#6366f1;color:#fff}
+.btn-warning{background:#f59e0b;color:#fff}
+.btn-info{background:#06b6d4;color:#fff}
+.hidden{display:none}
+#status{margin-top:10px;font-size:14px}
 </style>
 </head>
 
@@ -25,185 +44,123 @@ body{
 
 <!-- LOGIN -->
 <div id="loginBox">
-  <input type="password" id="pass" placeholder="Nhập mật khẩu" onkeydown="if(event.key==='Enter')doLogin()">
-  <button onclick="doLogin()">Đăng nhập</button>
+  <h2>🔒 Đăng nhập</h2>
+  <input type="password" id="pass" placeholder="Nhập mật khẩu">
+  <button class="btn-primary" onclick="login()">Đăng nhập</button>
 </div>
 
 <!-- MAIN -->
-<div id="mainBox" class="hidden">
-  <h2>Pickleball Manager</h2>
+<div id="app" class="hidden">
 
-  <textarea id="players" rows="6"></textarea>
+  <h2>🏓 Pickleball Manager</h2>
 
-  <div id="playerTags"></div>
+  <textarea id="players" rows="8" placeholder="Mỗi dòng 1 VĐV"></textarea>
 
-  <button id="newGameBtn" class="hidden" onclick="createGame()">Tạo game</button>
+  <button class="btn-warning" onclick="save()">💾 Lưu danh sách</button>
+  <button class="btn-info" onclick="create()">🚀 Tạo lịch</button>
 
   <div id="status"></div>
+
 </div>
 
 </div>
 
 <script>
-(function(){
+const API = "https://script.google.com/macros/s/AKfycbyhzlTYzLTTVQB5HpvtrxZ-NMQB0HwT8dQH_MchZbN9xamE5lTvjh-N-RgNU730NMM9tw/exec";
+const PASS = "123";
 
-const PASSWORD = "123";
-const API_URL = "https://script.google.com/macros/s/AKfycbwfxL7zBh-CHZWTWv6fPe4k4tsGF7MV_1KsmxNWDJT7w4Hi5aY_7GGnl-5BGyjN4g7hkg/exec";
-
-let originalPlayers = [];
-
-/* ================= API ================= */
-function callAPI(action, data){
-
-  const payload = { action, ...data };
-
-  return fetch(API_URL,{
-    method:"POST",
-    headers:{
-      "Content-Type":"application/json"
-    },
-    body:JSON.stringify(payload)
-  })
-  .then(res => res.text())
-  .then(text=>{
-    try{
-      return JSON.parse(text);
-    }catch(e){
-      console.error("RAW RESPONSE:", text);
-      throw new Error("Response không phải JSON");
-    }
-  });
-
-}
-
-/* ================= UI ================= */
-
-function showStatus(msg){
-  document.getElementById("status").innerText = msg;
-}
-
-/* ================= LOGIN ================= */
-
-function setLogged(){
-  localStorage.setItem("pb_ok","1");
-}
-
-function isLogged(){
-  return localStorage.getItem("pb_ok")==="1";
-}
-
-window.doLogin = function(){
-  const pass = document.getElementById("pass").value;
-
-  if(pass === PASSWORD){
-    setLogged();
-
+/* ===== LOGIN ===== */
+function login(){
+  if(document.getElementById("pass").value === PASS){
     document.getElementById("loginBox").classList.add("hidden");
-    document.getElementById("mainBox").classList.remove("hidden");
-
-    loadPlayers(); // 🔥 AUTO LOAD SAU LOGIN
+    document.getElementById("app").classList.remove("hidden");
+    load(); // 🔥 auto load
   }else{
     alert("Sai mật khẩu");
   }
-};
+}
 
-/* ================= LOAD DATA ================= */
+/* ===== LOAD (GET) ===== */
+function load(){
 
-function loadPlayers(){
+  const url = API + "?action=loadPlayers";
 
-  showStatus("Đang tải danh sách...");
+  setStatus("⏳ Đang tải danh sách...");
 
-  callAPI("loadPlayers")
-  .then(data=>{
+  fetch(url)
+  .then(r => r.json())
+  .then(data => {
 
-    if(data.players && data.players.length){
+    console.log("LOAD:", data);
 
-      originalPlayers = data.players;
-
+    if(data.success){
       document.getElementById("players").value = data.players.join("\n");
-
-      updateTags();
-
-      showStatus("Đã load " + data.players.length + " VĐV");
-
+      setStatus("✅ Đã tải " + data.count + " VĐV");
     }else{
-      showStatus("Chưa có dữ liệu");
+      setStatus("❌ " + data.error);
     }
 
   })
   .catch(err=>{
     console.error(err);
-    showStatus("Lỗi kết nối API");
+    setStatus("❌ Lỗi kết nối API");
   });
-
 }
 
-/* ================= TAG ================= */
+/* ===== SAVE ===== */
+function save(){
 
-function updateTags(){
-
-  const text = document.getElementById("players").value.trim();
-
-  const list = text
+  const list = document.getElementById("players").value
     .split("\n")
-    .map(x=>x.trim())
-    .filter(x=>x);
+    .map(x => x.trim())
+    .filter(x => x);
 
-  const box = document.getElementById("playerTags");
-  box.innerHTML = "";
+  setStatus("⏳ Đang lưu...");
 
-  list.forEach(p=>{
-    const div = document.createElement("div");
-    div.innerText = p;
-    box.appendChild(div);
-  });
-
-}
-
-/* ================= CREATE GAME ================= */
-
-window.createGame = function(){
-
-  const text = document.getElementById("players").value.trim();
-
-  if(!text){
-    alert("Nhập danh sách");
-    return;
-  }
-
-  const list = text.split("\n").map(x=>x.trim()).filter(x=>x);
-
-  showStatus("Đang tạo game...");
-
-  callAPI("savePlayers",{players:list})
-  .then(()=>callAPI("createSchedule"))
-  .then(()=>{
-    showStatus("Tạo game thành công");
-    originalPlayers = list;
+  fetch(API,{
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify({
+      action:"savePlayers",
+      players:list
+    })
+  })
+  .then(r => r.json())
+  .then(data=>{
+    console.log("SAVE:", data);
+    setStatus("✅ " + (data.message || "Đã lưu"));
   })
   .catch(()=>{
-    showStatus("Lỗi tạo game");
+    setStatus("❌ Lỗi lưu dữ liệu");
   });
+}
 
-};
+/* ===== CREATE ===== */
+function create(){
 
-/* ================= INIT ================= */
+  setStatus("⏳ Đang tạo lịch...");
 
-document.addEventListener("DOMContentLoaded",function(){
+  fetch(API,{
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify({
+      action:"createSchedule"
+    })
+  })
+  .then(r => r.json())
+  .then(data=>{
+    console.log("CREATE:", data);
+    setStatus("🔥 " + data.message);
+  })
+  .catch(()=>{
+    setStatus("❌ Lỗi tạo lịch");
+  });
+}
 
-  document.getElementById("players").addEventListener("input",updateTags);
-
-  // 🔥 AUTO LOGIN nếu đã lưu
-  if(isLogged()){
-    document.getElementById("loginBox").classList.add("hidden");
-    document.getElementById("mainBox").classList.remove("hidden");
-
-    loadPlayers(); // 🔥 LOAD NGAY
-  }
-
-});
-
-})();
+/* ===== UI ===== */
+function setStatus(msg){
+  document.getElementById("status").innerText = msg;
+}
 </script>
 
 </body>
