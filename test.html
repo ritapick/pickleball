@@ -586,8 +586,8 @@
     async function init() {
         try {
             const [rankRes, matchRes] = await Promise.all([
-                getSheet('danhsachvdv', 'E1:I25'),
-                getSheet('lichthidau', 'A2:G100')
+                getSheet('DanhSachVDV', 'E1:I25'),
+                getSheet('LichThiDau', 'A2:G100')
             ]);
             renderRanking(rankRes);
             renderMatches(matchRes);
