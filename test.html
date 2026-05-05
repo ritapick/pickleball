@@ -38,7 +38,6 @@
 
   .container { position: relative; z-index: 1; max-width: 480px; margin: 0 auto; padding: 16px; }
 
-  /* LOGIN */
   #loginBox {
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     min-height: 100vh; min-height: 100dvh; animation: fadeIn 0.5s ease;
@@ -92,16 +91,11 @@
     background: linear-gradient(135deg, #f59e0b, #d97706); color: white;
     box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
   }
-  .btn-success {
-    background: linear-gradient(135deg, #22c55e, #16a34a); color: white;
-    box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
-  }
   .btn-info {
     background: linear-gradient(135deg, #06b6d4, #0891b2); color: white;
     box-shadow: 0 4px 15px rgba(6, 182, 212, 0.4);
   }
 
-  /* MAIN */
   #mainBox { animation: fadeIn 0.5s ease; }
 
   .header { text-align: center; margin-bottom: 20px; padding-top: 10px; position: relative; }
@@ -119,7 +113,6 @@
     font-size: 12px; cursor: pointer; font-family: inherit; transition: all 0.3s;
   }
 
-  /* Stats */
   .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
   .stat-card {
     background: rgba(30, 27, 75, 0.4); backdrop-filter: blur(10px);
@@ -130,7 +123,6 @@
   .stat-value { font-size: 26px; font-weight: 700; color: #a78bfa; }
   .stat-label { font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
 
-  /* Card */
   .card {
     background: rgba(30, 27, 75, 0.4); backdrop-filter: blur(10px);
     border: 1px solid rgba(99, 102, 241, 0.12); border-radius: 16px;
@@ -159,7 +151,6 @@
   }
   @keyframes tagIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
 
-  /* Action Buttons */
   .action-buttons { display: flex; flex-direction: column; gap: 10px; }
 
   .status {
@@ -182,18 +173,6 @@
   .hidden { display: none !important; }
   .fade-in { animation: fadeIn 0.5s ease; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-  .auto-save-indicator {
-    display: inline-flex; align-items: center; gap: 4px;
-    font-size: 11px; color: #64748b; margin-top: 8px;
-    transition: opacity 0.3s; opacity: 0;
-  }
-  .auto-save-indicator.show { opacity: 1; }
-  .auto-save-dot {
-    width: 6px; height: 6px; border-radius: 50%; background: #22c55e;
-    animation: pulse 1.5s infinite;
-  }
-  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
   .change-notice {
     margin-top: 10px; padding: 10px 14px; border-radius: 10px;
@@ -221,7 +200,6 @@
 
 <div class="container">
 
-  <!-- LOGIN -->
   <div id="loginBox">
     <div class="login-card">
       <div class="logo">🏓</div>
@@ -240,7 +218,6 @@
     </div>
   </div>
 
-  <!-- MAIN -->
   <div id="mainBox" class="hidden">
     <div class="header">
       <h1>🏓 PICKLEBALL MANAGER PRO</h1>
@@ -272,13 +249,9 @@
         <span class="card-badge" id="listStatus">Đang tải...</span>
       </div>
       <textarea id="players" rows="6" placeholder="Nhập danh sách VĐV (mỗi dòng 1 người)"></textarea>
-      <div class="auto-save-indicator" id="autoSaveIndicator">
-        <span class="auto-save-dot"></span>
-        <span id="autoSaveText">Đang lưu...</span>
-      </div>
       <div class="change-notice" id="changeNotice">
         <span>⚠️</span>
-        <span>Danh sách đã thay đổi so với bản gốc — hãy tạo game mới để cập nhật lịch thi đấu</span>
+        <span>Danh sách đã thay đổi — tạo game mới để lưu & chạy lại lịch thi đấu</span>
       </div>
       <div class="player-list" id="playerTags"></div>
     </div>
@@ -302,7 +275,6 @@
 (function() {
   var PASSWORD = "123";
   var API_URL = "https://script.google.com/macros/s/AKfycbxyjSKqBHxBoIuMIrmx8niKyYPVeAkMFVA3czmi5Zm5DG_LY_7MzkQhXF2TghhF0Dpu3Q/exec";
-  var autoSaveTimer = null;
   var originalPlayers = [];
 
   function callAPI(action, data) {
@@ -382,25 +354,6 @@
     updateStats(list.length);
   }
 
-  function showAutoSave(text) {
-    var indicator = document.getElementById("autoSaveIndicator");
-    var autoSaveTextEl = document.getElementById("autoSaveText");
-    autoSaveTextEl.textContent = text;
-    indicator.className = "auto-save-indicator show";
-  }
-
-  function hideAutoSave() {
-    document.getElementById("autoSaveIndicator").className = "auto-save-indicator";
-  }
-
-  function scheduleAutoSave() {
-    if (autoSaveTimer) clearTimeout(autoSaveTimer);
-    showAutoSave("⏳ Sẽ tự động lưu sau 3 giây...");
-    autoSaveTimer = setTimeout(function() {
-      doSavePlayers(true);
-    }, 3000);
-  }
-
   function checkChanges() {
     var currentText = document.getElementById("players").value.trim();
     var currentList = currentText ? currentText.split("\n").map(function(x){ return x.trim(); }).filter(function(x){ return x; }) : [];
@@ -423,12 +376,13 @@
   function loadPlayers() {
     showStatus("\u23F3 Đang tải danh sách VĐV...", "loading");
     document.getElementById("listStatus").textContent = "Đang tải...";
+    originalPlayers = [];
 
     callAPI("loadPlayers")
       .then(function(data) {
-        if (data.players && data.players.length > 0) {
-          document.getElementById("players").value = data.players.join("\n");
+        if (data && data.players && data.players.length > 0) {
           originalPlayers = data.players.slice();
+          document.getElementById("players").value = data.players.join("\n");
           document.getElementById("listStatus").textContent = "\u2705 " + data.players.length + " VĐV";
           document.getElementById("listStatus").style.background = "rgba(34,197,94,0.15)";
           document.getElementById("listStatus").style.color = "#86efac";
@@ -438,47 +392,22 @@
           if (data.roundCount) document.getElementById("roundCount").textContent = data.roundCount;
           showStatus("\u2705 Đã tải " + data.players.length + " VĐV!", "success");
         } else {
-          originalPlayers = [];
           document.getElementById("players").value = "";
           document.getElementById("listStatus").textContent = "⚠️ Trống";
           document.getElementById("listStatus").style.background = "rgba(245,158,11,0.15)";
           document.getElementById("listStatus").style.color = "#fcd34d";
+          updatePlayerTags();
+          checkChanges();
           showStatus("⚠️ Chưa có danh sách VĐV trong bảng tính.", "error");
         }
       })
       .catch(function(err) {
-        console.error(err);
+        console.error("Load error:", err);
         originalPlayers = [];
         document.getElementById("listStatus").textContent = "❌ Lỗi";
         document.getElementById("listStatus").style.background = "rgba(239,68,68,0.15)";
         document.getElementById("listStatus").style.color = "#fca5a5";
         showStatus("❌ Không kết nối được Google Sheets.", "error");
-      });
-  }
-
-  function doSavePlayers(silent) {
-    var text = document.getElementById("players").value.trim();
-    if (!text) {
-      if (!silent) alert("Danh sách VĐV trống!");
-      hideAutoSave();
-      return;
-    }
-    var list = text.split("\n").map(function(x){ return x.trim(); }).filter(function(x){ return x; });
-
-    if (!silent) showAutoSave("💾 Đang lưu...");
-
-    callAPI("savePlayers", { players: list })
-      .then(function() {
-        originalPlayers = list.slice();
-        checkChanges();
-        if (!silent) showStatus("\u2705 Đã lưu danh sách VĐV!", "success");
-        else showAutoSave("\u2705 Đã tự động lưu!");
-        setTimeout(hideAutoSave, silent ? 2000 : 4000);
-      })
-      .catch(function() {
-        if (!silent) showStatus("⚠️ Lỗi khi lưu.", "error");
-        else showAutoSave("❌ Lỗi lưu!");
-        setTimeout(hideAutoSave, 3000);
       });
   }
 
@@ -497,7 +426,6 @@
   window.doLogout = function() {
     clearLogin();
     originalPlayers = [];
-    if (autoSaveTimer) clearTimeout(autoSaveTimer);
     document.getElementById("mainBox").className = "hidden";
     document.getElementById("loginBox").className = "";
     document.getElementById("pass").value = "";
@@ -519,21 +447,21 @@
       alert("Cần từ 5 đến 12 VĐV!");
       return;
     }
-    if (!confirm("Tạo game mới và chạy lại lịch thi đấu?\n\n" + list.length + " VĐV")) return;
+    if (!confirm("Tạo game mới?\n\nHành động này sẽ:\n1. Lưu danh sách " + list.length + " VĐV vào bảng tính\n2. Chạy lại lịch thi đấu\n\nBạn có muốn tiếp tục?")) return;
 
-    showStatus("\u23F3 Đang tạo game mới...", "loading");
+    showStatus("\u23F3 Đang lưu danh sách & tạo game mới...", "loading");
 
     callAPI("savePlayers", { players: list })
       .then(function() { return callAPI("createSchedule"); })
       .then(function(data) {
-        if (data.matchCount) document.getElementById("matchCount").textContent = data.matchCount;
-        if (data.roundCount) document.getElementById("roundCount").textContent = data.roundCount;
         originalPlayers = list.slice();
         checkChanges();
-        showStatus("\uD83D\uDD25 Đã tạo game mới thành công!", "success");
+        if (data.matchCount) document.getElementById("matchCount").textContent = data.matchCount;
+        if (data.roundCount) document.getElementById("roundCount").textContent = data.roundCount;
+        showStatus("\uD83D\uDD25 Đã tạo game mới & chạy lại lịch thành công!", "success");
       })
       .catch(function() {
-        showStatus("⚠️ Có thể đã tạo xong. Kiểm tra Google Sheets.", "error");
+        showStatus("⚠️ Có lỗi xảy ra. Vui lòng kiểm tra Google Sheets.", "error");
       });
   };
 
@@ -541,7 +469,6 @@
     document.getElementById("players").addEventListener("input", function() {
       updatePlayerTags();
       checkChanges();
-      scheduleAutoSave();
     });
 
     if (isLoggedIn()) {
