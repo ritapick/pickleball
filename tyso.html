@@ -519,7 +519,7 @@
             getSheet('lichthidau', 'A2:G100')
                 .then(renderMatches)
                 .catch(e => console.log('Auto-refresh error:', e));
-        }, 1000);
+        }, 30000);
     }
 
     // Khởi chạy khi DOM ready
