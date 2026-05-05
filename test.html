@@ -3,38 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pickleball Manager Pro</title>
+<title>Pickleball Manager PRO</title>
 
 <style>
-body{
-  font-family:Arial;
-  background:#0f172a;
-  color:#fff;
-  margin:0;
-  padding:20px;
-}
+body{font-family:Arial;background:#0f172a;color:#fff;margin:0;padding:20px}
 .container{max-width:500px;margin:auto}
-input,textarea{
-  width:100%;
-  padding:12px;
-  border-radius:8px;
-  border:none;
-  margin-top:10px;
-}
-button{
-  width:100%;
-  padding:12px;
-  border:none;
-  border-radius:8px;
-  margin-top:10px;
-  font-weight:bold;
-  cursor:pointer;
-}
-.btn-primary{background:#6366f1;color:#fff}
-.btn-warning{background:#f59e0b;color:#fff}
-.btn-info{background:#06b6d4;color:#fff}
+input,textarea{width:100%;padding:12px;border-radius:8px;border:none;margin-top:10px}
+button{width:100%;padding:12px;border:none;border-radius:8px;margin-top:10px;font-weight:bold;cursor:pointer}
+.btn-primary{background:#6366f1}
+.btn-warning{background:#f59e0b}
+.btn-info{background:#06b6d4}
 .hidden{display:none}
-#status{margin-top:10px;font-size:14px}
+#status{margin-top:10px;font-size:14px;line-height:1.6}
 </style>
 </head>
 
@@ -42,124 +22,171 @@ button{
 
 <div class="container">
 
-<!-- LOGIN -->
 <div id="loginBox">
   <h2>🔒 Đăng nhập</h2>
   <input type="password" id="pass" placeholder="Nhập mật khẩu">
   <button class="btn-primary" onclick="login()">Đăng nhập</button>
 </div>
 
-<!-- MAIN -->
 <div id="app" class="hidden">
+  <h2>🏓 Pickleball Manager PRO</h2>
 
-  <h2>🏓 Pickleball Manager</h2>
+  <textarea id="players" rows="8"></textarea>
 
-  <textarea id="players" rows="8" placeholder="Mỗi dòng 1 VĐV"></textarea>
-
-  <button class="btn-warning" onclick="save()">💾 Lưu danh sách</button>
+  <button class="btn-warning" onclick="save()">💾 Lưu</button>
   <button class="btn-info" onclick="create()">🚀 Tạo lịch</button>
 
   <div id="status"></div>
-
 </div>
 
 </div>
 
 <script>
-const API = "https://script.google.com/macros/s/AKfycbyhzlTYzLTTVQB5HpvtrxZ-NMQB0HwT8dQH_MchZbN9xamE5lTvjh-N-RgNU730NMM9tw/exec";
+const API = "https://script.google.com/macros/s/AKfycbyfum_8OQco8FYvrq6q6yE8ZuoJ7UQLqRL1NOyqkRahVr1xjhrMg5bdf4rVJUnBYJ2gMg/exec";
 const PASS = "123";
 
 /* ===== LOGIN ===== */
 function login(){
-  if(document.getElementById("pass").value === PASS){
-    document.getElementById("loginBox").classList.add("hidden");
-    document.getElementById("app").classList.remove("hidden");
-    load(); // 🔥 auto load
-  }else{
-    alert("Sai mật khẩu");
+  if(pass.value === PASS){
+    loginBox.classList.add("hidden");
+    app.classList.remove("hidden");
+    init();
+  }else alert("Sai mật khẩu");
+}
+
+/* ===== INIT ===== */
+async function init(){
+  await checkAPI();
+  load();
+}
+
+/* ===== CHECK API ===== */
+async function checkAPI(){
+  setStatus("🔍 Kiểm tra API...");
+
+  try{
+    const res = await fetch(API + "?action=test");
+    const text = await res.text();
+
+    console.log("TEST RAW:", text);
+
+    let data;
+    try{
+      data = JSON.parse(text);
+    }catch{
+      throw "API không trả JSON (sai deploy hoặc lỗi GAS)";
+    }
+
+    if(!data.success){
+      throw "API hoạt động nhưng sai logic";
+    }
+
+    setStatus("✅ API OK");
+
+  }catch(err){
+    console.error(err);
+
+    if(String(err).includes("Failed to fetch")){
+      setStatus("❌ Không kết nối được API<br>→ Kiểm tra link hoặc public Web App");
+    }else{
+      setStatus("❌ " + err);
+    }
   }
 }
 
-/* ===== LOAD (GET) ===== */
-function load(){
+/* ===== LOAD ===== */
+async function load(){
 
-  const url = API + "?action=loadPlayers";
+  setStatus("⏳ Đang tải...");
 
-  setStatus("⏳ Đang tải danh sách...");
+  try{
+    const res = await fetch(API + "?action=loadPlayers");
+    const text = await res.text();
 
-  fetch(url)
-  .then(r => r.json())
-  .then(data => {
+    console.log("LOAD RAW:", text);
 
-    console.log("LOAD:", data);
-
-    if(data.success){
-      document.getElementById("players").value = data.players.join("\n");
-      setStatus("✅ Đã tải " + data.count + " VĐV");
-    }else{
-      setStatus("❌ " + data.error);
+    let data;
+    try{
+      data = JSON.parse(text);
+    }catch{
+      throw "API trả dữ liệu lỗi (không phải JSON)";
     }
 
-  })
-  .catch(err=>{
+    if(!data.success){
+      throw data.error || "Lỗi không xác định";
+    }
+
+    players.value = data.players.join("\n");
+
+    setStatus("✅ Đã tải " + data.count + " VĐV");
+
+  }catch(err){
     console.error(err);
-    setStatus("❌ Lỗi kết nối API");
-  });
+
+    if(String(err).includes("Failed to fetch")){
+      setStatus("❌ Không kết nối API");
+    }else{
+      setStatus("❌ " + err);
+    }
+  }
 }
 
 /* ===== SAVE ===== */
-function save(){
+async function save(){
 
-  const list = document.getElementById("players").value
-    .split("\n")
-    .map(x => x.trim())
-    .filter(x => x);
+  const list = players.value.split("\n").map(x=>x.trim()).filter(x=>x);
 
   setStatus("⏳ Đang lưu...");
 
-  fetch(API,{
-    method:"POST",
-    headers:{ "Content-Type":"application/json" },
-    body: JSON.stringify({
-      action:"savePlayers",
-      players:list
-    })
-  })
-  .then(r => r.json())
-  .then(data=>{
-    console.log("SAVE:", data);
-    setStatus("✅ " + (data.message || "Đã lưu"));
-  })
-  .catch(()=>{
+  try{
+    const res = await fetch(API,{
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({
+        action:"savePlayers",
+        players:list
+      })
+    });
+
+    const data = await res.json();
+
+    if(!data.success) throw data.error;
+
+    setStatus("✅ " + data.message);
+
+  }catch(err){
+    console.error(err);
     setStatus("❌ Lỗi lưu dữ liệu");
-  });
+  }
 }
 
 /* ===== CREATE ===== */
-function create(){
+async function create(){
 
   setStatus("⏳ Đang tạo lịch...");
 
-  fetch(API,{
-    method:"POST",
-    headers:{ "Content-Type":"application/json" },
-    body: JSON.stringify({
-      action:"createSchedule"
-    })
-  })
-  .then(r => r.json())
-  .then(data=>{
-    console.log("CREATE:", data);
+  try{
+    const res = await fetch(API,{
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({ action:"createSchedule" })
+    });
+
+    const data = await res.json();
+
+    if(!data.success) throw data.error;
+
     setStatus("🔥 " + data.message);
-  })
-  .catch(()=>{
+
+  }catch(err){
+    console.error(err);
     setStatus("❌ Lỗi tạo lịch");
-  });
+  }
 }
 
 /* ===== UI ===== */
 function setStatus(msg){
-  document.getElementById("status").innerText = msg;
+  status.innerHTML = msg;
 }
 </script>
 
