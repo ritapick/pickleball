@@ -81,6 +81,7 @@
     font-size: 15px; font-weight: 600; font-family: inherit; cursor: pointer;
     transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px;
     -webkit-tap-highlight-color: transparent;
+    text-decoration: none;
   }
   .btn:active { transform: scale(0.97); }
   .btn-primary {
@@ -98,13 +99,6 @@
   .btn-info {
     background: linear-gradient(135deg, #06b6d4, #0891b2); color: white;
     box-shadow: 0 4px 15px rgba(6, 182, 212, 0.4);
-  }
-  .btn-link {
-    background: linear-gradient(135deg, #06b6d4, #0891b2); color: white;
-    box-shadow: 0 4px 15px rgba(6, 182, 212, 0.4); text-decoration: none;
-  }
-  .btn-sm {
-    padding: 8px 14px; font-size: 12px; border-radius: 10px;
   }
 
   /* MAIN */
@@ -167,8 +161,6 @@
 
   /* Action Buttons */
   .action-buttons { display: flex; flex-direction: column; gap: 10px; }
-  .action-row { display: flex; gap: 10px; }
-  .action-row .btn { flex: 1; }
 
   .status {
     margin-top: 14px; padding: 12px 16px; border-radius: 12px;
@@ -203,11 +195,19 @@
   }
   @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
+  .change-notice {
+    margin-top: 10px; padding: 10px 14px; border-radius: 10px;
+    font-size: 12px; font-weight: 500;
+    background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.2);
+    color: #fcd34d; display: none; align-items: center; gap: 8px;
+    animation: fadeIn 0.3s ease;
+  }
+  .change-notice.show { display: flex; }
+
   @media (max-width: 360px) {
     .container { padding: 12px; }
     .stat-value { font-size: 22px; }
     .card { padding: 14px; }
-    .action-row { flex-direction: column; }
   }
 </style>
 </head>
@@ -228,13 +228,13 @@
       <h2>Đăng nhập Quản trị</h2>
       <p>Quản lý giải đấu Pickleball</p>
       <div class="input-group">
-        <input type="password" id="pass" placeholder="🔒 Mật khẩu" onkeydown="if(event.key==='Enter')login()">
+        <input type="password" id="pass" placeholder="🔒 Mật khẩu" onkeydown="if(event.key==='Enter')doLogin()">
       </div>
       <label class="remember-row">
         <input type="checkbox" id="rememberMe" checked>
         <span>Ghi nhớ đăng nhập</span>
       </label>
-      <button class="btn btn-primary" id="loginBtn" onclick="login()">
+      <button class="btn btn-primary" onclick="doLogin()">
         <span>Đăng nhập</span><span>→</span>
       </button>
     </div>
@@ -245,7 +245,7 @@
     <div class="header">
       <h1>🏓 PICKLEBALL MANAGER PRO</h1>
       <p>Quản lý & xếp lịch thi đấu tự động</p>
-      <button class="logout-btn" onclick="logout()">Đăng xuất</button>
+      <button class="logout-btn" onclick="doLogout()">Đăng xuất</button>
     </div>
 
     <div class="stats-grid">
@@ -276,21 +276,18 @@
         <span class="auto-save-dot"></span>
         <span id="autoSaveText">Đang lưu...</span>
       </div>
+      <div class="change-notice" id="changeNotice">
+        <span>⚠️</span>
+        <span>Danh sách đã thay đổi so với bản gốc — hãy tạo game mới để cập nhật lịch thi đấu</span>
+      </div>
       <div class="player-list" id="playerTags"></div>
     </div>
 
     <div class="card fade-in">
       <div class="card-title" style="margin-bottom: 14px;">⚙️ Điều khiển</div>
       <div class="action-buttons">
-        <div class="action-row">
-          <button class="btn btn-warning" onclick="createGame()">🚀 Tạo game mới</button>
-          <button class="btn btn-info btn-sm" onclick="loadPlayers()" title="Tải lại dữ liệu">🔄 Tải lại</button>
-        </div>
-        <div class="action-row">
-          <button class="btn btn-success btn-sm" onclick="savePlayersOnly()">💾 Lưu danh sách VĐV</button>
-          <button class="btn btn-sm" style="background: rgba(99,102,241,0.2); border: 1px solid rgba(99,102,241,0.3); color: #a78bfa;" onclick="refreshStats()">📊 Cập nhật stats</button>
-        </div>
-        <a href="#" target="_blank" class="btn btn-link" id="scoreLink">📝 Vào trang nhập điểm →</a>
+        <button class="btn btn-warning hidden" id="newGameBtn" onclick="createGame()">🚀 Tạo game mới & Chạy lại lịch</button>
+        <a href="https://ductrong49.github.io/ritapickleball/tyso.html" target="_blank" rel="noopener" class="btn btn-info">📝 Vào trang cập nhật kết quả →</a>
       </div>
     </div>
 
@@ -302,234 +299,258 @@
 </div>
 
 <script>
-var PASSWORD = "123";
-var API_URL = "https://script.google.com/macros/s/AKfycbxyjSKqBHxBoIuMIrmx8niKyYPVeAkMFVA3czmi5Zm5DG_LY_7MzkQhXF2TghhF0Dpu3Q/exec";
-var autoSaveTimer = null;
-var isDataLoaded = false;
+(function() {
+  var PASSWORD = "123";
+  var API_URL = "https://script.google.com/macros/s/AKfycbxyjSKqBHxBoIuMIrmx8niKyYPVeAkMFVA3czmi5Zm5DG_LY_7MzkQhXF2TghhF0Dpu3Q/exec";
+  var autoSaveTimer = null;
+  var originalPlayers = [];
 
-function callAPI(action, data) {
-  var payload = { action: action };
-  if (data) {
-    for (var k in data) { payload[k] = data[k]; }
-  }
-  return fetch(API_URL, { method: "POST", body: JSON.stringify(payload) })
-  .then(function(res) { return res.text(); })
-  .then(function(text) {
-    try { return JSON.parse(text); }
-    catch(e) { console.error("Parse error:", text); throw new Error("Invalid response"); }
-  });
-}
-
-function showStatus(msg, type) {
-  var el = document.getElementById("status");
-  el.className = "status show " + type;
-  if (type === "loading") {
-    el.innerHTML = '<span class="spinner"></span><span>' + msg + '</span>';
-  } else {
-    el.innerHTML = '<span>' + msg + '</span>';
-  }
-  if (type !== "loading") {
-    setTimeout(function() { el.className = "status"; }, 4000);
-  }
-}
-
-function setLoggedIn() {
-  if (document.getElementById("rememberMe").checked) {
-    localStorage.setItem("pb_ok", "1");
-  } else {
-    sessionStorage.setItem("pb_ok", "1");
-  }
-}
-
-function isLoggedIn() {
-  return localStorage.getItem("pb_ok") === "1" || sessionStorage.getItem("pb_ok") === "1";
-}
-
-function clearLogin() {
-  localStorage.removeItem("pb_ok");
-  sessionStorage.removeItem("pb_ok");
-}
-
-function showMainBox() {
-  document.getElementById("loginBox").className = "hidden";
-  document.getElementById("mainBox").className = "";
-  if (!isDataLoaded) {
-    loadPlayers();
-    isDataLoaded = true;
-  }
-}
-
-function login() {
-  var pass = document.getElementById("pass").value;
-  if (pass === PASSWORD) {
-    setLoggedIn();
-    isDataLoaded = false;
-    showMainBox();
-  } else {
-    alert("Sai mật khẩu!");
-  }
-}
-
-function logout() {
-  clearLogin();
-  isDataLoaded = false;
-  document.getElementById("mainBox").className = "hidden";
-  document.getElementById("loginBox").className = "";
-  document.getElementById("pass").value = "";
-}
-
-function updateStats(count) {
-  document.getElementById("playerCount").innerText = count;
-  if (count >= 4) {
-    var rounds = count - 1;
-    var matches = rounds * Math.floor(count / 4);
-    document.getElementById("matchCount").innerText = "~" + matches;
-    document.getElementById("roundCount").innerText = rounds;
-  } else {
-    document.getElementById("matchCount").innerText = "—";
-    document.getElementById("roundCount").innerText = "—";
-  }
-}
-
-function updatePlayerTags() {
-  var text = document.getElementById("players").value.trim();
-  var container = document.getElementById("playerTags");
-  container.innerHTML = "";
-  if (!text) return;
-  var list = text.split("\n").map(function(x){ return x.trim(); }).filter(function(x){ return x; });
-  list.forEach(function(p, i) {
-    var tag = document.createElement("div");
-    tag.className = "player-tag";
-    tag.style.animationDelay = (i * 0.03) + "s";
-    tag.textContent = "\uD83D\uDC64 " + p;
-    container.appendChild(tag);
-  });
-  updateStats(list.length);
-}
-
-function showAutoSave(text) {
-  var indicator = document.getElementById("autoSaveIndicator");
-  var autoSaveTextEl = document.getElementById("autoSaveText");
-  autoSaveTextEl.textContent = text;
-  indicator.className = "auto-save-indicator show";
-}
-
-function hideAutoSave() {
-  document.getElementById("autoSaveIndicator").className = "auto-save-indicator";
-}
-
-function scheduleAutoSave() {
-  if (autoSaveTimer) clearTimeout(autoSaveTimer);
-  showAutoSave("⏳ Sẽ tự động lưu sau 3 giây...");
-  autoSaveTimer = setTimeout(function() {
-    savePlayersOnly(true);
-  }, 3000);
-}
-
-function loadPlayers() {
-  showStatus("\u23F3 Đang tải danh sách...", "loading");
-  document.getElementById("listStatus").textContent = "Đang tải...";
-
-  callAPI("loadPlayers")
-  .then(function(data) {
-    if (data.players && data.players.length > 0) {
-      document.getElementById("players").value = data.players.join("\n");
-      document.getElementById("listStatus").textContent = "\u2705 " + data.players.length + " VĐV";
-      document.getElementById("listStatus").style.background = "rgba(34,197,94,0.15)";
-      document.getElementById("listStatus").style.color = "#86efac";
-      updatePlayerTags();
-      if (data.matchCount) document.getElementById("matchCount").textContent = data.matchCount;
-      if (data.roundCount) document.getElementById("roundCount").textContent = data.roundCount;
-      showStatus("\u2705 Đã tải " + data.players.length + " VĐV!", "success");
-    } else {
-      document.getElementById("listStatus").textContent = "⚠️ Trống";
-      document.getElementById("listStatus").style.background = "rgba(245,158,11,0.15)";
-      document.getElementById("listStatus").style.color = "#fcd34d";
-      showStatus("⚠️ Chưa có danh sách VĐV trong bảng tính.", "error");
+  function callAPI(action, data) {
+    var payload = { action: action };
+    if (data) {
+      for (var k in data) {
+        if (Object.prototype.hasOwnProperty.call(data, k)) {
+          payload[k] = data[k];
+        }
+      }
     }
-  })
-  .catch(function(err) {
-    console.error(err);
-    document.getElementById("listStatus").textContent = "❌ Lỗi";
-    document.getElementById("listStatus").style.background = "rgba(239,68,68,0.15)";
-    document.getElementById("listStatus").style.color = "#fca5a5";
-    showStatus("❌ Không kết nối được Google Sheets.", "error");
-  });
-}
-
-function savePlayersOnly(silent) {
-  var text = document.getElementById("players").value.trim();
-  if (!text) {
-    if (!silent) alert("Danh sách VĐV trống!");
-    hideAutoSave();
-    return;
+    return fetch(API_URL, { method: "POST", body: JSON.stringify(payload) })
+      .then(function(res) { return res.text(); })
+      .then(function(text) {
+        try { return JSON.parse(text); }
+        catch(e) { throw new Error("Invalid response"); }
+      });
   }
-  var list = text.split("\n").map(function(x){ return x.trim(); }).filter(function(x){ return x; });
 
-  if (!silent) showAutoSave("💾 Đang lưu...");
+  function showStatus(msg, type) {
+    var el = document.getElementById("status");
+    el.className = "status show " + type;
+    if (type === "loading") {
+      el.innerHTML = '<span class="spinner"></span><span>' + msg + '</span>';
+    } else {
+      el.innerHTML = '<span>' + msg + '</span>';
+    }
+    if (type !== "loading") {
+      setTimeout(function() { el.className = "status"; }, 4000);
+    }
+  }
 
-  callAPI("savePlayers", { players: list })
-  .then(function() {
-    if (!silent) showStatus("\u2705 Đã lưu danh sách VĐV!", "success");
-    else showAutoSave("\u2705 Đã tự động lưu!");
-    setTimeout(hideAutoSave, silent ? 2000 : 4000);
-  })
-  .catch(function() {
-    if (!silent) showStatus("⚠️ Lỗi khi lưu.", "error");
-    else showAutoSave("❌ Lỗi lưu!");
-    setTimeout(hideAutoSave, 3000);
-  });
-}
+  function setLoggedIn(remember) {
+    if (remember) {
+      localStorage.setItem("pb_ok", "1");
+    } else {
+      sessionStorage.setItem("pb_ok", "1");
+    }
+  }
 
-function refreshStats() {
-  showStatus("\u23F3 Đang cập nhật stats...", "loading");
-  var text = document.getElementById("players").value.trim();
-  if (text) {
+  function isLoggedIn() {
+    return localStorage.getItem("pb_ok") === "1" || sessionStorage.getItem("pb_ok") === "1";
+  }
+
+  function clearLogin() {
+    localStorage.removeItem("pb_ok");
+    sessionStorage.removeItem("pb_ok");
+  }
+
+  function updateStats(count) {
+    document.getElementById("playerCount").innerText = count;
+    if (count >= 4) {
+      var rounds = count - 1;
+      var matchesPerRound = Math.floor(count / 4);
+      var totalMatches = rounds * matchesPerRound;
+      document.getElementById("matchCount").innerText = totalMatches;
+      document.getElementById("roundCount").innerText = rounds;
+    } else {
+      document.getElementById("matchCount").innerText = "—";
+      document.getElementById("roundCount").innerText = "—";
+    }
+  }
+
+  function updatePlayerTags() {
+    var text = document.getElementById("players").value.trim();
+    var container = document.getElementById("playerTags");
+    container.innerHTML = "";
+    if (!text) return;
     var list = text.split("\n").map(function(x){ return x.trim(); }).filter(function(x){ return x; });
+    list.forEach(function(p, i) {
+      var tag = document.createElement("div");
+      tag.className = "player-tag";
+      tag.style.animationDelay = (i * 0.03) + "s";
+      tag.textContent = "\uD83D\uDC64 " + p;
+      container.appendChild(tag);
+    });
     updateStats(list.length);
-    showStatus("\u2705 Stats đã cập nhật (" + list.length + " VĐV)!", "success");
-  } else {
-    showStatus("⚠️ Chưa có danh sách VĐV.", "error");
   }
-}
 
-function createGame() {
-  var text = document.getElementById("players").value.trim();
-  if (!text) { alert("Vui lòng nhập danh sách VĐV!"); return; }
-
-  var list = text.split("\n").map(function(x){ return x.trim(); }).filter(function(x){ return x; });
-  if (list.length < 5 || list.length > 12) {
-    alert("Cần từ 5 đến 12 VĐV!");
-    return;
+  function showAutoSave(text) {
+    var indicator = document.getElementById("autoSaveIndicator");
+    var autoSaveTextEl = document.getElementById("autoSaveText");
+    autoSaveTextEl.textContent = text;
+    indicator.className = "auto-save-indicator show";
   }
-  if (!confirm("Tạo game mới và chạy lại lịch?\n\n" + list.length + " VĐV")) return;
 
-  showStatus("\u23F3 Đang tạo game mới...", "loading");
+  function hideAutoSave() {
+    document.getElementById("autoSaveIndicator").className = "auto-save-indicator";
+  }
 
-  callAPI("savePlayers", { players: list })
-  .then(function() { return callAPI("createSchedule"); })
-  .then(function(data) {
-    if (data.matchCount) document.getElementById("matchCount").textContent = data.matchCount;
-    if (data.roundCount) document.getElementById("roundCount").textContent = data.roundCount;
-    showStatus("\uD83D\uDD25 Đã tạo game mới thành công!", "success");
-  })
-  .catch(function() {
-    showStatus("⚠️ Có thể đã tạo xong. Kiểm tra Google Sheets.", "error");
+  function scheduleAutoSave() {
+    if (autoSaveTimer) clearTimeout(autoSaveTimer);
+    showAutoSave("⏳ Sẽ tự động lưu sau 3 giây...");
+    autoSaveTimer = setTimeout(function() {
+      doSavePlayers(true);
+    }, 3000);
+  }
+
+  function checkChanges() {
+    var currentText = document.getElementById("players").value.trim();
+    var currentList = currentText ? currentText.split("\n").map(function(x){ return x.trim(); }).filter(function(x){ return x; }) : [];
+
+    var hasChanges = (currentList.length !== originalPlayers.length) ||
+      currentList.some(function(name, idx) { return name !== originalPlayers[idx]; });
+
+    var notice = document.getElementById("changeNotice");
+    var newGameBtn = document.getElementById("newGameBtn");
+
+    if (hasChanges) {
+      notice.className = "change-notice show";
+      newGameBtn.className = "btn btn-warning";
+    } else {
+      notice.className = "change-notice";
+      newGameBtn.className = "btn btn-warning hidden";
+    }
+  }
+
+  function loadPlayers() {
+    showStatus("\u23F3 Đang tải danh sách VĐV...", "loading");
+    document.getElementById("listStatus").textContent = "Đang tải...";
+
+    callAPI("loadPlayers")
+      .then(function(data) {
+        if (data.players && data.players.length > 0) {
+          document.getElementById("players").value = data.players.join("\n");
+          originalPlayers = data.players.slice();
+          document.getElementById("listStatus").textContent = "\u2705 " + data.players.length + " VĐV";
+          document.getElementById("listStatus").style.background = "rgba(34,197,94,0.15)";
+          document.getElementById("listStatus").style.color = "#86efac";
+          updatePlayerTags();
+          checkChanges();
+          if (data.matchCount) document.getElementById("matchCount").textContent = data.matchCount;
+          if (data.roundCount) document.getElementById("roundCount").textContent = data.roundCount;
+          showStatus("\u2705 Đã tải " + data.players.length + " VĐV!", "success");
+        } else {
+          originalPlayers = [];
+          document.getElementById("players").value = "";
+          document.getElementById("listStatus").textContent = "⚠️ Trống";
+          document.getElementById("listStatus").style.background = "rgba(245,158,11,0.15)";
+          document.getElementById("listStatus").style.color = "#fcd34d";
+          showStatus("⚠️ Chưa có danh sách VĐV trong bảng tính.", "error");
+        }
+      })
+      .catch(function(err) {
+        console.error(err);
+        originalPlayers = [];
+        document.getElementById("listStatus").textContent = "❌ Lỗi";
+        document.getElementById("listStatus").style.background = "rgba(239,68,68,0.15)";
+        document.getElementById("listStatus").style.color = "#fca5a5";
+        showStatus("❌ Không kết nối được Google Sheets.", "error");
+      });
+  }
+
+  function doSavePlayers(silent) {
+    var text = document.getElementById("players").value.trim();
+    if (!text) {
+      if (!silent) alert("Danh sách VĐV trống!");
+      hideAutoSave();
+      return;
+    }
+    var list = text.split("\n").map(function(x){ return x.trim(); }).filter(function(x){ return x; });
+
+    if (!silent) showAutoSave("💾 Đang lưu...");
+
+    callAPI("savePlayers", { players: list })
+      .then(function() {
+        originalPlayers = list.slice();
+        checkChanges();
+        if (!silent) showStatus("\u2705 Đã lưu danh sách VĐV!", "success");
+        else showAutoSave("\u2705 Đã tự động lưu!");
+        setTimeout(hideAutoSave, silent ? 2000 : 4000);
+      })
+      .catch(function() {
+        if (!silent) showStatus("⚠️ Lỗi khi lưu.", "error");
+        else showAutoSave("❌ Lỗi lưu!");
+        setTimeout(hideAutoSave, 3000);
+      });
+  }
+
+  window.doLogin = function() {
+    var pass = document.getElementById("pass").value;
+    if (pass === PASSWORD) {
+      setLoggedIn(document.getElementById("rememberMe").checked);
+      document.getElementById("loginBox").className = "hidden";
+      document.getElementById("mainBox").className = "";
+      loadPlayers();
+    } else {
+      alert("Sai mật khẩu!");
+    }
+  };
+
+  window.doLogout = function() {
+    clearLogin();
+    originalPlayers = [];
+    if (autoSaveTimer) clearTimeout(autoSaveTimer);
+    document.getElementById("mainBox").className = "hidden";
+    document.getElementById("loginBox").className = "";
+    document.getElementById("pass").value = "";
+    document.getElementById("players").value = "";
+    document.getElementById("newGameBtn").className = "btn btn-warning hidden";
+    document.getElementById("changeNotice").className = "change-notice";
+    document.getElementById("playerTags").innerHTML = "";
+    document.getElementById("playerCount").innerText = "0";
+    document.getElementById("matchCount").innerText = "0";
+    document.getElementById("roundCount").innerText = "0";
+  };
+
+  window.createGame = function() {
+    var text = document.getElementById("players").value.trim();
+    if (!text) { alert("Vui lòng nhập danh sách VĐV!"); return; }
+
+    var list = text.split("\n").map(function(x){ return x.trim(); }).filter(function(x){ return x; });
+    if (list.length < 5 || list.length > 12) {
+      alert("Cần từ 5 đến 12 VĐV!");
+      return;
+    }
+    if (!confirm("Tạo game mới và chạy lại lịch thi đấu?\n\n" + list.length + " VĐV")) return;
+
+    showStatus("\u23F3 Đang tạo game mới...", "loading");
+
+    callAPI("savePlayers", { players: list })
+      .then(function() { return callAPI("createSchedule"); })
+      .then(function(data) {
+        if (data.matchCount) document.getElementById("matchCount").textContent = data.matchCount;
+        if (data.roundCount) document.getElementById("roundCount").textContent = data.roundCount;
+        originalPlayers = list.slice();
+        checkChanges();
+        showStatus("\uD83D\uDD25 Đã tạo game mới thành công!", "success");
+      })
+      .catch(function() {
+        showStatus("⚠️ Có thể đã tạo xong. Kiểm tra Google Sheets.", "error");
+      });
+  };
+
+  document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("players").addEventListener("input", function() {
+      updatePlayerTags();
+      checkChanges();
+      scheduleAutoSave();
+    });
+
+    if (isLoggedIn()) {
+      document.getElementById("loginBox").className = "hidden";
+      document.getElementById("mainBox").className = "";
+      loadPlayers();
+    }
   });
-}
-
-// Init
-document.addEventListener("DOMContentLoaded", function() {
-  document.getElementById("players").addEventListener("input", function() {
-    updatePlayerTags();
-    scheduleAutoSave();
-  });
-
-  if (isLoggedIn()) {
-    isDataLoaded = false;
-    showMainBox();
-  }
-});
+})();
 </script>
 
 </body>
