@@ -197,7 +197,7 @@
     <section class="section">
         <div class="section-head">
             <div class="section-icon icon-match">✏️</div>
-            <h2><span>Nhập Tỷ Số</span></h2>
+            <h2><span>KẾT QUẢ THI ĐẤU</span></h2>
         </div>
         <div id="match-area">
             <div class="loader"><div class="spinner"></div><span class="loader-text">Đang tải...</span></div>
@@ -309,7 +309,7 @@
             const delay = Math.min(idx * 0.04, 1.5);
             const inputCls = isSaved ? 'saved-input' : '';
             const badgeCls = isSaved ? 'mc-status saved-badge' : 'mc-status pending-badge';
-            const badgeTxt = isSaved ? 'Đã lưu ✓' : 'Chờ nhập';
+            const badgeTxt = isSaved ? 'Đã thi đấu ✓' : 'Chưa thi đấu';
             const btnCls = isSaved ? 'mc-save-btn btn-saved' : 'mc-save-btn';
             const btnIcon = isSaved ? '✓' : '💾';
             const btnTxt = isSaved ? 'Đã lưu' : 'Lưu tỷ số';
@@ -372,7 +372,7 @@
         if (cardEl) cardEl.classList.remove('saved');
         if (statusEl) {
             statusEl.className = 'mc-status pending-badge';
-            statusEl.textContent = 'Chờ nhập';
+            statusEl.textContent = 'Chưa thi đấu';
         }
         if (sbtn) {
             sbtn.className = 'mc-save-btn';
@@ -519,7 +519,7 @@
             getSheet('lichthidau', 'A2:G100')
                 .then(renderMatches)
                 .catch(e => console.log('Auto-refresh error:', e));
-        }, 30000);
+        }, 60000);
     }
 
     // Khởi chạy khi DOM ready
