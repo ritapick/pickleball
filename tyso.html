@@ -466,7 +466,7 @@
             sbtn.innerHTML = '<span class="btn-icon">✓</span><span>Đã lưu</span>';
             setTimeout(() => { if (sbtn) sbtn.classList.remove('pulse'); }, 1500);
 
-            showToast(`✅ Đã lưu ${n1} - ${n2} data`, 'success');
+            showToast(`✅ Đã lưu tỷ số ${n1} - ${n2} vào bảng điểm`, 'success');
 
             // Reload dữ liệu để cập nhật bảng xếp hạng (nếu có công thức)
             setTimeout(() => loadData(), 1500);
