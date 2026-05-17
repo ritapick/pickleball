@@ -759,10 +759,10 @@
 
             // Vòng bảng - sheet "bang"
             var rangesBang = [
-                { range: 'A1:G8', title: 'BẢNG A' },
-                { range: 'A10:G17', title: 'BẢNG B' },
-                { range: 'A19:G26', title: 'BẢNG C' },
-                { range: 'A28:G35', title: 'BẢNG D' }
+                { range: 'A1:h8', title: 'BẢNG A' },
+                { range: 'A10:h17', title: 'BẢNG B' },
+                { range: 'A19:h26', title: 'BẢNG C' },
+                { range: 'A28:h35', title: 'BẢNG D' }
             ];
 
             var vongbangContainer = document.getElementById('vongbang-container');
@@ -781,10 +781,10 @@
 
             // Tứ kết - sheet "1.8"
             var rangesTuKet = [
-                { range: 'A2:F3', title: 'Tứ kết 1' },
-                { range: 'A5:F6', title: 'Tứ kết 2' },
-                { range: 'A8:F9', title: 'Tứ kết 3' },
-                { range: 'A11:F12', title: 'Tứ kết 4' }
+                { range: 'A2:g3', title: 'Tứ kết 1' },
+                { range: 'A5:g6', title: 'Tứ kết 2' },
+                { range: 'A8:g9', title: 'Tứ kết 3' },
+                { range: 'A11:g12', title: 'Tứ kết 4' }
             ];
 
             var tuketContainer = document.getElementById('tuket-container');
@@ -803,8 +803,8 @@
 
             // Bán kết - sheet "bk"
             var rangesBanKet = [
-                { range: 'A3:E4', title: 'Bán kết 1' },
-                { range: 'A6:E7', title: 'Bán kết 2' }
+                { range: 'A3:f4', title: 'Bán kết 1' },
+                { range: 'A6:f7', title: 'Bán kết 2' }
             ];
 
             var banketContainer = document.getElementById('banket-container');
@@ -823,7 +823,7 @@
 
             // Chung kết - sheet "ck" - hiển thị đúng vùng A3:C4
             var ckContainer = document.getElementById('chungket-container');
-            var ckData = await fetchSheetData('ck', 'A3:D4');
+            var ckData = await fetchSheetData('ck', 'A3:e4');
             if (ckData) {
                 var ckHTML = renderMatchTable(ckData, 'Chung Kết');
                 if (ckHTML) {
