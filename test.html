@@ -1,462 +1,135 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nhập Điểm Giải Đấu</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-primary: #0f172a;
-            --bg-secondary: #1e293b;
-            --bg-card: #1e293b;
-            --bg-input: #334155;
-            --border-color: #475569;
-            --text-primary: #f1f5f9;
-            --text-secondary: #94a3b8;
-            --accent-green: #22c55e;
-            --accent-blue: #3b82f6;
-            --accent-purple: #a855f7;
-            --accent-orange: #f97316;
-            --shadow: 0 4px 6px -1px rgba(0,0,0,0.3), 0 2px 4px -2px rgba(0,0,0,0.2);
-            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.4), 0 4px 6px -4px rgba(0,0,0,0.3);
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg-primary); color: var(--text-primary); min-height: 100vh; padding-bottom: 40px; }
-        .header { background: linear-gradient(135deg, #1e293b 0%, #334155 100%); padding: 24px 32px; border-bottom: 2px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
-        .header h1 { font-size: 28px; font-weight: 800; background: linear-gradient(135deg, #60a5fa, #a78bfa, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-        .header-controls { display: flex; align-items: center; gap: 12px; }
-        .status-badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
-        .status-badge.disconnected { background: rgba(239,68,68,0.2); color: #fca5a5; border: 1px solid rgba(239,68,68,0.4); }
-        .status-badge.connected { background: rgba(34,197,94,0.2); color: #86efac; border: 1px solid rgba(34,197,94,0.4); }
-        .container { max-width: 1400px; margin: 0 auto; padding: 24px; }
-        .round-section { margin-bottom: 40px; animation: fadeInUp 0.5s ease-out; }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .round-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid var(--border-color); }
-        .round-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
-        .round-header h2 { font-size: 22px; font-weight: 700; }
-        .round-header .round-count { margin-left: auto; font-size: 13px; color: var(--text-secondary); background: var(--bg-secondary); padding: 4px 12px; border-radius: 20px; }
-        .round-vb .round-icon { background: linear-gradient(135deg, #22c55e, #16a34a); }
-        .round-tk .round-icon { background: linear-gradient(135deg, #3b82f6, #2563eb); }
-        .round-bk .round-icon { background: linear-gradient(135deg, #a855f7, #7c3aed); }
-        .round-ck .round-icon { background: linear-gradient(135deg, #f97316, #ea580c); }
-        .round-vb .round-header h2 { color: #86efac; }
-        .round-tk .round-header h2 { color: #93c5fd; }
-        .round-bk .round-header h2 { color: #c4b5fd; }
-        .round-ck .round-header h2 { color: #fdba74; }
-        .matches-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; }
-        .match-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; transition: all 0.3s ease; position: relative; overflow: hidden; }
-        .match-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
-        .round-vb .match-card::before { background: linear-gradient(90deg, #22c55e, #16a34a); }
-        .round-tk .match-card::before { background: linear-gradient(90deg, #3b82f6, #2563eb); }
-        .round-bk .match-card::before { background: linear-gradient(90deg, #a855f7, #7c3aed); }
-        .round-ck .match-card::before { background: linear-gradient(90deg, #f97316, #ea580c); }
-        .match-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); border-color: var(--text-secondary); }
-        .match-title { font-size: 13px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; display: flex; align-items: center; gap: 6px; }
-        .match-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; padding: 8px 12px; background: var(--bg-secondary); border-radius: 10px; transition: background 0.2s; }
-        .match-row:hover { background: #2d3a4f; }
-        .team-label { font-size: 11px; color: var(--text-secondary); font-weight: 600; min-width: 20px; }
-        .team-name-input { flex: 1; background: var(--bg-input); border: 1px solid transparent; color: var(--text-primary); padding: 8px 10px; border-radius: 8px; font-size: 14px; font-weight: 500; transition: all 0.2s; min-width: 0; }
-        .team-name-input:focus { outline: none; border-color: var(--accent-blue); background: #3b4d63; }
-        .team-name-input::placeholder { color: #64748b; }
-        .score-input { width: 56px; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-primary); padding: 8px; border-radius: 8px; font-size: 16px; font-weight: 700; text-align: center; transition: all 0.2s; }
-        .score-input:focus { outline: none; border-color: var(--accent-green); background: #1a3a2a; box-shadow: 0 0 0 3px rgba(34,197,94,0.2); }
-        .save-btn { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; margin-top: 14px; padding: 10px 16px; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; color: white; }
-        .round-vb .save-btn { background: linear-gradient(135deg, #22c55e, #16a34a); }
-        .round-tk .save-btn { background: linear-gradient(135deg, #3b82f6, #2563eb); }
-        .round-bk .save-btn { background: linear-gradient(135deg, #a855f7, #7c3aed); }
-        .round-ck .save-btn { background: linear-gradient(135deg, #f97316, #ea580c); }
-        .save-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
-        .save-btn:active { transform: translateY(0); }
-        .save-btn.saving { opacity: 0.7; cursor: not-allowed; }
-        .save-btn.saved { background: linear-gradient(135deg, #16a34a, #15803d) !important; }
-        .save-btn.error { background: linear-gradient(135deg, #ef4444, #dc2626) !important; }
-        .global-actions { position: fixed; bottom: 24px; right: 24px; display: flex; flex-direction: column; gap: 10px; z-index: 100; }
-        .fab-btn { padding: 14px 24px; border: none; border-radius: 14px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 8px; box-shadow: var(--shadow-lg); color: white; }
-        .fab-save-all { background: linear-gradient(135deg, #22c55e, #16a34a); }
-        .fab-load-all { background: linear-gradient(135deg, #3b82f6, #2563eb); }
-        .fab-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.4); }
-        .toast { position: fixed; top: 24px; right: 24px; padding: 14px 20px; border-radius: 12px; font-size: 14px; font-weight: 600; z-index: 1000; transform: translateX(120%); transition: transform 0.3s ease; max-width: 400px; box-shadow: var(--shadow-lg); }
-        .toast.show { transform: translateX(0); }
-        .toast.success { background: linear-gradient(135deg, #16a34a, #15803d); color: white; }
-        .toast.error { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
-        .toast.info { background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; }
-        .setup-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 999; backdrop-filter: blur(4px); }
-        .setup-modal.hidden { display: none; }
-        .modal-content { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 20px; padding: 32px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: var(--shadow-lg); }
-        .modal-content h3 { font-size: 20px; margin-bottom: 16px; color: var(--accent-blue); }
-        .modal-content p { color: var(--text-secondary); font-size: 14px; line-height: 1.6; margin-bottom: 12px; }
-        .modal-btn { padding: 10px 24px; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; margin-top: 16px; margin-right: 8px; }
-        .modal-btn.primary { background: var(--accent-blue); color: white; }
-        .modal-btn.secondary { background: var(--bg-input); color: var(--text-primary); }
-        .modal-btn:hover { opacity: 0.85; transform: translateY(-1px); }
-        .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.8s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        @media (max-width: 768px) { .header { padding: 16px; } .header h1 { font-size: 20px; } .container { padding: 16px; } .matches-grid { grid-template-columns: 1fr; } .global-actions { bottom: 16px; right: 16px; } .fab-btn { padding: 12px 18px; font-size: 13px; } }
-        .tab-nav { display: flex; gap: 4px; margin-bottom: 24px; background: var(--bg-secondary); padding: 6px; border-radius: 14px; overflow-x: auto; }
-        .tab-btn { padding: 10px 20px; border: none; background: transparent; color: var(--text-secondary); font-size: 14px; font-weight: 600; cursor: pointer; border-radius: 10px; transition: all 0.2s; white-space: nowrap; }
-        .tab-btn.active { background: var(--bg-input); color: var(--text-primary); box-shadow: var(--shadow); }
-        .tab-btn:hover:not(.active) { color: var(--text-primary); }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; animation: fadeInUp 0.3s ease-out; }
-        .group-subtitle { font-size: 15px; font-weight: 700; margin-bottom: 12px; padding: 6px 12px; border-radius: 8px; display: inline-block; }
-        .group-a { background: rgba(34,197,94,0.15); color: #86efac; }
-        .group-b { background: rgba(59,130,246,0.15); color: #93c5fd; }
-        .group-c { background: rgba(168,85,247,0.15); color: #c4b5fd; }
-        .group-d { background: rgba(249,115,22,0.15); color: #fdba74; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nhập Điểm Giải Đấu</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#0f172a;--card:#1e293b;--input:#334155;--border:#475569;--text:#f1f5f9;--muted:#94a3b8;--green:#22c55e;--blue:#3b82f6;--purple:#a855f7;--orange:#f97316;--red:#ef4444}
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:Inter,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:40px}
+    .header{background:linear-gradient(135deg,#1e293b,#334155);padding:20px 24px;border-bottom:2px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .header h1{font-size:24px;font-weight:800;background:linear-gradient(135deg,#60a5fa,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .status{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600}
+    .status.ok{background:rgba(34,197,94,.2);color:#86efac;border:1px solid rgba(34,197,94,.4)}
+    .status.err{background:rgba(239,68,68,.2);color:#fca5a5;border:1px solid rgba(239,68,68,.4)}
+    .container{max-width:1300px;margin:0 auto;padding:20px}
+    .tabs{display:flex;gap:6px;margin-bottom:20px;background:var(--card);padding:6px;border-radius:12px;overflow-x:auto}
+    .tab{padding:10px 18px;border:none;background:transparent;color:var(--muted);font-size:14px;font-weight:600;cursor:pointer;border-radius:8px;white-space:nowrap}
+    .tab.active{background:var(--input);color:var(--text)}
+    .content{display:none}.content.active{display:block}
+    .round-head{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--border)}
+    .round-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px}
+    .vb .round-icon{background:linear-gradient(135deg,#22c55e,#16a34a)}.tk .round-icon{background:linear-gradient(135deg,#3b82f6,#2563eb)}
+    .bk .round-icon{background:linear-gradient(135deg,#a855f7,#7c3aed)}.ck .round-icon{background:linear-gradient(135deg,#f97316,#ea580c)}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;position:relative}
+    .card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:14px 14px 0 0}
+    .vb .card::before{background:linear-gradient(90deg,#22c55e,#16a34a)}.tk .card::before{background:linear-gradient(90deg,#3b82f6,#2563eb)}
+    .bk .card::before{background:linear-gradient(90deg,#a855f7,#7c3aed)}.ck .card::before{background:linear-gradient(90deg,#f97316,#ea580c)}
+    .match-title{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;font-weight:600}
+    .row{display:flex;align-items:center;gap:10px;margin-bottom:8px;padding:8px 10px;background:var(--input);border-radius:8px}
+    .lbl{font-size:11px;color:var(--muted);font-weight:600;min-width:18px}
+    .team{flex:1;background:transparent;border:1px solid transparent;color:var(--text);padding:7px 9px;border-radius:6px;font-size:13px;min-width:0}
+    .team:focus{outline:none;border-color:var(--blue);background:#3b4d63}
+    .score{width:52px;background:var(--input);border:1px solid var(--border);color:var(--text);padding:7px;border-radius:6px;font-size:15px;font-weight:700;text-align:center}
+    .score:focus{outline:none;border-color:var(--green);background:#1a3a2a}
+    .btn{width:100%;margin-top:12px;padding:9px 14px;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;color:#fff;transition:all.2s}
+    .vb .btn{background:linear-gradient(135deg,#22c55e,#16a34a)}.tk .btn{background:linear-gradient(135deg,#3b82f6,#2563eb)}
+    .bk .btn{background:linear-gradient(135deg,#a855f7,#7c3aed)}.ck .btn{background:linear-gradient(135deg,#f97316,#ea580c)}
+    .btn:hover{opacity:.9;transform:translateY(-1px)}.btn:active{transform:translateY(0)}
+    .btn.saving{opacity:.7;cursor:not-allowed}.btn.saved{background:linear-gradient(135deg,#16a34a,#15803d)!important}
+    .btn.err{background:linear-gradient(135deg,#ef4444,#dc2626)!important}
+    .fab{position:fixed;bottom:20px;right:20px;display:flex;flex-direction:column;gap:10px;z-index:100}
+    .fab-btn{padding:12px 20px;border:none;border-radius:12px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;box-shadow:0 4px 12px rgba(0,0,0,.3);color:#fff}
+    .fab-save{background:linear-gradient(135deg,#22c55e,#16a34a)}.fab-load{background:linear-gradient(135deg,#3b82f6,#2563eb)}.fab-test{background:linear-gradient(135deg,#8b5cf6,#7c3aed)}
+    .fab-btn:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.4)}
+    .toast{position:fixed;top:20px;right:20px;padding:12px 18px;border-radius:10px;font-size:13px;font-weight:600;z-index:1000;transform:translateX(150%);transition:transform.3s;max-width:380px;box-shadow:0 4px 12px rgba(0,0,0,.3)}
+    .toast.show{transform:translateX(0)}.toast.ok{background:linear-gradient(135deg,#16a34a,#15803d);color:#fff}
+    .toast.err{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff}.toast.info{background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff}
+    .spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin.8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+    .group-title{font-size:14px;font-weight:700;margin:16px 0 10px;padding:5px 10px;border-radius:6px;display:inline-block}
+    .g-a{background:rgba(34,197,94,.15);color:#86efac}.g-b{background:rgba(59,130,246,.15);color:#93c5fd}
+    .g-c{background:rgba(168,85,247,.15);color:#c4b5fd}.g-d{background:rgba(249,115,22,.15);color:#fdba74}
+    @media(max-width:768px){.header{padding:14px 16px}.header h1{font-size:20px}.container{padding:14px}.grid{grid-template-columns:1fr}.fab{bottom:14px;right:14px}}
+  </style>
 </head>
 <body>
-    <div class="header">
-        <h1>🏆 HỆ THỐNG QUẢN LÝ ĐIỂM GIẢI ĐẤU</h1>
-        <div class="header-controls">
-            <span class="status-badge connected" id="statusBadge">🟢 Đã kết nối</span>
-            <button class="modal-btn primary" onclick="showSetup()" style="margin:0;padding:8px 16px;font-size:13px;">⚙️ Cấu hình</button>
-        </div>
+  <div class="header">
+    <h1>🏆 Nhập Điểm Giải Đấu</h1>
+    <div style="display:flex;gap:8px;align-items:center">
+      <span class="status err" id="status">⚡ Chưa kết nối</span>
+      <button class="fab-btn fab-test" onclick="testConnection()" style="padding:8px 14px;font-size:12px;margin:0">🔍 Test</button>
     </div>
-    <div class="container">
-        <div class="tab-nav">
-            <button class="tab-btn active" onclick="switchTab('vb')">🟢 Vòng Bảng</button>
-            <button class="tab-btn" onclick="switchTab('tk')">🔵 Tứ Kết</button>
-            <button class="tab-btn" onclick="switchTab('bk')">🟣 Bán Kết</button>
-            <button class="tab-btn" onclick="switchTab('ck')">🟠 Chung Kết</button>
-        </div>
-        <div class="tab-content active" id="tab-vb">
-            <div class="round-section round-vb">
-                <div class="round-header">
-                    <div class="round-icon">🟢</div>
-                    <h2>VÒNG BẢNG</h2>
-                    <span class="round-count">4 bảng × 6 trận</span>
-                </div>
-                <div id="vongbang-container"></div>
-            </div>
-        </div>
-        <div class="tab-content" id="tab-tk">
-            <div class="round-section round-tk">
-                <div class="round-header">
-                    <div class="round-icon">🔵</div>
-                    <h2>TỨ KẾT</h2>
-                    <span class="round-count">4 trận</span>
-                </div>
-                <div class="matches-grid" id="tuket-container"></div>
-            </div>
-        </div>
-        <div class="tab-content" id="tab-bk">
-            <div class="round-section round-bk">
-                <div class="round-header">
-                    <div class="round-icon">🟣</div>
-                    <h2>BÁN KẾT</h2>
-                    <span class="round-count">2 trận</span>
-                </div>
-                <div class="matches-grid" id="banket-container"></div>
-            </div>
-        </div>
-        <div class="tab-content" id="tab-ck">
-            <div class="round-section round-ck">
-                <div class="round-header">
-                    <div class="round-icon">🟠</div>
-                    <h2>CHUNG KẾT</h2>
-                    <span class="round-count">1 trận</span>
-                </div>
-                <div class="matches-grid" id="chungket-container"></div>
-            </div>
-        </div>
+  </div>
+  
+  <div class="container">
+    <div class="tabs">
+      <button class="tab active" onclick="tab('vb')">🟢 Vòng Bảng</button>
+      <button class="tab" onclick="tab('tk')">🔵 Tứ Kết</button>
+      <button class="tab" onclick="tab('bk')">🟣 Bán Kết</button>
+      <button class="tab" onclick="tab('ck')">🟠 Chung Kết</button>
     </div>
-    <div class="global-actions">
-        <button class="fab-btn fab-save-all" onclick="saveAll()">💾 Lưu Tất Cả</button>
-        <button class="fab-btn fab-load-all" onclick="loadAll()">📥 Tải Dữ Liệu</button>
+    
+    <div class="content active" id="vb">
+      <div class="round-head vb"><div class="round-icon">🟢</div><h2 style="font-size:18px;color:#86efac">VÒNG BẢNG</h2><span style="margin-left:auto;font-size:12px;color:var(--muted)">4 bảng × 6 trận</span></div>
+      <div id="vb-container"></div>
     </div>
-    <div class="toast" id="toast"></div>
-    <div class="setup-modal hidden" id="setupModal">
-        <div class="modal-content">
-            <h3>⚙️ Cấu hình URL Apps Script</h3>
-            <p>Nhập URL Web App mới nếu cần thay đổi:</p>
-            <input type="text" class="script-url-input" id="setupUrlInput" placeholder="https://script.google.com/macros/s/.../exec" style="width:100%;margin-top:8px;">
-            <br>
-            <button class="modal-btn primary" onclick="saveSetup()">✅ Lưu cấu hình</button>
-            <button class="modal-btn secondary" onclick="closeSetup()">Đóng</button>
-        </div>
+    
+    <div class="content" id="tk">
+      <div class="round-head tk"><div class="round-icon">🔵</div><h2 style="font-size:18px;color:#93c5fd">TỨ KẾT</h2><span style="margin-left:auto;font-size:12px;color:var(--muted)">4 trận</span></div>
+      <div class="grid" id="tk-container"></div>
     </div>
-    <script>
-        const DEFAULT_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxrzQxdfzyTJFgsC2LNBJYqxAUaSFRjjty5BVoEW7r20PZKE8zGVG5qPXzid361p78J4w/exec';
-        let APPS_SCRIPT_URL = DEFAULT_SCRIPT_URL;
+    
+    <div class="content" id="bk">
+      <div class="round-head bk"><div class="round-icon">🟣</div><h2 style="font-size:18px;color:#c4b5fd">BÁN KẾT</h2><span style="margin-left:auto;font-size:12px;color:var(--muted)">2 trận</span></div>
+      <div class="grid" id="bk-container"></div>
+    </div>
+    
+    <div class="content" id="ck">
+      <div class="round-head ck"><div class="round-icon">🟠</div><h2 style="font-size:18px;color:#fdba74">CHUNG KẾT</h2><span style="margin-left:auto;font-size:12px;color:var(--muted)">1 trận</span></div>
+      <div class="grid" id="ck-container"></div>
+    </div>
+  </div>
+  
+  <div class="fab">
+    <button class="fab-btn fab-save" onclick="saveAll()">💾 Lưu Tất Cả</button>
+    <button class="fab-btn fab-load" onclick="loadAll()">📥 Tải Dữ Liệu</button>
+  </div>
+  
+  <div class="toast" id="toast"></div>
 
-        function getAppsScriptUrl() { return APPS_SCRIPT_URL; }
-        
-        function setConnected(connected) {
-            const badge = document.getElementById('statusBadge');
-            if (connected) { badge.textContent = '🟢 Đã kết nối'; badge.className = 'status-badge connected'; }
-            else { badge.textContent = '⚡ Chưa kết nối'; badge.className = 'status-badge disconnected'; }
-        }
+  <script>
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxGsQ4GCaJPqW73H3asrfSxbi1p_jtLOxq8_hNL9MJThIJvxspVwgFmPg2q7RloEjsbbg/exec';
+    const GROUPS = ['A','B','C','D'];
 
-        function showToast(msg, type = 'info') {
-            const toast = document.getElementById('toast');
-            toast.textContent = msg;
-            toast.className = 'toast ' + type + ' show';
-            setTimeout(function() { toast.classList.remove('show'); }, 3500);
-        }
-
-        function showSetup() {
-            document.getElementById('setupModal').classList.remove('hidden');
-            document.getElementById('setupUrlInput').value = APPS_SCRIPT_URL;
-        }
-        function closeSetup() { document.getElementById('setupModal').classList.add('hidden'); }
-        function saveSetup() {
-            const url = document.getElementById('setupUrlInput').value.trim();
-            if (!url) { showToast('Vui lòng nhập URL!', 'error'); return; }
-            APPS_SCRIPT_URL = url;
-            closeSetup();
-            setConnected(true);
-            showToast('✅ Đã cập nhật URL!', 'success');
-        }
-        document.getElementById('setupModal').addEventListener('click', function(e) { if (e.target === this) closeSetup(); });
-
-        function switchTab(tab) {
-            document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
-            document.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('active'); });
-            event.target.classList.add('active');
-            document.getElementById('tab-' + tab).classList.add('active');
-        }
-
-        const GROUP_NAMES = ['A', 'B', 'C', 'D'];
-
-        function initVongBang() {
-            const container = document.getElementById('vongbang-container');
-            container.innerHTML = '';
-            GROUP_NAMES.forEach(function(gName) {
-                const section = document.createElement('div');
-                section.style.marginBottom = '24px';
-                section.innerHTML = '<div class="group-subtitle group-' + gName.toLowerCase() + '">BẢNG ' + gName + '</div>';
-                const grid = document.createElement('div');
-                grid.className = 'matches-grid';
-                let html = '';
-                for (let m = 0; m < 6; m++) {
-                    const row = m + 2;
-                    const matchId = 'vb_' + gName + '_' + m;
-                    html += '<div class="match-card" id="card-' + matchId + '">'
-                        + '<div class="match-title">Trận ' + (m + 1) + ' <span style="opacity:0.5;font-weight:400;">bang dòng ' + row + '</span></div>'
-                        + '<div class="match-row"><span class="team-label">🏠</span>'
-                        + '<input type="text" class="team-name-input" id="' + matchId + '_team1" placeholder="Đội nhà" data-sheet="bang" data-row="' + row + '" data-col="3">'
-                        + '<input type="number" class="score-input" id="' + matchId + '_score1" placeholder="-" data-sheet="bang" data-row="' + row + '" data-col="4" min="0">'
-                        + '</div><div class="match-row"><span class="team-label">✈️</span>'
-                        + '<input type="text" class="team-name-input" id="' + matchId + '_team2" placeholder="Đội khách" data-sheet="bang" data-row="' + row + '" data-col="5">'
-                        + '<input type="number" class="score-input" id="' + matchId + '_score2" placeholder="-" data-sheet="bang" data-row="' + row + '" data-col="6" min="0">'
-                        + '</div><button class="save-btn" onclick="saveMatch(\'' + matchId + '\')">💾 Lưu trận này</button></div>';
-                }
-                grid.innerHTML = html;
-                section.appendChild(grid);
-                container.appendChild(section);
-            });
-        }
-
-        function initTuKet() {
-            const container = document.getElementById('tuket-container');
-            const tkMatches = [
-                { id: 'tk_1', title: 'Tứ kết 1', sheet: '1.8', row: 2 },
-                { id: 'tk_2', title: 'Tứ kết 2', sheet: '1.8', row: 5 },
-                { id: 'tk_3', title: 'Tứ kết 3', sheet: '1.8', row: 8 },
-                { id: 'tk_4', title: 'Tứ kết 4', sheet: '1.8', row: 11 }
-            ];
-            let html = '';
-            tkMatches.forEach(function(m) {
-                html += '<div class="match-card" id="card-' + m.id + '">'
-                    + '<div class="match-title">' + m.title + ' <span style="opacity:0.5;font-weight:400;">' + m.sheet + ' dòng ' + m.row + '</span></div>'
-                    + '<div class="match-row"><span class="team-label">🏠</span>'
-                    + '<input type="text" class="team-name-input" id="' + m.id + '_team1" placeholder="Đội 1" data-sheet="' + m.sheet + '" data-row="' + m.row + '" data-col="4">'
-                    + '<input type="number" class="score-input" id="' + m.id + '_score1" placeholder="-" data-sheet="' + m.sheet + '" data-row="' + m.row + '" data-col="5" min="0">'
-                    + '</div><div class="match-row"><span class="team-label">✈️</span>'
-                    + '<input type="text" class="team-name-input" id="' + m.id + '_team2" placeholder="Đội 2" data-sheet="' + m.sheet + '" data-row="' + m.row + '" data-col="6">'
-                    + '<input type="number" class="score-input" id="' + m.id + '_score2" placeholder="-" data-sheet="' + m.sheet + '" data-row="' + m.row + '" data-col="7" min="0">'
-                    + '</div><button class="save-btn" onclick="saveMatch(\'' + m.id + '\')">💾 Lưu trận này</button></div>';
-            });
-            container.innerHTML = html;
-        }
-
-        function initBanKet() {
-            const container = document.getElementById('banket-container');
-            const bkMatches = [
-                { id: 'bk_1', title: 'Bán kết 1', sheet: 'bk', row: 3 },
-                { id: 'bk_2', title: 'Bán kết 2', sheet: 'bk', row: 6 }
-            ];
-            let html = '';
-            bkMatches.forEach(function(m) {
-                html += '<div class="match-card" id="card-' + m.id + '">'
-                    + '<div class="match-title">' + m.title + ' <span style="opacity:0.5;font-weight:400;">' + m.sheet + ' dòng ' + m.row + '</span></div>'
-                    + '<div class="match-row"><span class="team-label">🏠</span>'
-                    + '<input type="text" class="team-name-input" id="' + m.id + '_team1" placeholder="Đội 1" data-sheet="' + m.sheet + '" data-row="' + m.row + '" data-col="3">'
-                    + '<input type="number" class="score-input" id="' + m.id + '_score1" placeholder="-" data-sheet="' + m.sheet + '" data-row="' + m.row + '" data-col="4" min="0">'
-                    + '</div><div class="match-row"><span class="team-label">✈️</span>'
-                    + '<input type="text" class="team-name-input" id="' + m.id + '_team2" placeholder="Đội 2" data-sheet="' + m.sheet + '" data-row="' + m.row + '" data-col="5">'
-                    + '<input type="number" class="score-input" id="' + m.id + '_score2" placeholder="-" data-sheet="' + m.sheet + '" data-row="' + m.row + '" data-col="6" min="0">'
-                    + '</div><button class="save-btn" onclick="saveMatch(\'' + m.id + '\')">💾 Lưu trận này</button></div>';
-            });
-            container.innerHTML = html;
-        }
-
-        function initChungKet() {
-            const container = document.getElementById('chungket-container');
-            const m = { id: 'ck_1', title: 'Chung kết', sheet: 'ck', row: 3 };
-            container.innerHTML = '<div class="match-card" id="card-' + m.id + '">'
-                + '<div class="match-title">' + m.title + ' <span style="opacity:0.5;font-weight:400;">' + m.sheet + ' dòng ' + m.row + '</span></div>'
-                + '<div class="match-row"><span class="team-label">🏠</span>'
-                + '<input type="text" class="team-name-input" id="' + m.id + '_team1" placeholder="Đội 1" data-sheet="' + m.sheet + '" data-row="' + m.row + '" data-col="2" style="font-weight:700;">'
-                + '<input type="number" class="score-input" id="' + m.id + '_score1" placeholder="-" data-sheet="' + m.sheet + '" data-row="' + m.row + '" data-col="3" min="0" style="font-size:20px;">'
-                + '</div><div class="match-row"><span class="team-label">✈️</span>'
-                + '<input type="text" class="team-name-input" id="' + m.id + '_team2" placeholder="Đội 2" data-sheet="' + m.sheet + '" data-row="' + m.row + '" data-col="4" style="font-weight:700;">'
-                + '<input type="number" class="score-input" id="' + m.id + '_score2" placeholder="-" data-sheet="' + m.sheet + '" data-row="' + m.row + '" data-col="5" min="0" style="font-size:20px;">'
-                + '</div><button class="save-btn" onclick="saveMatch(\'' + m.id + '\')" style="font-size:16px;padding:12px;">💾 Lưu trận Chung kết</button></div>';
-        }
-
-        async function saveMatch(matchId) {
-            const url = getAppsScriptUrl();
-            const btn = document.querySelector('#card-' + matchId + ' .save-btn');
-            btn.innerHTML = '<span class="spinner"></span> Đang lưu...';
-            btn.classList.add('saving');
-            const prefix = matchId + '_';
-            const team1 = document.getElementById(prefix + 'team1').value.trim();
-            const score1 = document.getElementById(prefix + 'score1').value;
-            const team2 = document.getElementById(prefix + 'team2').value.trim();
-            const score2 = document.getElementById(prefix + 'score2').value;
-            const refInput = document.getElementById(prefix + 'team1');
-            const sheet = refInput.dataset.sheet;
-            const row = parseInt(refInput.dataset.row);
-            const updates = [
-                { row: row, col: parseInt(refInput.dataset.col), value: team1 },
-                { row: row, col: parseInt(document.getElementById(prefix + 'score1').dataset.col), value: score1 !== '' ? parseInt(score1) : '' },
-                { row: row, col: parseInt(document.getElementById(prefix + 'team2').dataset.col), value: team2 },
-                { row: row, col: parseInt(document.getElementById(prefix + 'score2').dataset.col), value: score2 !== '' ? parseInt(score2) : '' }
-            ];
-            try {
-                const response = await fetch(url, { method: 'POST', body: JSON.stringify({ sheet: sheet, updates: updates }) });
-                const result = await response.json();
-                if (result.status === 'success') {
-                    btn.innerHTML = '✅ Đã lưu!';
-                    btn.classList.remove('saving');
-                    btn.classList.add('saved');
-                    showToast('Đã lưu ' + matchId.replace('_', ' ').toUpperCase(), 'success');
-                    setConnected(true);
-                    setTimeout(function() { btn.innerHTML = '💾 Lưu trận này'; btn.classList.remove('saved'); }, 2000);
-                } else { throw new Error(result.message || 'Lỗi không xác định'); }
-            } catch (err) {
-                btn.innerHTML = '❌ Lỗi!';
-                btn.classList.remove('saving');
-                btn.classList.add('error');
-                showToast('Lỗi lưu: ' + err.message, 'error');
-                setConnected(false);
-                setTimeout(function() { btn.innerHTML = '💾 Lưu trận này'; btn.classList.remove('error'); }, 3000);
-            }
-        }
-
-        async function saveAll() {
-            const url = getAppsScriptUrl();
-            showToast('Đang lưu tất cả dữ liệu...', 'info');
-            const allMatches = [];
-            GROUP_NAMES.forEach(function(g) { for (let m = 0; m < 6; m++) allMatches.push('vb_' + g + '_' + m); });
-            for (let i = 1; i <= 4; i++) allMatches.push('tk_' + i);
-            for (let i = 1; i <= 2; i++) allMatches.push('bk_' + i);
-            allMatches.push('ck_1');
-            let successCount = 0;
-            let errorCount = 0;
-            for (let idx = 0; idx < allMatches.length; idx++) {
-                const mid = allMatches[idx];
-                try {
-                    const p = mid + '_';
-                    const t1El = document.getElementById(p + 'team1');
-                    if (!t1El) continue;
-                    const sheetName = t1El.dataset.sheet;
-                    const rowNum = parseInt(t1El.dataset.row);
-                    const t1Val = document.getElementById(p + 'team1').value.trim();
-                    const s1Val = document.getElementById(p + 'score1').value;
-                    const t2Val = document.getElementById(p + 'team2').value.trim();
-                    const s2Val = document.getElementById(p + 'score2').value;
-                    const ups = [
-                        { row: rowNum, col: parseInt(t1El.dataset.col), value: t1Val },
-                        { row: rowNum, col: parseInt(document.getElementById(p + 'score1').dataset.col), value: s1Val !== '' ? parseInt(s1Val) : '' },
-                        { row: rowNum, col: parseInt(document.getElementById(p + 'team2').dataset.col), value: t2Val },
-                        { row: rowNum, col: parseInt(document.getElementById(p + 'score2').dataset.col), value: s2Val !== '' ? parseInt(s2Val) : '' }
-                    ];
-                    await fetch(url, { method: 'POST', body: JSON.stringify({ sheet: sheetName, updates: ups }) });
-                    successCount++;
-                } catch (e) { errorCount++; }
-            }
-            if (errorCount === 0) { showToast('✅ Đã lưu thành công ' + successCount + ' trận!', 'success'); setConnected(true); }
-            else { showToast('✅ ' + successCount + ' thành công, ❌ ' + errorCount + ' lỗi', 'error'); }
-        }
-
-        async function loadAll() {
-            const url = getAppsScriptUrl();
-            showToast('Đang tải dữ liệu từ sheet...', 'info');
-            try {
-                const resp = await fetch(url + '?action=getData');
-                const data = await resp.json();
-                if (data.status === 'error') throw new Error(data.message);
-                if (data.bang) {
-                    GROUP_NAMES.forEach(function(gName) {
-                        const groupData = data.bang[gName];
-                        if (!groupData) return;
-                        for (let m = 0; m < 6; m++) {
-                            const matchId = 'vb_' + gName + '_' + m;
-                            const p = matchId + '_';
-                            const rowData = groupData[m];
-                            if (!rowData) return;
-                            const el1 = document.getElementById(p + 'team1'); if (el1) el1.value = rowData[2] || '';
-                            const el2 = document.getElementById(p + 'score1'); if (el2) el2.value = (rowData[3] !== null && rowData[3] !== undefined) ? rowData[3] : '';
-                            const el3 = document.getElementById(p + 'team2'); if (el3) el3.value = rowData[4] || '';
-                            const el4 = document.getElementById(p + 'score2'); if (el4) el4.value = (rowData[5] !== null && rowData[5] !== undefined) ? rowData[5] : '';
-                        }
-                    });
-                }
-                if (data.tk && Array.isArray(data.tk)) {
-                    data.tk.forEach(function(matchData, i) {
-                        if (!matchData) return;
-                        const p = 'tk_' + (i + 1) + '_';
-                        const row = matchData[0];
-                        if (!row) return;
-                        const el1 = document.getElementById(p + 'team1'); if (el1) el1.value = row[3] || '';
-                        const el2 = document.getElementById(p + 'score1'); if (el2) el2.value = (row[4] !== null && row[4] !== undefined) ? row[4] : '';
-                        const el3 = document.getElementById(p + 'team2'); if (el3) el3.value = row[5] || '';
-                        const el4 = document.getElementById(p + 'score2'); if (el4) el4.value = (row[6] !== null && row[6] !== undefined) ? row[6] : '';
-                    });
-                }
-                if (data.bk && Array.isArray(data.bk)) {
-                    data.bk.forEach(function(matchData, i) {
-                        if (!matchData) return;
-                        const p = 'bk_' + (i + 1) + '_';
-                        const row = matchData[0];
-                        if (!row) return;
-                        const el1 = document.getElementById(p + 'team1'); if (el1) el1.value = row[2] || '';
-                        const el2 = document.getElementById(p + 'score1'); if (el2) el2.value = (row[3] !== null && row[3] !== undefined) ? row[3] : '';
-                        const el3 = document.getElementById(p + 'team2'); if (el3) el3.value = row[4] || '';
-                        const el4 = document.getElementById(p + 'score2'); if (el4) el4.value = (row[5] !== null && row[5] !== undefined) ? row[5] : '';
-                    });
-                }
-                if (data.ck && Array.isArray(data.ck)) {
-                    const p = 'ck_1_';
-                    const row = data.ck[0];
-                    if (row) {
-                        const el1 = document.getElementById(p + 'team1'); if (el1) el1.value = row[1] || '';
-                        const el2 = document.getElementById(p + 'score1'); if (el2) el2.value = (row[2] !== null && row[2] !== undefined) ? row[2] : '';
-                        const el3 = document.getElementById(p + 'team2'); if (el3) el3.value = row[3] || '';
-                        const el4 = document.getElementById(p + 'score2'); if (el4) el4.value = (row[4] !== null && row[4] !== undefined) ? row[4] : '';
-                    }
-                }
-                showToast('✅ Đã tải dữ liệu thành công!', 'success');
-                setConnected(true);
-            } catch (err) {
-                showToast('Lỗi tải dữ liệu: ' + err.message, 'error');
-                setConnected(false);
-            }
-        }
-
-        function init() {
-            initVongBang();
-            initTuKet();
-            initBanKet();
-            initChungKet();
-            setConnected(true);
-        }
-        init();
-    </script>
+    function $(id){return document.getElementById(id)}
+    function toast(msg,type='info'){const t=$('toast');t.textContent=msg;t.className='toast '+type+' show';setTimeout(()=>t.classList.remove('show'),3500)}
+    function setStatus(ok){$('status').textContent=ok?'🟢 Đã kết nối':'⚡ Lỗi kết nối';$('status').className='status '+(ok?'ok':'err')}
+    
+    function tab(t){document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.content').forEach(c=>c.classList.remove('active'));event.target.classList.add('active');$(t).classList.add('active')}
+    
+    function initVB(){const c=$('vb-container');c.innerHTML='';GROUPS.forEach(g=>{let h='<div class="group-title g-'+g.toLowerCase()+'">BẢNG '+g+'</div><div class="grid">';for(let m=0;m<6;m++){const r=m+2,id='vb_'+g+'_'+m;h+='<div class="card vb" id="c-'+id+'"><div class="match-title">Trận '+(m+1)+' • bang:'+r+'</div><div class="row"><span class="lbl">🏠</span><input class="team" id="'+id+'_t1" data-s="bang" data-r="'+r+'" data-c="3" placeholder="Đội nhà"><input class="score" id="'+id+'_s1" data-s="bang" data-r="'+r+'" data-c="4" min="0" placeholder="-"></div><div class="row"><span class="lbl">✈️</span><input class="team" id="'+id+'_t2" data-s="bang" data-r="'+r+'" data-c="5" placeholder="Đội khách"><input class="score" id="'+id+'_s2" data-s="bang" data-r="'+r+'" data-c="6" min="0" placeholder="-"></div><button class="btn" onclick="save(\''+id+'\')">💾 Lưu</button></div>'}c.innerHTML=h+'</div>'})}
+    
+    function initTK(){const c=$('tk-container'),ms=[{id:'tk_1',t:'Tứ kết 1',sh:'1.8',r:2},{id:'tk_2',t:'Tứ kết 2',sh:'1.8',r:5},{id:'tk_3',t:'Tứ kết 3',sh:'1.8',r:8},{id:'tk_4',t:'Tứ kết 4',sh:'1.8',r:11}];let h='';ms.forEach(m=>{h+='<div class="card tk" id="c-'+m.id+'"><div class="match-title">'+m.t+' • '+m.sh+':'+m.r+'</div><div class="row"><span class="lbl">🏠</span><input class="team" id="'+m.id+'_t1" data-s="'+m.sh+'" data-r="'+m.r+'" data-c="4" placeholder="Đội 1"><input class="score" id="'+m.id+'_s1" data-s="'+m.sh+'" data-r="'+m.r+'" data-c="5" min="0" placeholder="-"></div><div class="row"><span class="lbl">✈️</span><input class="team" id="'+m.id+'_t2" data-s="'+m.sh+'" data-r="'+m.r+'" data-c="6" placeholder="Đội 2"><input class="score" id="'+m.id+'_s2" data-s="'+m.sh+'" data-r="'+m.r+'" data-c="7" min="0" placeholder="-"></div><button class="btn" onclick="save(\''+m.id+'\')">💾 Lưu</button></div>'});c.innerHTML=h}
+    
+    function initBK(){const c=$('bk-container'),ms=[{id:'bk_1',t:'Bán kết 1',sh:'bk',r:3},{id:'bk_2',t:'Bán kết 2',sh:'bk',r:6}];let h='';ms.forEach(m=>{h+='<div class="card bk" id="c-'+m.id+'"><div class="match-title">'+m.t+' • '+m.sh+':'+m.r+'</div><div class="row"><span class="lbl">🏠</span><input class="team" id="'+m.id+'_t1" data-s="'+m.sh+'" data-r="'+m.r+'" data-c="3" placeholder="Đội 1"><input class="score" id="'+m.id+'_s1" data-s="'+m.sh+'" data-r="'+m.r+'" data-c="4" min="0" placeholder="-"></div><div class="row"><span class="lbl">✈️</span><input class="team" id="'+m.id+'_t2" data-s="'+m.sh+'" data-r="'+m.r+'" data-c="5" placeholder="Đội 2"><input class="score" id="'+m.id+'_s2" data-s="'+m.sh+'" data-r="'+m.r+'" data-c="6" min="0" placeholder="-"></div><button class="btn" onclick="save(\''+m.id+'\')">💾 Lưu</button></div>'});c.innerHTML=h}
+    
+    function initCK(){const c=$('ck-container'),m={id:'ck_1',t:'Chung kết',sh:'ck',r:3};c.innerHTML='<div class="card ck" id="c-'+m.id+'"><div class="match-title">'+m.t+' • '+m.sh+':'+m.r+'</div><div class="row"><span class="lbl">🏠</span><input class="team" id="'+m.id+'_t1" data-s="'+m.sh+'" data-r="'+m.r+'" data-c="2" placeholder="Đội 1" style="font-weight:700"><input class="score" id="'+m.id+'_s1" data-s="'+m.sh+'" data-r="'+m.r+'" data-c="3" min="0" placeholder="-" style="font-size:18px"></div><div class="row"><span class="lbl">✈️</span><input class="team" id="'+m.id+'_t2" data-s="'+m.sh+'" data-r="'+m.r+'" data-c="4" placeholder="Đội 2" style="font-weight:700"><input class="score" id="'+m.id+'_s2" data-s="'+m.sh+'" data-r="'+m.r+'" data-c="5" min="0" placeholder="-" style="font-size:18px"></div><button class="btn" onclick="save(\''+m.id+'\')" style="font-size:14px;padding:10px">💾 Lưu Chung kết</button></div>'}
+    
+    async function api(path,params={}){const url=SCRIPT_URL+(path?'?'+new URLSearchParams({action:path,...params}):'');try{const res=await fetch(url,{method:params.method||'GET',body:params.body?JSON.stringify(params.body):undefined,headers:params.body?{'Content-Type':'application/json'}:{}});const text=await res.text();try{return JSON.parse(text)}catch(e){console.error('Parse error:',text);throw new Error('Response không phải JSON: '+text.substring(0,100))}}catch(e){console.error('Fetch error:',e);throw e}}
+    
+    async function testConnection(){toast('Đang kiểm tra kết nối...','info');try{const res=await api('test');if(res.status==='ok'){setStatus(true);toast('✅ '+res.message,'ok')}else{setStatus(false);toast('❌ '+res.message,'err')}}catch(e){setStatus(false);toast('Lỗi kết nối: '+e.message,'err');console.error(e)}}
+    
+    async function save(id){const btn=$('c-'+id+' .btn');btn.innerHTML='<span class="spinner"></span> Đang lưu...';btn.classList.add('saving');try{const p=id+'_',ref=$(p+'t1'),sheet=ref.dataset.s,row=+ref.dataset.r,ups=[{r:row,c:+ref.dataset.c,v:$(p+'t1').value.trim()},{r:row,c:+$(p+'s1').dataset.c,v:$(p+'s1').value!==''?+$(p+'s1').value:''},{r:row,c:+$(p+'t2').dataset.c,v:$(p+'t2').value.trim()},{r:row,c:+$(p+'s2').dataset.c,v:$(p+'s2').value!==''?+$(p+'s2').value:''}];const res=await api(null,{method:'POST',body:{sheet:sheet,updates:ups}});if(res.status==='success'){btn.innerHTML='✅ Đã lưu';btn.classList.remove('saving');btn.classList.add('saved');toast('Đã lưu '+id.toUpperCase(),'ok');setTimeout(()=>{btn.innerHTML='💾 Lưu';btn.classList.remove('saved')},2000);setStatus(true)}else{throw new Error(res.message)}}catch(e){btn.innerHTML='❌ Lỗi';btn.classList.remove('saving');btn.classList.add('err');toast('Lỗi: '+e.message,'err');setStatus(false);setTimeout(()=>{btn.innerHTML='💾 Lưu';btn.classList.remove('err')},3000)}}
+    
+    async function saveAll(){toast('Đang lưu tất cả...','info');const ids=[...GROUPS.flatMap(g=>[...Array(6).keys()].map(m=>'vb_'+g+'_'+m)),'tk_1','tk_2','tk_3','tk_4','bk_1','bk_2','ck_1'];let ok=0,err=0;for(const id of ids){try{const p=id+'_',ref=$(p+'t1');if(!ref)continue;const sheet=ref.dataset.s,row=+ref.dataset.r,ups=[{r:row,c:+ref.dataset.c,v:$(p+'t1').value.trim()},{r:row,c:+$(p+'s1').dataset.c,v:$(p+'s1').value!==''?+$(p+'s1').value:''},{r:row,c:+$(p+'t2').dataset.c,v:$(p+'t2').value.trim()},{r:row,c:+$(p+'s2').dataset.c,v:$(p+'s2').value!==''?+$(p+'s2').value:''}];await api(null,{method:'POST',body:{sheet,updates:ups}});ok++}catch(e){err++}}toast(ok+' thành công, '+err+' lỗi',err?'err':'ok');if(!err)setStatus(true)}
+    
+    async function loadAll(){toast('Đang tải dữ liệu...','info');try{const data=await api('getData');if(data.status==='error')throw new Error(data.message);if(data.bang)GROUPS.forEach(g=>{const gd=data.bang[g];if(!gd)return;for(let m=0;m<6;m++){const id='vb_'+g+'_'+m,p=id+'_',rd=gd[m];if(!rd)return;const e1=$(p+'t1'),e2=$(p+'s1'),e3=$(p+'t2'),e4=$(p+'s2');if(e1)e1.value=rd[2]||'';if(e2)e2.value=rd[3]!=null?rd[3]:'';if(e3)e3.value=rd[4]||'';if(e4)e4.value=rd[5]!=null?rd[5]:''}});if(data.tk?.length)data.tk.forEach((md,i)=>{if(!md)return;const p='tk_'+(i+1)+'_',r=md[0];if(!r)return;const e1=$(p+'t1'),e2=$(p+'s1'),e3=$(p+'t2'),e4=$(p+'s2');if(e1)e1.value=r[3]||'';if(e2)e2.value=r[4]!=null?r[4]:'';if(e3)e3.value=r[5]||'';if(e4)e4.value=r[6]!=null?r[6]:''});if(data.bk?.length)data.bk.forEach((md,i)=>{if(!md)return;const p='bk_'+(i+1)+'_',r=md[0];if(!r)return;const e1=$(p+'t1'),e2=$(p+'s1'),e3=$(p+'t2'),e4=$(p+'s2');if(e1)e1.value=r[2]||'';if(e2)e2.value=r[3]!=null?r[3]:'';if(e3)e3.value=r[4]||'';if(e4)e4.value=r[5]!=null?r[5]:''});if(data.ck?.length){const p='ck_1_',r=data.ck[0];if(r){const e1=$(p+'t1'),e2=$(p+'s1'),e3=$(p+'t2'),e4=$(p+'s2');if(e1)e1.value=r[1]||'';if(e2)e2.value=r[2]!=null?r[2]:'';if(e3)e3.value=r[3]||'';if(e4)e4.value=r[4]!=null?r[4]:''}}toast('✅ Tải thành công!','ok');setStatus(true)}catch(e){toast('Lỗi tải: '+e.message,'err');setStatus(false);console.error(e)}}
+    
+    function init(){initVB();initTK();initBK();initCK();testConnection()}
+    init();
+  </script>
 </body>
 </html>
-
