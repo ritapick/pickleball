@@ -2,610 +2,461 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>🏆 Robin Round</title>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nhập Điểm Giải Đấu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #ff6b35;
-            --primary-glow: rgba(255,107,53,0.4);
-            --secondary: #00b4d8;
-            --accent: #ffd166;
-            --bg-dark: #0b0f19;
-            --bg-card: #141a2b;
-            --bg-card-hover: #1c2438;
-            --border: rgba(255,255,255,0.06);
-            --text: #e8ecf4;
-            --text-dim: #7a8ba5;
-            --green: #22c55e;
-            --red: #ef4444;
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #1e293b;
+            --bg-input: #334155;
+            --border-color: #475569;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --accent-green: #22c55e;
+            --accent-blue: #3b82f6;
+            --accent-purple: #a855f7;
+            --accent-orange: #f97316;
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.3), 0 2px 4px -2px rgba(0,0,0,0.2);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.4), 0 4px 6px -4px rgba(0,0,0,0.3);
         }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg-dark);
-            color: var(--text);
-            min-height: 100vh;
-            overflow-x: hidden;
-            padding-bottom: 40px;
-        }
-
-        body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background: 
-                radial-gradient(ellipse at 15% 20%, rgba(255,107,53,0.08) 0%, transparent 45%),
-                radial-gradient(ellipse at 85% 80%, rgba(0,180,216,0.06) 0%, transparent 45%);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .wrapper {
-            position: relative;
-            z-index: 1;
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 12px;
-        }
-
-        /* Header */
-        header {
-            text-align: center;
-            padding: 24px 8px 20px;
-            position: relative;
-        }
-
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
-            color: #000;
-            font-family: 'Oswald', sans-serif;
-            font-weight: 700;
-            font-size: 0.65rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            padding: 4px 14px;
-            border-radius: 20px;
-            margin-bottom: 12px;
-            box-shadow: 0 0 15px var(--primary-glow);
-        }
-
-        header h1 {
-            font-family: 'Oswald', sans-serif;
-            font-size: clamp(1.8rem, 7vw, 2.6rem);
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            background: linear-gradient(135deg, #fff 20%, var(--accent), var(--primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            line-height: 1.1;
-        }
-
-        header p {
-            color: var(--text-dim);
-            margin-top: 6px;
-            font-size: 0.85rem;
-            font-weight: 400;
-        }
-
-        .divider {
-            width: 50px; height: 3px;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
-            margin: 14px auto 0;
-            border-radius: 2px;
-        }
-
-        /* Section */
-        .section { margin-bottom: 28px; }
-
-        .section-head {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 14px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .section-icon {
-            width: 34px; height: 34px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-            flex-shrink: 0;
-        }
-
-        .icon-rank { background: linear-gradient(135deg, var(--primary), #ff9248); }
-        .icon-match { background: linear-gradient(135deg, var(--secondary), #0096c7); }
-
-        .section-head h2 {
-            font-family: 'Oswald', sans-serif;
-            font-size: 1.15rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-        }
-
-        .section-head h2 span { color: var(--accent); }
-
-        .badge-count {
-            margin-left: auto;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            padding: 3px 9px;
-            border-radius: 12px;
-            font-size: 0.7rem;
-            color: var(--text-dim);
-            font-family: 'Oswald', sans-serif;
-            letter-spacing: 0.5px;
-        }
-
-        /* Loading */
-        .loader {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 30px 12px;
-            gap: 12px;
-        }
-
-        .spinner {
-            width: 36px; height: 36px;
-            border: 3px solid var(--border);
-            border-top-color: var(--primary);
-            border-radius: 50%;
-            animation: rotate 0.7s linear infinite;
-        }
-
-        @keyframes rotate { to { transform: rotate(360deg); } }
-
-        .loader-text { color: var(--text-dim); font-size: 0.8rem; }
-
-        /* Ranking Table */
-        .rank-wrap {
-            background: var(--bg-card);
-            border-radius: 14px;
-            border: 1px solid var(--border);
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-        }
-
-        .rank-table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 340px;
-            font-size: 0.85rem;
-        }
-
-        .rank-table thead th {
-            background: rgba(255,107,53,0.12);
-            padding: 11px 10px;
-            font-family: 'Oswald', sans-serif;
-            font-weight: 600;
-            font-size: 0.72rem;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            text-align: center;
-            color: var(--accent);
-            border-bottom: 2px solid var(--primary);
-            white-space: nowrap;
-            position: sticky;
-            top: 0;
-        }
-
-        .rank-table thead th:first-child { width: 42px; }
-
-        .rank-table tbody tr {
-            border-bottom: 1px solid var(--border);
-            transition: background 0.2s;
-        }
-
-        .rank-table tbody tr:hover { background: rgba(255,107,53,0.05); }
-        .rank-table tbody tr:last-child { border-bottom: none; }
-
-        .rank-table td {
-            padding: 10px 10px;
-            text-align: center;
-            vertical-align: middle;
-        }
-
-        .rank-table td:first-child {
-            font-family: 'Oswald', sans-serif;
-            font-weight: 700;
-            font-size: 0.95rem;
-        }
-
-        .rank-table td:nth-child(2) {
-            text-align: left;
-            font-weight: 500;
-        }
-
-        .rank-num {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 28px; height: 28px;
-            border-radius: 50%;
-            font-size: 0.78rem;
-        }
-
-        .r1 { background: linear-gradient(135deg, #ffd700, #ffaa00); color: #000; box-shadow: 0 0 8px rgba(255,215,0,0.4); }
-        .r2 { background: linear-gradient(135deg, #c0c0c0, #8a8a8a); color: #000; }
-        .r3 { background: linear-gradient(135deg, #cd7f32, #a05a18); color: #fff; }
-        .r0 { background: var(--bg-card-hover); color: var(--text-dim); }
-
-        /* Match Cards */
-        .match-grid {
-            display: grid;
-            gap: 12px;
-        }
-
-        .match-card {
-            background: var(--bg-card);
-            border-radius: 14px;
-            border: 1px solid var(--border);
-            overflow: hidden;
-            transition: all 0.2s ease;
-            animation: fadeUp 0.4s ease forwards;
-            opacity: 0;
-        }
-
-        .match-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255,107,53,0.1);
-            border-color: rgba(255,107,53,0.2);
-        }
-
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(12px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .mc-head {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 8px 14px;
-            background: rgba(255,255,255,0.02);
-            border-bottom: 1px solid var(--border);
-        }
-
-        .mc-round {
-            font-family: 'Oswald', sans-serif;
-            font-size: 0.7rem;
-            font-weight: 500;
-            letter-spacing: 0.8px;
-            text-transform: uppercase;
-            color: var(--text-dim);
-            background: var(--bg-card-hover);
-            padding: 3px 9px;
-            border-radius: 10px;
-            border: 1px solid var(--border);
-        }
-
-        .mc-status {
-            font-size: 0.65rem;
-            font-weight: 600;
-            padding: 3px 8px;
-            border-radius: 10px;
-            text-transform: uppercase;
-            letter-spacing: 0.4px;
-        }
-
-        .mc-status.done {
-            background: rgba(34,197,94,0.12);
-            color: var(--green);
-            border: 1px solid rgba(34,197,94,0.25);
-        }
-
-        .mc-status.wait {
-            background: rgba(255,209,102,0.12);
-            color: var(--accent);
-            border: 1px solid rgba(255,209,102,0.25);
-        }
-
-        .mc-body {
-            padding: 14px 10px;
-        }
-
-        .mc-teams {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 8px;
-        }
-
-        .mc-team {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            text-align: center;
-        }
-
-        .mc-team-label {
-            font-size: 0.6rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-dim);
-        }
-
-        .mc-team-names {
-            font-weight: 600;
-            font-size: 0.82rem;
-            line-height: 1.4;
-        }
-
-        .mc-team-names .amp {
-            display: block;
-            color: var(--text-dim);
-            font-weight: 400;
-            font-size: 0.7rem;
-        }
-
-        .mc-vs {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
-            flex-shrink: 0;
-            min-width: 60px;
-        }
-
-        .vs-circle {
-            width: 34px; height: 34px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Oswald', sans-serif;
-            font-weight: 700;
-            font-size: 0.7rem;
-            color: #000;
-        }
-
-        .mc-score-row {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .mc-score {
-            font-family: 'Oswald', sans-serif;
-            font-size: 1.35rem;
-            font-weight: 700;
-            min-width: 28px;
-            text-align: center;
-            padding: 2px 5px;
-            border-radius: 5px;
-        }
-
-        .mc-score.s1 {
-            color: var(--primary);
-            background: rgba(255,107,53,0.12);
-            border: 1px solid rgba(255,107,53,0.2);
-        }
-
-        .mc-score.s2 {
-            color: var(--secondary);
-            background: rgba(0,180,216,0.12);
-            border: 1px solid rgba(0,180,216,0.2);
-        }
-
-        .mc-score.sep {
-            color: var(--text-dim);
-            font-size: 0.9rem;
-            padding: 0;
-            background: none;
-            border: none;
-            min-width: auto;
-        }
-
-        .mc-noscore {
-            color: var(--text-dim);
-            font-size: 0.72rem;
-            font-style: italic;
-        }
-
-        /* Error */
-        .err-box {
-            background: rgba(239,68,68,0.08);
-            border: 1px solid rgba(239,68,68,0.25);
-            border-radius: 12px;
-            padding: 18px 14px;
-            text-align: center;
-        }
-
-        .err-box h3 { color: var(--red); margin-bottom: 6px; font-size: 0.95rem; }
-        .err-box p { color: var(--text-dim); font-size: 0.8rem; }
-
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 24px 10px;
-            color: var(--text-dim);
-            font-size: 0.72rem;
-        }
-
-        /* Scrollbar */
-        ::-webkit-scrollbar { width: 4px; height: 4px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: var(--bg-card-hover); border-radius: 2px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-primary); color: var(--text-primary); min-height: 100vh; padding-bottom: 40px; }
+        .header { background: linear-gradient(135deg, #1e293b 0%, #334155 100%); padding: 24px 32px; border-bottom: 2px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+        .header h1 { font-size: 28px; font-weight: 800; background: linear-gradient(135deg, #60a5fa, #a78bfa, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .header-controls { display: flex; align-items: center; gap: 12px; }
+        .status-badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        .status-badge.disconnected { background: rgba(239,68,68,0.2); color: #fca5a5; border: 1px solid rgba(239,68,68,0.4); }
+        .status-badge.connected { background: rgba(34,197,94,0.2); color: #86efac; border: 1px solid rgba(34,197,94,0.4); }
+        .container { max-width: 1400px; margin: 0 auto; padding: 24px; }
+        .round-section { margin-bottom: 40px; animation: fadeInUp 0.5s ease-out; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .round-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid var(--border-color); }
+        .round-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .round-header h2 { font-size: 22px; font-weight: 700; }
+        .round-header .round-count { margin-left: auto; font-size: 13px; color: var(--text-secondary); background: var(--bg-secondary); padding: 4px 12px; border-radius: 20px; }
+        .round-vb .round-icon { background: linear-gradient(135deg, #22c55e, #16a34a); }
+        .round-tk .round-icon { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+        .round-bk .round-icon { background: linear-gradient(135deg, #a855f7, #7c3aed); }
+        .round-ck .round-icon { background: linear-gradient(135deg, #f97316, #ea580c); }
+        .round-vb .round-header h2 { color: #86efac; }
+        .round-tk .round-header h2 { color: #93c5fd; }
+        .round-bk .round-header h2 { color: #c4b5fd; }
+        .round-ck .round-header h2 { color: #fdba74; }
+        .matches-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; }
+        .match-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; transition: all 0.3s ease; position: relative; overflow: hidden; }
+        .match-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+        .round-vb .match-card::before { background: linear-gradient(90deg, #22c55e, #16a34a); }
+        .round-tk .match-card::before { background: linear-gradient(90deg, #3b82f6, #2563eb); }
+        .round-bk .match-card::before { background: linear-gradient(90deg, #a855f7, #7c3aed); }
+        .round-ck .match-card::before { background: linear-gradient(90deg, #f97316, #ea580c); }
+        .match-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); border-color: var(--text-secondary); }
+        .match-title { font-size: 13px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; display: flex; align-items: center; gap: 6px; }
+        .match-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; padding: 8px 12px; background: var(--bg-secondary); border-radius: 10px; transition: background 0.2s; }
+        .match-row:hover { background: #2d3a4f; }
+        .team-label { font-size: 11px; color: var(--text-secondary); font-weight: 600; min-width: 20px; }
+        .team-name-input { flex: 1; background: var(--bg-input); border: 1px solid transparent; color: var(--text-primary); padding: 8px 10px; border-radius: 8px; font-size: 14px; font-weight: 500; transition: all 0.2s; min-width: 0; }
+        .team-name-input:focus { outline: none; border-color: var(--accent-blue); background: #3b4d63; }
+        .team-name-input::placeholder { color: #64748b; }
+        .score-input { width: 56px; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-primary); padding: 8px; border-radius: 8px; font-size: 16px; font-weight: 700; text-align: center; transition: all 0.2s; }
+        .score-input:focus { outline: none; border-color: var(--accent-green); background: #1a3a2a; box-shadow: 0 0 0 3px rgba(34,197,94,0.2); }
+        .save-btn { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; margin-top: 14px; padding: 10px 16px; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; color: white; }
+        .round-vb .save-btn { background: linear-gradient(135deg, #22c55e, #16a34a); }
+        .round-tk .save-btn { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+        .round-bk .save-btn { background: linear-gradient(135deg, #a855f7, #7c3aed); }
+        .round-ck .save-btn { background: linear-gradient(135deg, #f97316, #ea580c); }
+        .save-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+        .save-btn:active { transform: translateY(0); }
+        .save-btn.saving { opacity: 0.7; cursor: not-allowed; }
+        .save-btn.saved { background: linear-gradient(135deg, #16a34a, #15803d) !important; }
+        .save-btn.error { background: linear-gradient(135deg, #ef4444, #dc2626) !important; }
+        .global-actions { position: fixed; bottom: 24px; right: 24px; display: flex; flex-direction: column; gap: 10px; z-index: 100; }
+        .fab-btn { padding: 14px 24px; border: none; border-radius: 14px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 8px; box-shadow: var(--shadow-lg); color: white; }
+        .fab-save-all { background: linear-gradient(135deg, #22c55e, #16a34a); }
+        .fab-load-all { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+        .fab-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.4); }
+        .toast { position: fixed; top: 24px; right: 24px; padding: 14px 20px; border-radius: 12px; font-size: 14px; font-weight: 600; z-index: 1000; transform: translateX(120%); transition: transform 0.3s ease; max-width: 400px; box-shadow: var(--shadow-lg); }
+        .toast.show { transform: translateX(0); }
+        .toast.success { background: linear-gradient(135deg, #16a34a, #15803d); color: white; }
+        .toast.error { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
+        .toast.info { background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; }
+        .setup-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 999; backdrop-filter: blur(4px); }
+        .setup-modal.hidden { display: none; }
+        .modal-content { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 20px; padding: 32px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: var(--shadow-lg); }
+        .modal-content h3 { font-size: 20px; margin-bottom: 16px; color: var(--accent-blue); }
+        .modal-content p { color: var(--text-secondary); font-size: 14px; line-height: 1.6; margin-bottom: 12px; }
+        .modal-btn { padding: 10px 24px; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; margin-top: 16px; margin-right: 8px; }
+        .modal-btn.primary { background: var(--accent-blue); color: white; }
+        .modal-btn.secondary { background: var(--bg-input); color: var(--text-primary); }
+        .modal-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+        .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @media (max-width: 768px) { .header { padding: 16px; } .header h1 { font-size: 20px; } .container { padding: 16px; } .matches-grid { grid-template-columns: 1fr; } .global-actions { bottom: 16px; right: 16px; } .fab-btn { padding: 12px 18px; font-size: 13px; } }
+        .tab-nav { display: flex; gap: 4px; margin-bottom: 24px; background: var(--bg-secondary); padding: 6px; border-radius: 14px; overflow-x: auto; }
+        .tab-btn { padding: 10px 20px; border: none; background: transparent; color: var(--text-secondary); font-size: 14px; font-weight: 600; cursor: pointer; border-radius: 10px; transition: all 0.2s; white-space: nowrap; }
+        .tab-btn.active { background: var(--bg-input); color: var(--text-primary); box-shadow: var(--shadow); }
+        .tab-btn:hover:not(.active) { color: var(--text-primary); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeInUp 0.3s ease-out; }
+        .group-subtitle { font-size: 15px; font-weight: 700; margin-bottom: 12px; padding: 6px 12px; border-radius: 8px; display: inline-block; }
+        .group-a { background: rgba(34,197,94,0.15); color: #86efac; }
+        .group-b { background: rgba(59,130,246,0.15); color: #93c5fd; }
+        .group-c { background: rgba(168,85,247,0.15); color: #c4b5fd; }
+        .group-d { background: rgba(249,115,22,0.15); color: #fdba74; }
     </style>
 </head>
 <body>
-
-<div class="wrapper">
-    <header>
-        <div class="badge">🏓 Robin Round</div>
-        <h1>Giải Đấu Pickleball</h1>
-        <p>Bảng xếp hạng & Lịch thi đấu</p>
-        <div class="divider"></div>
-    </header>
-
-    <!-- Ranking -->
-    <section class="section">
-        <div class="section-head">
-            <div class="section-icon icon-rank">🏆</div>
-            <h2>Bảng <span>Xếp Hạng</span></h2>
+    <div class="header">
+        <h1>🏆 HỆ THỐNG QUẢN LÝ ĐIỂM GIẢI ĐẤU</h1>
+        <div class="header-controls">
+            <span class="status-badge connected" id="statusBadge">🟢 Đã kết nối</span>
+            <button class="modal-btn primary" onclick="showSetup()" style="margin:0;padding:8px 16px;font-size:13px;">⚙️ Cấu hình</button>
         </div>
-        <div id="rank-area">
-            <div class="loader"><div class="spinner"></div><span class="loader-text">Đang tải...</span></div>
+    </div>
+    <div class="container">
+        <div class="tab-nav">
+            <button class="tab-btn active" onclick="switchTab('vb')">🟢 Vòng Bảng</button>
+            <button class="tab-btn" onclick="switchTab('tk')">🔵 Tứ Kết</button>
+            <button class="tab-btn" onclick="switchTab('bk')">🟣 Bán Kết</button>
+            <button class="tab-btn" onclick="switchTab('ck')">🟠 Chung Kết</button>
         </div>
-    </section>
-
-    <!-- Matches -->
-    <section class="section">
-        <div class="section-head">
-            <div class="section-icon icon-match">⚡</div>
-            <h2>Lịch Thi Đấu & <span>Kết Quả</span></h2>
-            <div class="badge-count" id="mc-count"></div>
+        <div class="tab-content active" id="tab-vb">
+            <div class="round-section round-vb">
+                <div class="round-header">
+                    <div class="round-icon">🟢</div>
+                    <h2>VÒNG BẢNG</h2>
+                    <span class="round-count">4 bảng × 6 trận</span>
+                </div>
+                <div id="vongbang-container"></div>
+            </div>
         </div>
-        <div id="match-area">
-            <div class="loader"><div class="spinner"></div><span class="loader-text">Đang tải...</span></div>
+        <div class="tab-content" id="tab-tk">
+            <div class="round-section round-tk">
+                <div class="round-header">
+                    <div class="round-icon">🔵</div>
+                    <h2>TỨ KẾT</h2>
+                    <span class="round-count">4 trận</span>
+                </div>
+                <div class="matches-grid" id="tuket-container"></div>
+            </div>
         </div>
-    </section>
+        <div class="tab-content" id="tab-bk">
+            <div class="round-section round-bk">
+                <div class="round-header">
+                    <div class="round-icon">🟣</div>
+                    <h2>BÁN KẾT</h2>
+                    <span class="round-count">2 trận</span>
+                </div>
+                <div class="matches-grid" id="banket-container"></div>
+            </div>
+        </div>
+        <div class="tab-content" id="tab-ck">
+            <div class="round-section round-ck">
+                <div class="round-header">
+                    <div class="round-icon">🟠</div>
+                    <h2>CHUNG KẾT</h2>
+                    <span class="round-count">1 trận</span>
+                </div>
+                <div class="matches-grid" id="chungket-container"></div>
+            </div>
+        </div>
+    </div>
+    <div class="global-actions">
+        <button class="fab-btn fab-save-all" onclick="saveAll()">💾 Lưu Tất Cả</button>
+        <button class="fab-btn fab-load-all" onclick="loadAll()">📥 Tải Dữ Liệu</button>
+    </div>
+    <div class="toast" id="toast"></div>
+    <div class="setup-modal hidden" id="setupModal">
+        <div class="modal-content">
+            <h3>⚙️ Cấu hình URL Apps Script</h3>
+            <p>Nhập URL Web App mới nếu cần thay đổi:</p>
+            <input type="text" class="script-url-input" id="setupUrlInput" placeholder="https://script.google.com/macros/s/.../exec" style="width:100%;margin-top:8px;">
+            <br>
+            <button class="modal-btn primary" onclick="saveSetup()">✅ Lưu cấu hình</button>
+            <button class="modal-btn secondary" onclick="closeSetup()">Đóng</button>
+        </div>
+    </div>
+    <script>
+        const DEFAULT_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxrzQxdfzyTJFgsC2LNBJYqxAUaSFRjjty5BVoEW7r20PZKE8zGVG5qPXzid361p78J4w/exec';
+        let APPS_SCRIPT_URL = DEFAULT_SCRIPT_URL;
 
-    <footer>🏆 KARAOKE RITA</footer>
-</div>
-
-<script>
-    const SHEET_ID = '1GUr4TFhq_Ha65en9vthhtii35-RWg28qeEcLiVJaVek';
-    const BASE = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq`;
-
-    function getSheet(sheetName, range) {
-        const url = `${BASE}?tqx=out:json&sheet=${encodeURIComponent(sheetName)}&range=${encodeURIComponent(range)}`;
-        return fetch(url).then(r => r.text()).then(txt => {
-            const m = txt.match(/google\.visualization\.Query\.setResponse\(([\s\S]*?)\);?$/);
-            if (!m) throw new Error('Parse data failed');
-            return JSON.parse(m[1]);
-        });
-    }
-
-    function val(row, ci) {
-        if (!row.c || !row.c[ci] || row.c[ci].v == null) return '';
-        return String(row.c[ci].v);
-    }
-
-    function renderRanking(data) {
-        const el = document.getElementById('rank-area');
-        const t = data.table;
-        if (!t || !t.rows || t.rows.length === 0) {
-            el.innerHTML = '<div class="err-box"><h3>Không có dữ liệu</h3><p>Không tìm thấy bảng xếp hạng.</p></div>';
-            return;
+        function getAppsScriptUrl() { return APPS_SCRIPT_URL; }
+        
+        function setConnected(connected) {
+            const badge = document.getElementById('statusBadge');
+            if (connected) { badge.textContent = '🟢 Đã kết nối'; badge.className = 'status-badge connected'; }
+            else { badge.textContent = '⚡ Chưa kết nối'; badge.className = 'status-badge disconnected'; }
         }
-        const hdrs = t.cols.map(c => c.label || '');
-        let h = '<div class="rank-wrap"><table class="rank-table"><thead><tr><th>#</th>';
-        hdrs.forEach(x => { h += `<th>${x}</th>`; });
-        h += '</tr></thead><tbody>';
 
-        t.rows.forEach((row, i) => {
-            const has = row.c && row.c.some(c => c && c.v !== '' && c.v !== null);
-            if (!has) return;
-            const rc = i < 3 ? `r${i+1}` : 'r0';
-            h += `<tr><td><span class="rank-num ${rc}">${i+1}</span></td>`;
-            for (let j = 0; j < hdrs.length; j++) {
-                const cls = j === 1 ? ' style="text-align:left;font-weight:500"' : '';
-                h += `<td${cls}>${val(row, j)}</td>`;
+        function showToast(msg, type = 'info') {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.className = 'toast ' + type + ' show';
+            setTimeout(function() { toast.classList.remove('show'); }, 3500);
+        }
+
+        function showSetup() {
+            document.getElementById('setupModal').classList.remove('hidden');
+            document.getElementById('setupUrlInput').value = APPS_SCRIPT_URL;
+        }
+        function closeSetup() { document.getElementById('setupModal').classList.add('hidden'); }
+        function saveSetup() {
+            const url = document.getElementById('setupUrlInput').value.trim();
+            if (!url) { showToast('Vui lòng nhập URL!', 'error'); return; }
+            APPS_SCRIPT_URL = url;
+            closeSetup();
+            setConnected(true);
+            showToast('✅ Đã cập nhật URL!', 'success');
+        }
+        document.getElementById('setupModal').addEventListener('click', function(e) { if (e.target === this) closeSetup(); });
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+            document.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('active'); });
+            event.target.classList.add('active');
+            document.getElementById('tab-' + tab).classList.add('active');
+        }
+
+        const GROUP_NAMES = ['A', 'B', 'C', 'D'];
+
+        function initVongBang() {
+            const container = document.getElementById('vongbang-container');
+            container.innerHTML = '';
+            GROUP_NAMES.forEach(function(gName) {
+                const section = document.createElement('div');
+                section.style.marginBottom = '24px';
+                section.innerHTML = '<div class="group-subtitle group-' + gName.toLowerCase() + '">BẢNG ' + gName + '</div>';
+                const grid = document.createElement('div');
+                grid.className = 'matches-grid';
+                let html = '';
+                for (let m = 0; m < 6; m++) {
+                    const row = m + 2;
+                    const matchId = 'vb_' + gName + '_' + m;
+                    html += '<div class="match-card" id="card-' + matchId + '">'
+                        + '<div class="match-title">Trận ' + (m + 1) + ' <span style="opacity:0.5;font-weight:400;">bang dòng ' + row + '</span></div>'
+                        + '<div class="match-row"><span class="team-label">🏠</span>'
+                        + '<input type="text" class="team-name-input" id="' + matchId + '_team1" placeholder="Đội nhà" data-sheet="bang" data-row="' + row + '" data-col="3">'
+                        + '<input type="number" class="score-input" id="' + matchId + '_score1" placeholder="-" data-sheet="bang" data-row="' + row + '" data-col="4" min="0">'
+                        + '</div><div class="match-row"><span class="team-label">✈️</span>'
+                        + '<input type="text" class="team-name-input" id="' + matchId + '_team2" placeholder="Đội khách" data-sheet="bang" data-row="' + row + '" data-col="5">'
+                        + '<input type="number" class="score-input" id="' + matchId + '_score2" placeholder="-" data-sheet="bang" data-row="' + row + '" data-col="6" min="0">'
+                        + '</div><button class="save-btn" onclick="saveMatch(\'' + matchId + '\')">💾 Lưu trận này</button></div>';
+                }
+                grid.innerHTML = html;
+                section.appendChild(grid);
+                container.appendChild(section);
+            });
+        }
+
+        function initTuKet() {
+            const container = document.getElementById('tuket-container');
+            const tkMatches = [
+                { id: 'tk_1', title: 'Tứ kết 1', sheet: '1.8', row: 2 },
+                { id: 'tk_2', title: 'Tứ kết 2', sheet: '1.8', row: 5 },
+                { id: 'tk_3', title: 'Tứ kết 3', sheet: '1.8', row: 8 },
+                { id: 'tk_4', title: 'Tứ kết 4', sheet: '1.8', row: 11 }
+            ];
+            let html = '';
+            tkMatches.forEach(function(m) {
+                html += '<div class="match-card" id="card-' + m.id + '">'
+                    + '<div class="match-title">' + m.title + ' <span style="opacity:0.5;font-weight:400;">' + m.sheet + ' dòng ' + m.row + '</span></div>'
+                    + '<div class="match-row"><span class="team-label">🏠</span>'
+                    + '<input type="text" class="team-name-input" id="' + m.id + '_team1" placeholder="Đội 1" data-sheet="' + m.sheet + '" data-row="' + m.row + '" data-col="4">'
+                    + '<input type="number" class="score-input" id="' + m.id + '_score1" placeholder="-" data-sheet="' + m.sheet + '" data-row="' + m.row + '" data-col="5" min="0">'
+                    + '</div><div class="match-row"><span class="team-label">✈️</span>'
+                    + '<input type="text" class="team-name-input" id="' + m.id + '_team2" placeholder="Đội 2" data-sheet="' + m.sheet + '" data-row="' + m.row + '" data-col="6">'
+                    + '<input type="number" class="score-input" id="' + m.id + '_score2" placeholder="-" data-sheet="' + m.sheet + '" data-row="' + m.row + '" data-col="7" min="0">'
+                    + '</div><button class="save-btn" onclick="saveMatch(\'' + m.id + '\')">💾 Lưu trận này</button></div>';
+            });
+            container.innerHTML = html;
+        }
+
+        function initBanKet() {
+            const container = document.getElementById('banket-container');
+            const bkMatches = [
+                { id: 'bk_1', title: 'Bán kết 1', sheet: 'bk', row: 3 },
+                { id: 'bk_2', title: 'Bán kết 2', sheet: 'bk', row: 6 }
+            ];
+            let html = '';
+            bkMatches.forEach(function(m) {
+                html += '<div class="match-card" id="card-' + m.id + '">'
+                    + '<div class="match-title">' + m.title + ' <span style="opacity:0.5;font-weight:400;">' + m.sheet + ' dòng ' + m.row + '</span></div>'
+                    + '<div class="match-row"><span class="team-label">🏠</span>'
+                    + '<input type="text" class="team-name-input" id="' + m.id + '_team1" placeholder="Đội 1" data-sheet="' + m.sheet + '" data-row="' + m.row + '" data-col="3">'
+                    + '<input type="number" class="score-input" id="' + m.id + '_score1" placeholder="-" data-sheet="' + m.sheet + '" data-row="' + m.row + '" data-col="4" min="0">'
+                    + '</div><div class="match-row"><span class="team-label">✈️</span>'
+                    + '<input type="text" class="team-name-input" id="' + m.id + '_team2" placeholder="Đội 2" data-sheet="' + m.sheet + '" data-row="' + m.row + '" data-col="5">'
+                    + '<input type="number" class="score-input" id="' + m.id + '_score2" placeholder="-" data-sheet="' + m.sheet + '" data-row="' + m.row + '" data-col="6" min="0">'
+                    + '</div><button class="save-btn" onclick="saveMatch(\'' + m.id + '\')">💾 Lưu trận này</button></div>';
+            });
+            container.innerHTML = html;
+        }
+
+        function initChungKet() {
+            const container = document.getElementById('chungket-container');
+            const m = { id: 'ck_1', title: 'Chung kết', sheet: 'ck', row: 3 };
+            container.innerHTML = '<div class="match-card" id="card-' + m.id + '">'
+                + '<div class="match-title">' + m.title + ' <span style="opacity:0.5;font-weight:400;">' + m.sheet + ' dòng ' + m.row + '</span></div>'
+                + '<div class="match-row"><span class="team-label">🏠</span>'
+                + '<input type="text" class="team-name-input" id="' + m.id + '_team1" placeholder="Đội 1" data-sheet="' + m.sheet + '" data-row="' + m.row + '" data-col="2" style="font-weight:700;">'
+                + '<input type="number" class="score-input" id="' + m.id + '_score1" placeholder="-" data-sheet="' + m.sheet + '" data-row="' + m.row + '" data-col="3" min="0" style="font-size:20px;">'
+                + '</div><div class="match-row"><span class="team-label">✈️</span>'
+                + '<input type="text" class="team-name-input" id="' + m.id + '_team2" placeholder="Đội 2" data-sheet="' + m.sheet + '" data-row="' + m.row + '" data-col="4" style="font-weight:700;">'
+                + '<input type="number" class="score-input" id="' + m.id + '_score2" placeholder="-" data-sheet="' + m.sheet + '" data-row="' + m.row + '" data-col="5" min="0" style="font-size:20px;">'
+                + '</div><button class="save-btn" onclick="saveMatch(\'' + m.id + '\')" style="font-size:16px;padding:12px;">💾 Lưu trận Chung kết</button></div>';
+        }
+
+        async function saveMatch(matchId) {
+            const url = getAppsScriptUrl();
+            const btn = document.querySelector('#card-' + matchId + ' .save-btn');
+            btn.innerHTML = '<span class="spinner"></span> Đang lưu...';
+            btn.classList.add('saving');
+            const prefix = matchId + '_';
+            const team1 = document.getElementById(prefix + 'team1').value.trim();
+            const score1 = document.getElementById(prefix + 'score1').value;
+            const team2 = document.getElementById(prefix + 'team2').value.trim();
+            const score2 = document.getElementById(prefix + 'score2').value;
+            const refInput = document.getElementById(prefix + 'team1');
+            const sheet = refInput.dataset.sheet;
+            const row = parseInt(refInput.dataset.row);
+            const updates = [
+                { row: row, col: parseInt(refInput.dataset.col), value: team1 },
+                { row: row, col: parseInt(document.getElementById(prefix + 'score1').dataset.col), value: score1 !== '' ? parseInt(score1) : '' },
+                { row: row, col: parseInt(document.getElementById(prefix + 'team2').dataset.col), value: team2 },
+                { row: row, col: parseInt(document.getElementById(prefix + 'score2').dataset.col), value: score2 !== '' ? parseInt(score2) : '' }
+            ];
+            try {
+                const response = await fetch(url, { method: 'POST', body: JSON.stringify({ sheet: sheet, updates: updates }) });
+                const result = await response.json();
+                if (result.status === 'success') {
+                    btn.innerHTML = '✅ Đã lưu!';
+                    btn.classList.remove('saving');
+                    btn.classList.add('saved');
+                    showToast('Đã lưu ' + matchId.replace('_', ' ').toUpperCase(), 'success');
+                    setConnected(true);
+                    setTimeout(function() { btn.innerHTML = '💾 Lưu trận này'; btn.classList.remove('saved'); }, 2000);
+                } else { throw new Error(result.message || 'Lỗi không xác định'); }
+            } catch (err) {
+                btn.innerHTML = '❌ Lỗi!';
+                btn.classList.remove('saving');
+                btn.classList.add('error');
+                showToast('Lỗi lưu: ' + err.message, 'error');
+                setConnected(false);
+                setTimeout(function() { btn.innerHTML = '💾 Lưu trận này'; btn.classList.remove('error'); }, 3000);
             }
-            h += '</tr>';
-        });
-
-        h += '</tbody></table></div>';
-        el.innerHTML = h;
-    }
-
-    function renderMatches(data) {
-        const el = document.getElementById('match-area');
-        const cnt = document.getElementById('mc-count');
-        const t = data.table;
-        if (!t || !t.rows || t.rows.length === 0) {
-            el.innerHTML = '<div class="err-box"><h3>Không có dữ liệu</h3><p>Không tìm thấy lịch thi đấu.</p></div>';
-            cnt.textContent = '';
-            return;
         }
 
-        // Columns: A=0, B=1(t1p1), C=2(t1p2), D=3(t2p1), E=4(t2p2), F=5(score1), G=6(score2)
-        let count = 0;
-        let h = '<div class="match-grid">';
-
-        t.rows.forEach((row, idx) => {
-            const roundVal = val(row, 0);
-            if (!roundVal || roundVal.trim() === '') return;  // ✅ Chỉ lọc khi cột Trận trống
-            count++;
-
-            const round = val(row, 0);
-            const t1p1 = val(row, 1);
-            const t1p2 = val(row, 2);
-            const t2p1 = val(row, 3);
-            const t2p2 = val(row, 4);
-            const s1 = val(row, 5);
-            const s2 = val(row, 6);
-            const hasScore = s1 !== '' && s2 !== '';
-            const stCls = hasScore ? 'done' : 'wait';
-            const stTxt = hasScore ? 'Hoàn thành' : 'Chờ đấu';
-            const delay = Math.min(idx * 0.03, 1.2);
-
-            h += `<div class="match-card" style="animation-delay:${delay}s">`;
-            h += `<div class="mc-head"><span class="mc-round">${round || 'Trận ' + count}</span><span class="mc-status ${stCls}">${stTxt}</span></div>`;
-            h += `<div class="mc-body"><div class="mc-teams">`;
-
-            h += `<div class="mc-team"><span class="mc-team-label">Đội 1</span><div class="mc-team-names">${t1p1}<span class="amp">&</span>${t1p2}</div></div>`;
-
-            h += `<div class="mc-vs"><div class="vs-circle">VS</div>`;
-            if (hasScore) {
-                h += `<div class="mc-score-row"><span class="mc-score s1">${s1}</span><span class="mc-score sep">-</span><span class="mc-score s2">${s2}</span></div>`;
-            } else {
-                h += `<span class="mc-noscore">Chưa đấu</span>`;
+        async function saveAll() {
+            const url = getAppsScriptUrl();
+            showToast('Đang lưu tất cả dữ liệu...', 'info');
+            const allMatches = [];
+            GROUP_NAMES.forEach(function(g) { for (let m = 0; m < 6; m++) allMatches.push('vb_' + g + '_' + m); });
+            for (let i = 1; i <= 4; i++) allMatches.push('tk_' + i);
+            for (let i = 1; i <= 2; i++) allMatches.push('bk_' + i);
+            allMatches.push('ck_1');
+            let successCount = 0;
+            let errorCount = 0;
+            for (let idx = 0; idx < allMatches.length; idx++) {
+                const mid = allMatches[idx];
+                try {
+                    const p = mid + '_';
+                    const t1El = document.getElementById(p + 'team1');
+                    if (!t1El) continue;
+                    const sheetName = t1El.dataset.sheet;
+                    const rowNum = parseInt(t1El.dataset.row);
+                    const t1Val = document.getElementById(p + 'team1').value.trim();
+                    const s1Val = document.getElementById(p + 'score1').value;
+                    const t2Val = document.getElementById(p + 'team2').value.trim();
+                    const s2Val = document.getElementById(p + 'score2').value;
+                    const ups = [
+                        { row: rowNum, col: parseInt(t1El.dataset.col), value: t1Val },
+                        { row: rowNum, col: parseInt(document.getElementById(p + 'score1').dataset.col), value: s1Val !== '' ? parseInt(s1Val) : '' },
+                        { row: rowNum, col: parseInt(document.getElementById(p + 'team2').dataset.col), value: t2Val },
+                        { row: rowNum, col: parseInt(document.getElementById(p + 'score2').dataset.col), value: s2Val !== '' ? parseInt(s2Val) : '' }
+                    ];
+                    await fetch(url, { method: 'POST', body: JSON.stringify({ sheet: sheetName, updates: ups }) });
+                    successCount++;
+                } catch (e) { errorCount++; }
             }
-            h += `</div>`;
-
-            h += `<div class="mc-team"><span class="mc-team-label">Đội 2</span><div class="mc-team-names">${t2p1}<span class="amp">&</span>${t2p2}</div></div>`;
-
-            h += `</div></div></div>`;
-        });
-
-        h += '</div>';
-        el.innerHTML = h;
-        cnt.textContent = `${count} trận`;
-    }
-
-    async function init() {
-        try {
-            const [rankRes, matchRes] = await Promise.all([
-                getSheet('DanhSachVDV', 'E1:I25'),
-                getSheet('LichThiDau', 'A2:G100')
-            ]);
-            renderRanking(rankRes);
-            renderMatches(matchRes);
-        } catch (e) {
-            console.error(e);
-            const errMsg = `<div class="err-box"><h3>⚠️ Lỗi tải dữ liệu</h3><p>${e.message}</p><p style="margin-top:6px;font-size:0.8rem;">Đảm bảo Google Sheet đã chia sẻ công khai.</p></div>`;
-            document.getElementById('rank-area').innerHTML = errMsg;
-            document.getElementById('match-area').innerHTML = errMsg;
+            if (errorCount === 0) { showToast('✅ Đã lưu thành công ' + successCount + ' trận!', 'success'); setConnected(true); }
+            else { showToast('✅ ' + successCount + ' thành công, ❌ ' + errorCount + ' lỗi', 'error'); }
         }
-    }
 
-    init();
-    // 🔄 reload dữ liệu
-setInterval(function(){
-    init();
-}, 10000);
-    
-</script>
+        async function loadAll() {
+            const url = getAppsScriptUrl();
+            showToast('Đang tải dữ liệu từ sheet...', 'info');
+            try {
+                const resp = await fetch(url + '?action=getData');
+                const data = await resp.json();
+                if (data.status === 'error') throw new Error(data.message);
+                if (data.bang) {
+                    GROUP_NAMES.forEach(function(gName) {
+                        const groupData = data.bang[gName];
+                        if (!groupData) return;
+                        for (let m = 0; m < 6; m++) {
+                            const matchId = 'vb_' + gName + '_' + m;
+                            const p = matchId + '_';
+                            const rowData = groupData[m];
+                            if (!rowData) return;
+                            const el1 = document.getElementById(p + 'team1'); if (el1) el1.value = rowData[2] || '';
+                            const el2 = document.getElementById(p + 'score1'); if (el2) el2.value = (rowData[3] !== null && rowData[3] !== undefined) ? rowData[3] : '';
+                            const el3 = document.getElementById(p + 'team2'); if (el3) el3.value = rowData[4] || '';
+                            const el4 = document.getElementById(p + 'score2'); if (el4) el4.value = (rowData[5] !== null && rowData[5] !== undefined) ? rowData[5] : '';
+                        }
+                    });
+                }
+                if (data.tk && Array.isArray(data.tk)) {
+                    data.tk.forEach(function(matchData, i) {
+                        if (!matchData) return;
+                        const p = 'tk_' + (i + 1) + '_';
+                        const row = matchData[0];
+                        if (!row) return;
+                        const el1 = document.getElementById(p + 'team1'); if (el1) el1.value = row[3] || '';
+                        const el2 = document.getElementById(p + 'score1'); if (el2) el2.value = (row[4] !== null && row[4] !== undefined) ? row[4] : '';
+                        const el3 = document.getElementById(p + 'team2'); if (el3) el3.value = row[5] || '';
+                        const el4 = document.getElementById(p + 'score2'); if (el4) el4.value = (row[6] !== null && row[6] !== undefined) ? row[6] : '';
+                    });
+                }
+                if (data.bk && Array.isArray(data.bk)) {
+                    data.bk.forEach(function(matchData, i) {
+                        if (!matchData) return;
+                        const p = 'bk_' + (i + 1) + '_';
+                        const row = matchData[0];
+                        if (!row) return;
+                        const el1 = document.getElementById(p + 'team1'); if (el1) el1.value = row[2] || '';
+                        const el2 = document.getElementById(p + 'score1'); if (el2) el2.value = (row[3] !== null && row[3] !== undefined) ? row[3] : '';
+                        const el3 = document.getElementById(p + 'team2'); if (el3) el3.value = row[4] || '';
+                        const el4 = document.getElementById(p + 'score2'); if (el4) el4.value = (row[5] !== null && row[5] !== undefined) ? row[5] : '';
+                    });
+                }
+                if (data.ck && Array.isArray(data.ck)) {
+                    const p = 'ck_1_';
+                    const row = data.ck[0];
+                    if (row) {
+                        const el1 = document.getElementById(p + 'team1'); if (el1) el1.value = row[1] || '';
+                        const el2 = document.getElementById(p + 'score1'); if (el2) el2.value = (row[2] !== null && row[2] !== undefined) ? row[2] : '';
+                        const el3 = document.getElementById(p + 'team2'); if (el3) el3.value = row[3] || '';
+                        const el4 = document.getElementById(p + 'score2'); if (el4) el4.value = (row[4] !== null && row[4] !== undefined) ? row[4] : '';
+                    }
+                }
+                showToast('✅ Đã tải dữ liệu thành công!', 'success');
+                setConnected(true);
+            } catch (err) {
+                showToast('Lỗi tải dữ liệu: ' + err.message, 'error');
+                setConnected(false);
+            }
+        }
 
+        function init() {
+            initVongBang();
+            initTuKet();
+            initBanKet();
+            initChungKet();
+            setConnected(true);
+        }
+        init();
+    </script>
 </body>
 </html>
+
