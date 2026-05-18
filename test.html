@@ -162,6 +162,7 @@
             align-items: center;
             gap: 8px;
             justify-content: space-between;
+            flex-wrap: wrap;
         }
 
         .section-title .badge {
@@ -179,9 +180,9 @@
             background: var(--accent);
             color: #1a1a1a;
             border: none;
-            padding: 4px 12px;
-            border-radius: 6px;
-            font-size: 0.7rem;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 0.72rem;
             font-weight: 600;
             cursor: pointer;
             display: flex;
@@ -271,10 +272,6 @@
         table tr:nth-child(even) td { background: rgba(241, 245, 249, 0.5); }
         table tr:nth-child(even):hover td { background: rgba(26, 86, 219, 0.05); }
 
-        .rank-1 td:first-child::before { content: ''; }
-        .rank-2 td:first-child::before { content: ''; }
-        .rank-3 td:first-child::before { content: ''; }
-
         .points-cell { font-weight: 700; color: var(--primary); font-size: 0.9rem; }
         .ratio-cell { color: var(--text-secondary); font-weight: 600; }
 
@@ -298,11 +295,7 @@
 
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        .loading-text {
-            color: var(--text-secondary);
-            font-size: 0.85rem;
-            font-weight: 500;
-        }
+        .loading-text { color: var(--text-secondary); font-size: 0.85rem; font-weight: 500; }
 
         .error-msg {
             background: #fef2f2;
@@ -313,23 +306,6 @@
             font-size: 0.85rem;
             text-align: center;
             margin: 16px 0;
-        }
-
-        .success-msg {
-            background: #f0fdf4;
-            border: 1px solid #bbf7d0;
-            color: #166534;
-            padding: 10px 14px;
-            border-radius: 8px;
-            font-size: 0.8rem;
-            margin-top: 8px;
-            display: none;
-            animation: slideIn 0.3s ease;
-        }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(-8px); }
-            to { opacity: 1; transform: translateY(0); }
         }
 
         .sodo-table {
@@ -370,19 +346,8 @@
             table th, table td { padding: 8px 6px; }
         }
 
-        .tab-group-label {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .group-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            display: inline-block;
-        }
-
+        .tab-group-label { display: flex; align-items: center; gap: 4px; }
+        .group-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
         .dot-a { background: #3b82f6; }
         .dot-b { background: #ef4444; }
         .dot-c { background: #10b981; }
@@ -393,19 +358,13 @@
         .dot-ck { background: #f97316; }
         .dot-sodo { background: #6366f1; }
 
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .grid-2 .card { margin-bottom: 0; }
 
         @media (max-width: 640px) {
             .grid-2 { grid-template-columns: 1fr; }
         }
 
-        /* === STYLE CHO INPUT NHẬP TỶ SỐ === */
         .match-card {
             background: white;
             border-radius: 12px;
@@ -413,6 +372,16 @@
             margin-bottom: 8px;
             border: 1px solid var(--border);
             box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+            position: relative;
+        }
+
+        .match-card .match-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            padding-bottom: 6px;
+            border-bottom: 1px dashed var(--border);
         }
 
         .match-card .match-label {
@@ -421,10 +390,15 @@
             color: var(--text-secondary);
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-bottom: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        }
+
+        .match-card .cell-info {
+            font-size: 0.6rem;
+            color: #94a3b8;
+            background: #f8fafc;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 500;
         }
 
         .match-row {
@@ -455,33 +429,36 @@
         }
 
         .score-input {
-            width: 50px;
-            padding: 6px 8px;
+            width: 48px;
+            padding: 8px 6px;
             border: 2px solid var(--border);
-            border-radius: 6px;
+            border-radius: 8px;
             text-align: center;
             font-weight: 700;
-            font-size: 0.9rem;
-            transition: border-color 0.2s;
+            font-size: 1rem;
+            transition: all 0.2s;
+            background: #f8fafc;
         }
 
         .score-input:focus {
             outline: none;
             border-color: var(--primary);
-            background: rgba(26, 86, 219, 0.05);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.1);
         }
 
         .score-separator {
             font-weight: 800;
             color: var(--text-secondary);
-            font-size: 1rem;
+            font-size: 1.1rem;
+            margin: 0 4px;
         }
 
         .btn-save {
             background: linear-gradient(135deg, var(--success), #059669);
             color: white;
             border: none;
-            padding: 6px 14px;
+            padding: 8px 16px;
             border-radius: 8px;
             font-size: 0.75rem;
             font-weight: 600;
@@ -504,8 +481,27 @@
             transform: none;
         }
 
-        .btn-save.saving {
-            background: var(--text-secondary);
+        .btn-save.saving { background: var(--text-secondary); }
+
+        .status-msg {
+            font-size: 0.7rem;
+            font-weight: 500;
+            margin-top: 6px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: none;
+        }
+
+        .status-msg.success {
+            color: #166534;
+            background: #dcfce7;
+            display: block;
+        }
+
+        .status-msg.error {
+            color: #991b1b;
+            background: #fee2e2;
+            display: block;
         }
 
         .final-card {
@@ -516,82 +512,71 @@
             text-align: center;
         }
 
-        .final-card .trophy {
-            font-size: 2rem;
-            margin-bottom: 8px;
+        .final-card .match-team {
+            font-size: 0.95rem;
+            font-weight: 700;
         }
 
-        .final-card .match-label {
-            font-size: 0.85rem;
-            font-weight: 800;
-            color: #92400e;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 12px;
+        .final-card .score-input {
+            width: 56px;
+            font-size: 1.1rem;
         }
 
-        .final-card .match-row {
-            background: rgba(255,255,255,0.6);
-            border-radius: 8px;
-            padding: 10px 12px;
-            margin-bottom: 4px;
-        }
-
-        .final-card .match-team { font-size: 0.95rem; }
-        .final-card .match-score { font-size: 1rem; padding: 6px 14px; }
-
-        /* Toast notification */
         .toast {
             position: fixed;
-            bottom: 20px;
+            bottom: 24px;
             left: 50%;
             transform: translateX(-50%) translateY(100px);
-            background: var(--text);
-            color: white;
-            padding: 12px 24px;
+            padding: 12px 20px;
             border-radius: 12px;
             font-size: 0.85rem;
-            font-weight: 500;
+            font-weight: 600;
             box-shadow: 0 8px 30px rgba(0,0,0,0.2);
             z-index: 1000;
             transition: transform 0.3s ease;
             display: flex;
             align-items: center;
             gap: 8px;
+            max-width: 90%;
         }
 
         .toast.show { transform: translateX(-50%) translateY(0); }
-        .toast.success { background: var(--success); }
-        .toast.error { background: var(--error); }
+        .toast.success { background: #059669; color: white; }
+        .toast.error { background: #dc2626; color: white; }
+        .toast.info { background: var(--primary); color: white; }
+
+        .group-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 6px;
+            margin-right: 4px;
+        }
+
+        .group-badge.a { background: #dbeafe; color: #1e40af; }
+        .group-badge.b { background: #fee2e2; color: #991b1b; }
+        .group-badge.c { background: #d1fae5; color: #065f46; }
+        .group-badge.d { background: #fef3c7; color: #92400e; }
     </style>
 </head>
 <body>
     <div class="header">
-        <div class="ball-icon">🌕</div>
+        <div class="ball-icon">🏓</div>
         <h1>HOÀNG QUỐC VIỆT PICKLEBALL</h1>
         <div class="subtitle">Giải đấu HOÀNG QUỐC VIỆT và Những Người Bạn</div>
     </div>
 
     <div class="tabs-container">
-        <div class="tabs" id="tabs">
-            <button class="tab active" data-tab="bangnhom">
-                <span class="tab-group-label"><span class="group-dot dot-a"></span> BẢNG XẾP HẠNG</span>
-            </button>
-            <button class="tab" data-tab="vongbang">
-                <span class="tab-group-label"><span class="group-dot dot-bang"></span> Vòng bảng</span>
-            </button>
-            <button class="tab" data-tab="tuket">
-                <span class="tab-group-label"><span class="group-dot dot-tuk"></span> Tứ kết</span>
-            </button>
-            <button class="tab" data-tab="banket">
-                <span class="tab-group-label"><span class="group-dot dot-bk"></span> Bán kết</span>
-            </button>
-            <button class="tab" data-tab="chungket">
-                <span class="tab-group-label"><span class="group-dot dot-ck"></span> Chung kết</span>
-            </button>
-            <button class="tab" data-tab="sodo">
-                <span class="tab-group-label"><span class="group-dot dot-sodo"></span> Sơ đồ</span>
-            </button>
+        <div class="tabs">
+            <button class="tab active" data-tab="bangnhom"><span class="tab-group-label"><span class="group-dot dot-a"></span> Bảng xếp hạng</span></button>
+            <button class="tab" data-tab="vongbang"><span class="tab-group-label"><span class="group-dot dot-bang"></span> Vòng bảng</span></button>
+            <button class="tab" data-tab="tuket"><span class="tab-group-label"><span class="group-dot dot-tuk"></span> Tứ kết</span></button>
+            <button class="tab" data-tab="banket"><span class="tab-group-label"><span class="group-dot dot-bk"></span> Bán kết</span></button>
+            <button class="tab" data-tab="chungket"><span class="tab-group-label"><span class="group-dot dot-ck"></span> Chung kết</span></button>
+            <button class="tab" data-tab="sodo"><span class="tab-group-label"><span class="group-dot dot-sodo"></span> Sơ đồ</span></button>
         </div>
     </div>
 
@@ -610,7 +595,7 @@
         <!-- Tab Vòng bảng -->
         <div class="tab-content" id="tab-vongbang">
             <div class="section-title">
-                Thi đấu vòng bảng <span class="badge">Chi tiết</span>
+                Thi đấu vòng bảng <span class="badge">Nhập tỷ số</span>
                 <button class="btn-edit" onclick="refreshData()">🔄 Làm mới</button>
             </div>
             <div id="vongbang-container">
@@ -665,58 +650,61 @@
         <div class="update-time" id="update-time"></div>
     </div>
 
-    <!-- Toast Notification -->
-    <div class="toast" id="toast">
-        <span id="toast-icon">✓</span>
-        <span id="toast-message"></span>
-    </div>
+    <div class="toast" id="toast"></div>
 
     <script>
-        // === CẤU HÌNH ===
+        // === CONFIGURATION ===
         const SPREADSHEET_ID = '1jcCx9TFq80uFW0tSQJDL1kmTRrYierOARbvevhbxuXg';
         const BASE_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq`;
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby6lThMCgk_OeRWvYJEzQNjk6LAIjapOJoBYVoFQOspmxFze44RetiuPDljZi-1jiS8VA/exec';
 
-        // === MAPPING VỊ TRÍ Ô THEO YÊU CẦU ===
-        const CELL_MAPPING = {
+        // === CELL MAPPING ===
+        // Theo đúng yêu cầu: vị trí ghi dữ liệu tỷ số cho từng trận
+        const CELL_MAP = {
             // Vòng bảng - Bảng A (B3:F8)
-            'groupA_1': { team1: 'C3', team2: 'E3' },
-            'groupA_2': { team1: 'C4', team2: 'E4' },
-            'groupA_3': { team1: 'C5', team2: 'E5' },
-            'groupA_4': { team1: 'C6', team2: 'E6' },
-            'groupA_5': { team1: 'C7', team2: 'E7' },
-            'groupA_6': { team1: 'C8', team2: 'E8' },
+            'ga_1': { t1: 'C3', t2: 'E3', label: 'Trận 1' },
+            'ga_2': { t1: 'C4', t2: 'E4', label: 'Trận 2' },
+            'ga_3': { t1: 'C5', t2: 'E5', label: 'Trận 3' },
+            'ga_4': { t1: 'C6', t2: 'E6', label: 'Trận 4' },
+            'ga_5': { t1: 'C7', t2: 'E7', label: 'Trận 5' },
+            'ga_6': { t1: 'C8', t2: 'E8', label: 'Trận 6' },
+            
             // Vòng bảng - Bảng B (B12:F17)
-            'groupB_1': { team1: 'C12', team2: 'E12' },
-            'groupB_2': { team1: 'C13', team2: 'E13' },
-            'groupB_3': { team1: 'C14', team2: 'E14' },
-            'groupB_4': { team1: 'C15', team2: 'E15' },
-            'groupB_5': { team1: 'C16', team2: 'E16' },
-            'groupB_6': { team1: 'C17', team2: 'E17' },
+            'gb_1': { t1: 'C12', t2: 'E12', label: 'Trận 1' },
+            'gb_2': { t1: 'C13', t2: 'E13', label: 'Trận 2' },
+            'gb_3': { t1: 'C14', t2: 'E14', label: 'Trận 3' },
+            'gb_4': { t1: 'C15', t2: 'E15', label: 'Trận 4' },
+            'gb_5': { t1: 'C16', t2: 'E16', label: 'Trận 5' },
+            'gb_6': { t1: 'C17', t2: 'E17', label: 'Trận 6' },
+            
             // Vòng bảng - Bảng C (B21:F26)
-            'groupC_1': { team1: 'C21', team2: 'E21' },
-            'groupC_2': { team1: 'C22', team2: 'E22' },
-            'groupC_3': { team1: 'C23', team2: 'E23' },
-            'groupC_4': { team1: 'C24', team2: 'E24' },
-            'groupC_5': { team1: 'C25', team2: 'E25' },
-            'groupC_6': { team1: 'C26', team2: 'E26' },
+            'gc_1': { t1: 'C21', t2: 'E21', label: 'Trận 1' },
+            'gc_2': { t1: 'C22', t2: 'E22', label: 'Trận 2' },
+            'gc_3': { t1: 'C23', t2: 'E23', label: 'Trận 3' },
+            'gc_4': { t1: 'C24', t2: 'E24', label: 'Trận 4' },
+            'gc_5': { t1: 'C25', t2: 'E25', label: 'Trận 5' },
+            'gc_6': { t1: 'C26', t2: 'E26', label: 'Trận 6' },
+            
             // Vòng bảng - Bảng D (B30:F35)
-            'groupD_1': { team1: 'C30', team2: 'E30' },
-            'groupD_2': { team1: 'C31', team2: 'E31' },
-            'groupD_3': { team1: 'C32', team2: 'E32' },
-            'groupD_4': { team1: 'C33', team2: 'E33' },
-            'groupD_5': { team1: 'C34', team2: 'E34' },
-            'groupD_6': { team1: 'C35', team2: 'E35' },
+            'gd_1': { t1: 'C30', t2: 'E30', label: 'Trận 1' },
+            'gd_2': { t1: 'C31', t2: 'E31', label: 'Trận 2' },
+            'gd_3': { t1: 'C32', t2: 'E32', label: 'Trận 3' },
+            'gd_4': { t1: 'C33', t2: 'E33', label: 'Trận 4' },
+            'gd_5': { t1: 'C34', t2: 'E34', label: 'Trận 5' },
+            'gd_6': { t1: 'C35', t2: 'E35', label: 'Trận 6' },
+            
             // Tứ kết
-            'quarter_1': { team1: 'D3', team2: 'F3' },
-            'quarter_2': { team1: 'D6', team2: 'F6' },
-            'quarter_3': { team1: 'D9', team2: 'F9' },
-            'quarter_4': { team1: 'D12', team2: 'F12' },
+            'q_1': { t1: 'D3', t2: 'F5', label: 'Tứ kết 1' },
+            'q_2': { t1: 'D6', t2: 'F6', label: 'Tứ kết 2' },
+            'q_3': { t1: 'D9', t2: 'F9', label: 'Tứ kết 3' },
+            'q_4': { t1: 'D12', t2: 'F21', label: 'Tứ kết 4' },
+            
             // Bán kết
-            'semi_1': { team1: 'C4', team2: 'E4' },
-            'semi_2': { team1: 'C7', team2: 'E7' },
+            'sf_1': { t1: 'C4', t2: 'E4', label: 'Bán kết 1' },
+            'sf_2': { t1: 'C7', t2: 'E7', label: 'Bán kết 2' },
+            
             // Chung kết
-            'final': { team1: 'B4', team2: 'D4' }
+            'fn': { t1: 'B4', t2: 'D4', label: 'Chung kết' }
         };
 
         // === TAB SWITCHING ===
@@ -729,18 +717,26 @@
             });
         });
 
-        // === FETCH DATA FROM SHEETS ===
-        async function fetchSheetData(sheetName, range) {
+        // === TOAST ===
+        function showToast(msg, type = 'info') {
+            const toast = document.getElementById('toast');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // === FETCH DATA ===
+        async function fetchSheet(sheetName, range) {
             const url = BASE_URL + '?sheet=' + encodeURIComponent(sheetName) + '&range=' + encodeURIComponent(range) + '&tqx=out:json';
             try {
-                const response = await fetch(url);
-                const text = await response.text();
-                const jsonMatch = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\);?/);
-                if (!jsonMatch) throw new Error('Parse error');
-                const data = JSON.parse(jsonMatch[1]);
-                return data.table;
+                const res = await fetch(url);
+                const text = await res.text();
+                const match = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\);?/);
+                if (!match) throw new Error('Parse error');
+                return JSON.parse(match[1]).table;
             } catch (e) {
-                console.error('Error fetching ' + sheetName + ' ' + range + ':', e);
+                console.error(`Error ${sheetName} ${range}:`, e);
                 return null;
             }
         }
@@ -748,7 +744,7 @@
         function parseTable(tableData) {
             if (!tableData || !tableData.rows || !tableData.cols) return { headers: [], rows: [] };
             const headers = tableData.cols.map(c => c.label || '');
-            const rows = tableData.rows.map(row => 
+            const rows = tableData.rows.map(row =>
                 row.c.map(cell => {
                     if (!cell) return '';
                     if (cell.f) return cell.f;
@@ -760,301 +756,288 @@
         }
 
         // === RENDER FUNCTIONS ===
-        function renderStandingsTable(data, title, dotClass) {
+        function renderStandings(data, title, dotClass) {
             if (!data || data.rows.length === 0) return '';
-            const parsed = parseTable(data);
-            const { headers, rows } = parsed;
-            const filteredRows = rows.filter(r => r.some(c => c !== ''));
-            if (filteredRows.length === 0) return '';
+            const { headers, rows } = parseTable(data);
+            const filtered = rows.filter(r => r.some(c => c !== ''));
+            if (filtered.length === 0) return '';
 
-            let html = `<div class="card"><div class="card-title"><span class="icon"><span class="group-dot ${dotClass}"></span></span>${title}</div><table><thead><tr>`;
-            
-            filteredRows[0].forEach((cell, i) => {
-                const h = headers[i] || (i === 0 ? 'Đội' : (i === 1 ? 'Điểm' : 'Hệ số'));
-                html += `<th>${h}</th>`;
+            let h = `<div class="card"><div class="card-title"><span class="icon"><span class="group-dot ${dotClass}"></span></span>${title}</div><table><thead><tr>`;
+            filtered[0].forEach((_, i) => {
+                const header = headers[i] || (i === 0 ? 'Đội' : (i === 1 ? 'Điểm' : 'Hệ số'));
+                h += `<th>${header}</th>`;
             });
-            html += '</tr></thead><tbody>';
+            h += '</tr></thead><tbody>';
 
-            filteredRows.forEach((row, idx) => {
-                const rankClass = idx < 3 ? `rank-${idx + 1}` : '';
-                html += `<tr class="${rankClass}">`;
+            filtered.forEach((row, idx) => {
+                h += `<tr class="${idx < 3 ? 'rank-' + (idx + 1) : ''}">`;
                 row.forEach((cell, i) => {
-                    if (i === 1) html += `<td class="points-cell">${cell}</td>`;
-                    else if (i === 2) html += `<td class="ratio-cell">${cell}</td>`;
-                    else html += `<td>${cell}</td>`;
+                    const cls = i === 1 ? 'points-cell' : (i === 2 ? 'ratio-cell' : '');
+                    h += `<td class="${cls}">${cell}</td>`;
                 });
-                html += '</tr>';
+                h += '</tr>';
             });
-            html += '</tbody></table></div>';
-            return html;
+
+            h += '</tbody></table></div>';
+            return h;
         }
 
-        function renderMatchTable(data, title, matchConfigs) {
+        function renderMatches(data, title, matchIds, groupClass = '') {
             if (!data || data.rows.length === 0) return '';
-            const parsed = parseTable(data);
-            const { headers, rows } = parsed;
-            const filteredRows = rows.filter(r => r.some(c => c !== ''));
-            if (filteredRows.length === 0) return '';
+            const { headers, rows } = parseTable(data);
+            const filtered = rows.filter(r => r.some(c => c !== ''));
+            if (filtered.length === 0) return '';
 
-            let html = `<div class="card"><div class="card-title"><span class="icon">🏆</span>${title}</div>`;
+            let h = `<div class="card"><div class="card-title"><span class="icon">🏆</span>${title}</div>`;
 
-            filteredRows.forEach((row, rowIdx) => {
-                const matchConfig = matchConfigs[rowIdx];
-                if (!matchConfig) return;
-                
-                html += `<div class="match-card" data-match="${matchConfig.id}">
-                    <div class="match-label">
-                        <span>${matchConfig.label || 'Trận ' + (rowIdx + 1)}</span>
-                        <span class="cell-hint" style="font-size:0.65rem;color:var(--text-secondary)">📍 ${CELL_MAPPING[matchConfig.id]?.team1} / ${CELL_MAPPING[matchConfig.id]?.team2}</span>
-                    </div>`;
+            filtered.forEach((row, idx) => {
+                const matchId = matchIds[idx];
+                const matchInfo = CELL_MAP[matchId];
+                if (!matchInfo) return;
 
-                // Team 1 row
-                html += `<div class="match-row">
-                    <span class="match-team">${row[0] || 'Đội 1'}</span>
-                    <div class="score-input-group">
-                        <input type="number" class="score-input team1-score" 
-                               value="${row[2] || row[1] || ''}" min="0" max="99" 
-                               data-team="1" data-match="${matchConfig.id}">
-                        <span class="score-separator">-</span>
-                        <input type="number" class="score-input team2-score" 
-                               value="${row[3] || row[2] || row[1] || ''}" min="0" max="99"
-                               data-team="2" data-match="${matchConfig.id}">
+                const team1Name = row[1] || row[0] || 'Đội 1';
+                const team2Name = row[2] || row[1] || 'Đội 2';
+                const existingScore1 = row[3] || row[2] || '';
+                const existingScore2 = row[4] || row[3] || '';
+
+                h += `<div class="match-card">
+                    <div class="match-header">
+                        <span class="match-label">${groupClass ? `<span class="group-badge ${groupClass}">${title.replace('BẢNG', '').trim()}</span>` : ''}${matchInfo.label}</span>
+                        <span class="cell-info">📍 ${matchInfo.t1} / ${matchInfo.t2}</span>
                     </div>
-                    <button class="btn-save" onclick="saveScore('${matchConfig.id}')">
-                        💾 Lưu
-                    </button>
-                </div>
-                <div class="success-msg" id="msg-${matchConfig.id}">✓ Đã lưu thành công!</div>
+                    <div class="match-row">
+                        <span class="match-team">${team1Name}</span>
+                        <input type="number" class="score-input score-t1" data-match="${matchId}" value="${existingScore1}" min="0" max="99" placeholder="-">
+                        <span class="score-separator">-</span>
+                        <input type="number" class="score-input score-t2" data-match="${matchId}" value="${existingScore2}" min="0" max="99" placeholder="-">
+                        <button class="btn-save" onclick="saveScore('${matchId}')">💾 Lưu</button>
+                    </div>
+                    <div class="status-msg" id="msg-${matchId}"></div>
                 </div>`;
             });
 
-            html += '</div>';
-            return html;
+            h += '</div>';
+            return h;
+        }
+
+        function renderFinalCard(data) {
+            if (!data || data.rows.length === 0) return '';
+            const { headers, rows } = parseTable(data);
+            const filtered = rows.filter(r => r.some(c => c !== ''));
+            if (filtered.length === 0) return '';
+
+            const matchId = 'fn';
+            const matchInfo = CELL_MAP[matchId];
+            
+            // Try to get team names from the data
+            let team1Name = 'Đội 1';
+            let team2Name = 'Đội 2';
+            let existingScore1 = '';
+            let existingScore2 = '';
+
+            if (filtered.length > 0) {
+                team1Name = filtered[0][0] || team1Name;
+                team2Name = filtered[0][1] || filtered[0][2] || team2Name;
+                existingScore1 = filtered[0][2] || filtered[0][1] || '';
+                existingScore2 = filtered[0][3] || filtered[0][2] || '';
+            }
+
+            return `<div class="final-card">
+                <div class="trophy">🏆</div>
+                <div class="match-label">TRẬN CHUNG KẾT</div>
+                <div style="font-size:0.65rem;color:#92400e;margin-bottom:8px;">📍 ${matchInfo.t1} / ${matchInfo.t2}</div>
+                <div class="match-row" style="background:rgba(255,255,255,0.6);border-radius:8px;padding:10px 12px;margin-bottom:8px;">
+                    <span class="match-team" style="font-size:0.95rem;">${team1Name}</span>
+                    <input type="number" class="score-input score-t1" data-match="${matchId}" value="${existingScore1}" min="0" max="99" placeholder="-">
+                    <span class="score-separator">-</span>
+                    <input type="number" class="score-input score-t2" data-match="${matchId}" value="${existingScore2}" min="0" max="99" placeholder="-">
+                    <button class="btn-save" onclick="saveScore('${matchId}')" style="padding:8px 14px;">💾 Lưu</button>
+                </div>
+                <div class="status-msg" id="msg-${matchId}" style="background:rgba(255,255,255,0.8);"></div>
+            </div>`;
         }
 
         function renderSodoTable(data) {
             if (!data || data.rows.length === 0) return '';
-            const parsed = parseTable(data);
-            const { headers, rows } = parsed;
-            const filteredRows = rows.filter(r => r.some(c => c !== ''));
-            if (filteredRows.length === 0) return '';
+            const { headers, rows } = parseTable(data);
+            const filtered = rows.filter(r => r.some(c => c !== ''));
+            if (filtered.length === 0) return '';
 
-            let html = `<div class="card" style="padding: 8px; overflow-x: auto;">
+            let h = `<div class="card" style="padding: 8px; overflow-x: auto;">
                 <div class="card-title"><span class="icon">📋</span>Sơ đồ thi đấu</div>
                 <table class="sodo-table"><thead><tr>`;
             
-            headers.forEach(h => { html += `<th>${h || ''}</th>`; });
-            html += '</tr></thead><tbody>';
+            headers.forEach(hdr => { h += `<th>${hdr || ''}</th>`; });
+            h += '</tr></thead><tbody>';
             
-            filteredRows.forEach(row => {
-                html += '<tr>';
-                row.forEach(cell => { html += `<td>${cell}</td>`; });
-                html += '</tr>';
+            filtered.forEach(row => {
+                h += '<tr>';
+                row.forEach(cell => { h += `<td>${cell}</td>`; });
+                h += '</tr>';
             });
-            html += '</tbody></table></div>';
-            return html;
+            h += '</tbody></table></div>';
+            return h;
         }
 
-        // === SAVE SCORE TO GOOGLE SHEETS ===
+        // === SAVE SCORE ===
         async function saveScore(matchId) {
-            const card = document.querySelector(`[data-match="${matchId}"]`);
+            const card = document.querySelector(`.match-card .score-t1[data-match="${matchId}"]`);
             if (!card) return;
 
-            const team1Input = card.querySelector('.team1-score');
-            const team2Input = card.querySelector('.team2-score');
-            const saveBtn = card.querySelector('.btn-save');
-            const msgEl = document.getElementById(`msg-${matchId}`);
+            const parent = card.closest('.match-card');
+            const t1Input = parent.querySelector('.score-t1');
+            const t2Input = parent.querySelector('.score-t2');
+            const btn = parent.querySelector('.btn-save');
+            const msgEl = document.getElementById('msg-' + matchId);
 
-            if (!CELL_MAPPING[matchId]) {
-                showToast('❌ Match ID không hợp lệ', 'error');
-                return;
-            }
+            const val1 = t1Input.value.trim();
+            const val2 = t2Input.value.trim();
 
-            const team1Score = team1Input?.value || '';
-            const team2Score = team2Input?.value || '';
-
-            // Validate
-            if (team1Score === '' || team2Score === '') {
+            if (val1 === '' || val2 === '') {
+                if (msgEl) {
+                    msgEl.textContent = '⚠️ Vui lòng nhập đủ tỷ số';
+                    msgEl.className = 'status-msg error';
+                }
                 showToast('⚠️ Vui lòng nhập đủ tỷ số', 'error');
                 return;
             }
 
-            // UI state: saving
-            const originalBtnText = saveBtn.innerHTML;
-            saveBtn.disabled = true;
-            saveBtn.innerHTML = '⏳ Đang lưu...';
-            if (msgEl) msgEl.style.display = 'none';
+            // UI: saving state
+            const originalText = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '⏳ Đang lưu...';
+            btn.classList.add('saving');
+            if (msgEl) msgEl.className = 'status-msg';
 
             try {
-                const response = await fetch(SCRIPT_URL, {
+                await fetch(SCRIPT_URL, {
                     method: 'POST',
                     mode: 'no-cors',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         matchId: matchId,
-                        team1Score: parseInt(team1Score),
-                        team2Score: parseInt(team2Score)
+                        team1Score: parseInt(val1),
+                        team2Score: parseInt(val2)
                     })
                 });
 
-                // Do no-cors, assume success if no network error
+                // Success
                 if (msgEl) {
-                    msgEl.style.display = 'block';
-                    setTimeout(() => { msgEl.style.display = 'none'; }, 3000);
+                    msgEl.textContent = '✓ Đã lưu thành công!';
+                    msgEl.className = 'status-msg success';
+                    setTimeout(() => { msgEl.className = 'status-msg'; }, 3000);
                 }
-                showToast('✅ Đã lưu tỷ số vào Sheet!', 'success');
+                showToast('✅ Đã lưu tỷ số vào Google Sheets!', 'success');
                 
-                // Refresh data after 1.5s to show updated scores
+                // Refresh after 1.5s
                 setTimeout(refreshData, 1500);
 
-            } catch (error) {
-                console.error('Save error:', error);
+            } catch (err) {
+                console.error('Save error:', err);
+                if (msgEl) {
+                    msgEl.textContent = '✕ Lỗi kết nối';
+                    msgEl.className = 'status-msg error';
+                }
                 showToast('❌ Lỗi kết nối. Thử lại!', 'error');
-                if (msgEl) msgEl.style.display = 'none';
             } finally {
-                saveBtn.disabled = false;
-                saveBtn.innerHTML = originalBtnText;
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+                btn.classList.remove('saving');
             }
-        }
-
-        // === TOAST NOTIFICATION ===
-        function showToast(message, type = 'success') {
-            const toast = document.getElementById('toast');
-            const toastMsg = document.getElementById('toast-message');
-            const toastIcon = document.getElementById('toast-icon');
-            
-            toastMsg.textContent = message;
-            toastIcon.textContent = type === 'success' ? '✓' : '✕';
-            toast.className = `toast ${type} show`;
-            
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
         }
 
         // === REFRESH DATA ===
         async function refreshData() {
-            showToast('🔄 Đang làm mới dữ liệu...');
+            showToast('🔄 Đang làm mới dữ liệu...', 'info');
             await loadAllData();
-            showToast('✓ Đã làm mới!', 'success');
         }
 
         // === LOAD ALL DATA ===
         async function loadAllData() {
-            // Bảng A, B, C, D standings
-            const sheetNames = ['A', 'B', 'C', 'D'];
-            const titles = ['Bảng A', 'Bảng B', 'Bảng C', 'Bảng D'];
-            const dotClasses = ['dot-a', 'dot-b', 'dot-c', 'dot-d'];
+            // Bảng xếp hạng A, B, C, D
+            const groups = [
+                { name: 'A', title: 'Bảng A', dot: 'dot-a', cls: 'a' },
+                { name: 'B', title: 'Bảng B', dot: 'dot-b', cls: 'b' },
+                { name: 'C', title: 'Bảng C', dot: 'dot-c', cls: 'c' },
+                { name: 'D', title: 'Bảng D', dot: 'dot-d', cls: 'd' }
+            ];
 
             const bangnhomContainer = document.getElementById('bangnhom-container');
             let bangnhomHTML = '';
-
-            const results = await Promise.all(
-                sheetNames.map(name => fetchSheetData(name, 'F1:H5'))
-            );
-
-            results.forEach((data, idx) => {
+            const standingsResults = await Promise.all(groups.map(g => fetchSheet(g.name, 'F1:H5')));
+            standingsResults.forEach((data, idx) => {
                 if (data) {
-                    bangnhomHTML += renderStandingsTable(data, titles[idx], dotClasses[idx]);
+                    bangnhomHTML += renderStandings(data, groups[idx].title, groups[idx].dot);
                 } else {
-                    bangnhomHTML += `<div class="card"><div class="card-title"><span class="icon"><span class="group-dot ${dotClasses[idx]}"></span></span>${titles[idx]}</div><div class="error-msg">Không thể tải dữ liệu</div></div>`;
+                    bangnhomHTML += `<div class="card"><div class="card-title"><span class="icon"><span class="group-dot ${groups[idx].dot}"></span></span>${groups[idx].title}</div><div class="error-msg">Không thể tải dữ liệu</div></div>`;
                 }
             });
             bangnhomContainer.innerHTML = bangnhomHTML;
 
             // Vòng bảng - sheet "bang"
-            const rangesBang = [
-                { range: 'A1:H8', title: 'BẢNG A', matches: [
-                    { id: 'groupA_1', label: 'Trận 1' }, { id: 'groupA_2', label: 'Trận 2' },
-                    { id: 'groupA_3', label: 'Trận 3' }, { id: 'groupA_4', label: 'Trận 4' },
-                    { id: 'groupA_5', label: 'Trận 5' }, { id: 'groupA_6', label: 'Trận 6' }
-                ]},
-                { range: 'A10:H17', title: 'BẢNG B', matches: [
-                    { id: 'groupB_1', label: 'Trận 1' }, { id: 'groupB_2', label: 'Trận 2' },
-                    { id: 'groupB_3', label: 'Trận 3' }, { id: 'groupB_4', label: 'Trận 4' },
-                    { id: 'groupB_5', label: 'Trận 5' }, { id: 'groupB_6', label: 'Trận 6' }
-                ]},
-                { range: 'A19:H26', title: 'BẢNG C', matches: [
-                    { id: 'groupC_1', label: 'Trận 1' }, { id: 'groupC_2', label: 'Trận 2' },
-                    { id: 'groupC_3', label: 'Trận 3' }, { id: 'groupC_4', label: 'Trận 4' },
-                    { id: 'groupC_5', label: 'Trận 5' }, { id: 'groupC_6', label: 'Trận 6' }
-                ]},
-                { range: 'A28:H35', title: 'BẢNG D', matches: [
-                    { id: 'groupD_1', label: 'Trận 1' }, { id: 'groupD_2', label: 'Trận 2' },
-                    { id: 'groupD_3', label: 'Trận 3' }, { id: 'groupD_4', label: 'Trận 4' },
-                    { id: 'groupD_5', label: 'Trận 5' }, { id: 'groupD_6', label: 'Trận 6' }
-                ]}
+            const groupConfigs = [
+                { range: 'A1:H8', title: 'BẢNG A', matches: ['ga_1', 'ga_2', 'ga_3', 'ga_4', 'ga_5', 'ga_6'], cls: 'a' },
+                { range: 'A10:H17', title: 'BẢNG B', matches: ['gb_1', 'gb_2', 'gb_3', 'gb_4', 'gb_5', 'gb_6'], cls: 'b' },
+                { range: 'A19:H26', title: 'BẢNG C', matches: ['gc_1', 'gc_2', 'gc_3', 'gc_4', 'gc_5', 'gc_6'], cls: 'c' },
+                { range: 'A28:H35', title: 'BẢNG D', matches: ['gd_1', 'gd_2', 'gd_3', 'gd_4', 'gd_5', 'gd_6'], cls: 'd' }
             ];
 
             const vongbangContainer = document.getElementById('vongbang-container');
             let vongbangHTML = '';
-
-            const bangResults = await Promise.all(
-                rangesBang.map(r => fetchSheetData('bang', r.range))
-            );
-
+            const bangResults = await Promise.all(groupConfigs.map(cfg => fetchSheet('bang', cfg.range)));
             bangResults.forEach((data, idx) => {
                 if (data) {
-                    vongbangHTML += renderMatchTable(data, rangesBang[idx].title, rangesBang[idx].matches);
+                    vongbangHTML += renderMatches(data, groupConfigs[idx].title, groupConfigs[idx].matches, groupConfigs[idx].cls);
                 }
             });
             vongbangContainer.innerHTML = vongbangHTML || '<div class="error-msg">Không thể tải dữ liệu vòng bảng</div>';
 
             // Tứ kết - sheet "1.8"
-            const rangesTuKet = [
-                { range: 'A2:G3', title: 'Tứ kết 1', matches: [{ id: 'quarter_1', label: 'Tứ kết 1' }] },
-                { range: 'A5:G6', title: 'Tứ kết 2', matches: [{ id: 'quarter_2', label: 'Tứ kết 2' }] },
-                { range: 'A8:G9', title: 'Tứ kết 3', matches: [{ id: 'quarter_3', label: 'Tứ kết 3' }] },
-                { range: 'A11:G12', title: 'Tứ kết 4', matches: [{ id: 'quarter_4', label: 'Tứ kết 4' }] }
+            const tuKetConfigs = [
+                { range: 'A2:G3', title: 'Tứ kết 1', matches: ['q_1'] },
+                { range: 'A5:G6', title: 'Tứ kết 2', matches: ['q_2'] },
+                { range: 'A8:G9', title: 'Tứ kết 3', matches: ['q_3'] },
+                { range: 'A11:G12', title: 'Tứ kết 4', matches: ['q_4'] }
             ];
 
             const tuketContainer = document.getElementById('tuket-container');
             let tuketHTML = '';
-
-            const tuketResults = await Promise.all(
-                rangesTuKet.map(r => fetchSheetData('1.8', r.range))
-            );
-
-            tuketResults.forEach((data, idx) => {
+            const tuKetResults = await Promise.all(tuKetConfigs.map(cfg => fetchSheet('1.8', cfg.range)));
+            tuKetResults.forEach((data, idx) => {
                 if (data) {
-                    tuketHTML += renderMatchTable(data, rangesTuKet[idx].title, rangesTuKet[idx].matches);
+                    tuketHTML += renderMatches(data, tuKetConfigs[idx].title, tuKetConfigs[idx].matches);
                 }
             });
             tuketContainer.innerHTML = tuketHTML || '<div class="error-msg">Không thể tải dữ liệu tứ kết</div>';
 
             // Bán kết - sheet "bk"
-            const rangesBanKet = [
-                { range: 'A3:F4', title: 'Bán kết 1', matches: [{ id: 'semi_1', label: 'Bán kết 1' }] },
-                { range: 'A6:F7', title: 'Bán kết 2', matches: [{ id: 'semi_2', label: 'Bán kết 2' }] }
+            const banKetConfigs = [
+                { range: 'A3:F4', title: 'Bán kết 1', matches: ['sf_1'] },
+                { range: 'A6:F7', title: 'Bán kết 2', matches: ['sf_2'] }
             ];
 
             const banketContainer = document.getElementById('banket-container');
             let banketHTML = '';
-
-            const banketResults = await Promise.all(
-                rangesBanKet.map(r => fetchSheetData('bk', r.range))
-            );
-
-            banketResults.forEach((data, idx) => {
+            const banKetResults = await Promise.all(banKetConfigs.map(cfg => fetchSheet('bk', cfg.range)));
+            banKetResults.forEach((data, idx) => {
                 if (data) {
-                    banketHTML += renderMatchTable(data, rangesBanKet[idx].title, rangesBanKet[idx].matches);
+                    banketHTML += renderMatches(data, banKetConfigs[idx].title, banKetConfigs[idx].matches);
                 }
             });
             banketContainer.innerHTML = banketHTML || '<div class="error-msg">Không thể tải dữ liệu bán kết</div>';
 
             // Chung kết - sheet "ck"
             const ckContainer = document.getElementById('chungket-container');
-            const ckData = await fetchSheetData('ck', 'A3:E4');
+            const ckData = await fetchSheet('ck', 'A3:E4');
             if (ckData) {
-                const ckHTML = renderMatchTable(ckData, '🏆 CHUNG KẾT', [{ id: 'final', label: 'Trận Chung Kết' }]);
-                ckContainer.innerHTML = ckHTML || '<div class="error-msg">Chưa có dữ liệu chung kết</div>';
+                ckContainer.innerHTML = renderFinalCard(ckData) || '<div class="error-msg">Chưa có dữ liệu chung kết</div>';
             } else {
                 ckContainer.innerHTML = '<div class="error-msg">Không thể tải dữ liệu chung kết</div>';
             }
 
             // Sơ đồ - sheet "sodo"
             const sodoContainer = document.getElementById('sodo-container');
-            const sodoData = await fetchSheetData('sodo', 'A1:H21');
+            const sodoData = await fetchSheet('sodo', 'A1:H21');
             if (sodoData) {
                 sodoContainer.innerHTML = renderSodoTable(sodoData);
             } else {
@@ -1070,9 +1053,9 @@
         // === INIT ===
         document.addEventListener('DOMContentLoaded', () => {
             loadAllData();
-            // Auto refresh every 60 seconds
             setInterval(loadAllData, 60000);
         });
     </script>
 </body>
 </html>
+
