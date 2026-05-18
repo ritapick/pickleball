@@ -481,8 +481,9 @@
         });
     }
 
-    // ==================== LOAD SEMI FINALS ====================
+        // ==================== LOAD SEMI FINALS (Đã chỉnh theo hình) ====================
     async function loadSFData() {
+        // Query range A3:F7 (Bao gồm cả dòng tiêu đề và dòng dữ liệu)
         const data = await getSheet('bk', 'A3:F7');
         const t = data.table;
         if (!t || !t.rows || t.rows.length === 0) {
@@ -490,31 +491,58 @@
             return;
         }
 
-        const matches = [
-            { scoreRow: 4, round: 'Bán kết 1', t1: val(t.rows[0], 0), t2: val(t.rows[0], 1) },
-            { scoreRow: 7, round: 'Bán kết 2', t1: val(t.rows[1], 0), t2: val(t.rows[1], 1) }
+        // 📍 MAPPING THEO HÌNH:
+        // Range A3:F7 -> A3 là index 0.
+        // Row 4 (Dữ liệu Bán kết 1) -> index 1
+        // Row 7 (Dữ liệu Bán kết 2) -> index 4
+        
+        const matchConfig = [
+            { sheetRow: 4, rowIdx: 1, round: 'Bán kết 1' },
+            { sheetRow: 7, rowIdx: 4, round: 'Bán kết 2' }
         ];
 
         let h = '<div class="match-grid">';
-        matches.forEach((m, i) => {
-            const matchId = `sf_${m.scoreRow}`;
-            const match = {
+        matchConfig.forEach((cfg, i) => {
+            // Kiểm tra an toàn tránh lỗi nếu sheet rỗng dòng
+            const row = t.rows[cfg.rowIdx] || { c: [] }; 
+            
+            // Lấy tên đội ở cột B và F
+            const t1Name = val(row, 1); // Cột B (index 1)
+            const t2Name = val(row, 5); // Cột F (index 5)
+            
+            // Lấy tỷ số cũ (để hiển thị nếu đã có)
+            const existingS1 = val(row, 2); // Cột C (index 2)
+            const existingS2 = val(row, 4); // Cột E (index 4)
+
+            const matchId = `sf_${cfg.sheetRow}`;
+            const matchObj = {
                 id: matchId,
-                round: m.round,
-                t1: m.t1,
-                t2: m.t2,
-                existingS1: '',
-                existingS2: '',
+                round: cfg.round,
+                t1: t1Name || `Đội 1 Bán kết ${i+1}`,
+                t2: t2Name || `Đội 2 Bán kết ${i+1}`,
+                existingS1: existingS1,
+                existingS2: existingS2,
                 sheetName: 'bk',
-                team1Col: 'C',
-                team2Col: 'E',
-                row: m.scoreRow
+                team1Col: 'C', // Ghi tỷ số vào cột C
+                team2Col: 'E', // Ghi tỷ số vào cột E
+                row: cfg.sheetRow // Hàng ghi số liệu (4 và 7)
             };
-            allMatchData.push(match);
-            h += renderMatchCard(match, i);
+            
+            allMatchData.push(matchObj);
+            h += renderMatchCard(matchObj, i);
         });
         h += '</div>';
         document.getElementById('sf-area').innerHTML = h;
+
+        // Điền lại tỷ số vào ô input
+        matchConfig.forEach(cfg => {
+            const row = t.rows[cfg.rowIdx];
+            const matchId = `sf_${cfg.sheetRow}`;
+            const el1 = document.getElementById(`s1-${matchId}`);
+            const el2 = document.getElementById(`s2-${matchId}`);
+            if (el1) el1.value = val(row, 2) || ''; // Cột C
+            if (el2) el2.value = val(row, 4) || ''; // Cột E
+        });
     }
 
     // ==================== LOAD FINAL ====================
