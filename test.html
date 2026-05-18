@@ -10,13 +10,13 @@
         :root{--primary:#1a56db;--primary-light:#3b82f6;--primary-dark:#1e40af;--accent:#f59e0b;--bg:#e7f7e6;--card:#fff;--text:#222f3d;--text-secondary:#64748b;--border:#e2e8f0;--green:#10b981;--red:#ef4444}
         *{margin:0;padding:0;box-sizing:border-box}
         body{font-family:Inter,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-        .header{background:linear-gradient(135deg,#3e4f3c,#457d3e,#309124);color:#fff;padding:20px 16px;text-align:center;position:relative;box-shadow:0 4px 20px rgba(26,86,219,.3)}
-        .header h1{font-size:1.5rem;font-weight:800;position:relative;z-index:1}
+        .header{background:linear-gradient(135deg,#3e4f3c,#457d3e,#309124);color:#fff;padding:20px 16px;text-align:center;box-shadow:0 4px 20px rgba(26,86,219,.3)}
+        .header h1{font-size:1.5rem;font-weight:800}
         .header .subtitle{font-size:.8rem;opacity:.85;margin-top:4px}
         .tabs-container{background:#fff;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.08);border-bottom:1px solid var(--border)}
         .tabs{display:flex;overflow-x:auto;padding:0 8px;gap:2px;scrollbar-width:none}
         .tabs::-webkit-scrollbar{display:none}
-        .tab{flex:none;padding:12px 14px;font-size:.75rem;font-weight:600;color:var(--text-secondary);background:none;border:none;cursor:pointer;white-space:nowrap;border-radius:8px 8px 0 0;margin-bottom:-1px;transition:all .2s}
+        .tab{flex:none;padding:12px 14px;font-size:.75rem;font-weight:600;color:var(--text-secondary);background:none;border:none;cursor:pointer;white-space:nowrap;border-radius:8px 8px 0 0;margin-bottom:-1px;transition:all .2s;position:relative}
         .tab:hover{color:var(--primary);background:rgba(26,86,219,.05)}
         .tab.active{color:var(--primary);background:rgba(26,86,219,.08)}
         .tab.active::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--primary);border-radius:3px 3px 0 0}
@@ -33,18 +33,29 @@
         table th{background:linear-gradient(135deg,#1e3a5f,#1a56db);color:#fff;padding:10px 8px;text-align:center;font-weight:600;font-size:.72rem;text-transform:uppercase;white-space:nowrap}
         table th:first-child{border-radius:10px 0 0 0;text-align:left;padding-left:12px}
         table th:last-child{border-radius:0 10px 0 0}
-        table td{padding:10px 8px;text-align:center;border-bottom:1px solid var(--border);font-weight:500}
+        table td{padding:10px 8px;text-align:center;border-bottom:1px solid var(--border);font-weight:500;vertical-align:middle}
         table td:first-child{text-align:left;padding-left:12px;font-weight:600}
         table tr:hover td{background:rgba(26,86,219,.03)}
         table tr:nth-child(even) td{background:rgba(241,245,249,.5)}
-        .score-input{width:50px;background:#f0f7ff;border:2px solid var(--primary-light);border-radius:8px;padding:6px;text-align:center;font-size:.9rem;font-weight:800;color:var(--primary);transition:all .2s}
-        .score-input:focus{outline:none;border-color:var(--primary);background:#fff}
-        .score-input.saved{border-color:var(--green);background:#ecfdf5;color:var(--green)}
-        .save-btn{background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:.78rem;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap}
-        .save-btn:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(26,86,219,.25)}
+        
+        .score-input{width:48px;background:#f0f7ff;border:2px solid var(--primary-light);border-radius:8px;padding:6px;text-align:center;font-size:.9rem;font-weight:800;color:var(--primary);transition:all .2s}
+        .score-input:focus{outline:none;border-color:var(--primary);background:#fff;box-shadow:0 0 0 3px rgba(26,86,219,.15)}
+        .score-input.changed{border-color:var(--accent);background:#fffbeb;color:var(--accent)}
+        .score-input::-webkit-inner-spin-button,.score-input::-webkit-outer-spin-button{-webkit-appearance:none}
+        .score-input[type=number]{-moz-appearance:textfield}
+        
+        .save-btn{background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:.78rem;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap;display:inline-flex;align-items:center;gap:4px;opacity:.4;pointer-events:none}
+        .save-btn.active{opacity:1;pointer-events:auto}
+        .save-btn.active:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(26,86,219,.25)}
+        .save-btn:active{transform:translateY(0)}
         .save-btn.saving{opacity:.7;cursor:wait}
         .save-btn.success{background:linear-gradient(135deg,#059669,var(--green))}
         .save-btn.error{background:linear-gradient(135deg,#dc2626,var(--red))}
+        
+        .score-group{display:flex;align-items:center;gap:6px;justify-content:center}
+        .vs-text{font-weight:800;color:var(--text-secondary);font-size:.8rem}
+        .action-cell{text-align:center!important;padding:8px!important}
+        
         .loading{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;gap:12px}
         .spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin .8s linear infinite}
         @keyframes spin{to{transform:rotate(360deg)}}
@@ -59,7 +70,7 @@
         .toast.success{background:linear-gradient(135deg,#059669,var(--green))}
         .toast.error{background:linear-gradient(135deg,#dc2626,var(--red))}
         .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-        @media(max-width:640px){.grid-2{grid-template-columns:1fr}}
+        @media(max-width:640px){.grid-2{grid-template-columns:1fr}.header h1{font-size:1.3rem}.tab{padding:10px 12px;font-size:.7rem}.content{padding:12px}.card{padding:12px;border-radius:12px}.score-input{width:42px;padding:5px}}
         .tab-group-label{display:flex;align-items:center;gap:4px}
         .group-dot{width:8px;height:8px;border-radius:50%;display:inline-block}
         .dot-a{background:#3b82f6}.dot-b{background:#ef4444}.dot-c{background:#10b981}.dot-d{background:#f59e0b}
@@ -125,139 +136,195 @@
                 document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
                 document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
                 tab.classList.add('active');
-                $( 'tab-'+tab.dataset.tab ).classList.add('active');
+                $('tab-'+tab.dataset.tab).classList.add('active');
             }
         });
 
         async function api(action,params){
             const url = SCRIPT_URL + (action ? '?action='+action : '');
+            const opts = params || {};
             try{
                 const res = await fetch(url,{
-                    method: params?.method || 'GET',
-                    body: params?.body ? JSON.stringify(params.body) : undefined,
-                    headers: params?.body ? {'Content-Type':'text/plain'} : {}
+                    method: opts.method || 'GET',
+                    body: opts.body ? JSON.stringify(opts.body) : undefined,
+                    headers: opts.body ? {'Content-Type':'text/plain'} : {}
                 });
                 const text = await res.text();
-                try{ return JSON.parse(text); }
-                catch(e){ console.error('Parse error:',text); throw new Error('Response không phải JSON'); }
+                return JSON.parse(text);
             }catch(e){
-                console.error('Fetch error:',e);
-                throw new Error('Không thể kết nối đến server: '+e.message);
+                throw new Error('Kết nối thất bại: '+e.message);
             }
         }
 
         async function testConnection(){
             try{
                 const res = await api('test');
-                if(res.status==='ok'){ toast('✅ Kết nối thành công!','success'); return true; }
-                else{ toast('❌ '+res.message,'error'); return false; }
-            }catch(e){
-                toast('Lỗi kết nối: '+e.message,'error');
-                console.error(e);
-                return false;
-            }
-        }
-
-        function parseRow(row){
-            return row.map(cell => {
-                if(cell===null||cell===undefined) return '';
-                if(typeof cell==='object' && cell.f) return cell.f;
-                return String(cell);
-            });
+                if(res.status==='ok'){toast('✅ Kết nối thành công!','success');return true}
+                else{toast('❌ '+res.message,'error');return false}
+            }catch(e){toast('Lỗi: '+e.message,'error');return false}
         }
 
         function renderStandings(data,title,dotClass){
-            if(!data||!data.length||data.error) return '<div class="card"><div class="card-title"><span class="icon"><span class="group-dot '+dotClass+'"></span></span>'+title+'</div><div class="error-msg">'+(data?.error||'Không có dữ liệu')+'</div></div>';
+            if(!data||!data.length||data.error){
+                return '<div class="card"><div class="card-title"><span class="icon"><span class="group-dot '+dotClass+'"></span></span>'+title+'</div><div class="error-msg">'+(data?.error||'Không có dữ liệu')+'</div></div>';
+            }
             let html='<div class="card"><div class="card-title"><span class="icon"><span class="group-dot '+dotClass+'"></span></span>'+title+'</div><table><thead><tr><th>Đội</th><th>Điểm</th><th>Hệ số</th></tr></thead><tbody>';
-            data.filter(r=>r.some(c=>c!=='')).forEach((row,idx)=>{
-                const rc = idx<3?'rank-'+(idx+1):'';
-                html+='<tr class="'+rc+'"><td>'+row[0]+'</td><td class="points-cell">'+(row[1]||'0')+'</td><td class="ratio-cell">'+(row[2]||'-')+'</td></tr>';
+            data.filter(r=>r.some(c=>c!==''&&c!==null&&c!==undefined)).forEach((row,idx)=>{
+                html+='<tr><td>'+row[0]+'</td><td class="points-cell">'+(row[1]||'0')+'</td><td class="ratio-cell">'+(row[2]||'-')+'</td></tr>';
             });
             html+='</tbody></table></div>';
             return html;
         }
 
-        function renderMatchTable(data,title,sheetName,startRow){
-            if(!data||!data.length||data.error) return '<div class="card"><div class="card-title"><span class="icon">🏆</span>'+title+'</div><div class="error-msg">'+(data?.error||'Không có dữ liệu')+'</div></div>';
-            const rows = data.filter(r=>r.some(c=>c!==''));
-            if(rows.length===0) return '<div class="card"><div class="card-title"><span class="icon">🏆</span>'+title+'</div><div class="error-msg">Chưa có trận đấu</div></div>';
+        function renderMatchTable(data,title,sheetName,startRow,scoreCols){
+            if(!data||!data.length||data.error){
+                return '<div class="card"><div class="card-title"><span class="icon">🏆</span>'+title+'</div><div class="error-msg">'+(data?.error||'Không có dữ liệu')+'</div></div>';
+            }
+            const rows = data.filter(r=>r.some(c=>c!==''&&c!==null&&c!==undefined));
+            if(rows.length===0){
+                return '<div class="card"><div class="card-title"><span class="icon">🏆</span>'+title+'</div><div class="error-msg">Chưa có dữ liệu</div></div>';
+            }
+            
+            // scoreCols: mảng các index cột chứa tỷ số (0-indexed)
+            // Ví dụ: [3,5] nghĩa là cột D và F (1-indexed là 4 và 6)
+            const sc = scoreCols || [3,5];
             
             let html='<div class="card"><div class="card-title"><span class="icon">🏆</span>'+title+'</div><table><thead><tr>';
-            ['ST','Đội 1','Tỷ số 1','Tỷ số 2','Đội 2','Ghi chú','Thao tác'].forEach(h=>html+='<th>'+h+'</th>');
-            html+='</tr></thead><tbody>';
+            // Header: số cột trong data + 1 cột thao tác
+            for(let i=0;i<rows[0].length;i++) html+='<th>-</th>';
+            html+='<th style="width:80px">Lưu</th></tr></thead><tbody>';
             
             rows.forEach((row,idx)=>{
                 const sheetR = startRow + idx;
-                const s1Id = 's1_'+sheetName.replace(/[^a-z0-9]/gi,'')+'_'+sheetR;
-                const s2Id = 's2_'+sheetName.replace(/[^a-z0-9]/gi,'')+'_'+sheetR;
-                const btnId = 'btn_'+sheetName.replace(/[^a-z0-9]/gi,'')+'_'+sheetR;
-                const v1 = row[2]!==undefined&&row[2]!==null?row[2]:'';
-                const v2 = row[3]!==undefined&&row[3]!==null?row[3]:'';
-                
                 html+='<tr>';
-                for(let i=0;i<Math.min(6,row.length);i++) html+='<td>'+row[i]+'</td>';
-                html+='<td style="padding:6px"><div style="display:flex;gap:4px;align-items:center;justify-content:center">';
-                html+='<input type="number" class="score-input" id="'+s1Id+'" value="'+v1+'" min="0" placeholder="0" style="width:45px">';
-                html+='<span style="font-weight:700;color:var(--text-secondary)">-</span>';
-                html+='<input type="number" class="score-input" id="'+s2Id+'" value="'+v2+'" min="0" placeholder="0" style="width:45px">';
-                html+='</div><button class="save-btn" id="'+btnId+'" style="margin-top:6px;width:100%" onclick=\'saveScore("'+sheetName+'",'+sheetR+',4,6,["'+s1Id+'","'+s2Id+'"],"'+btnId+'")\'>💾 Lưu</button></td>';
-                html+='</tr>';
-            });
-            html+='</tbody></table></div>';
-            return html;
-        }
-
-        function renderSodo(data){
-            if(!data||!data.length||data.error) return '<div class="card"><div class="card-title"><span class="icon">📋</span>Sơ đồ</div><div class="error-msg">'+(data?.error||'Không có dữ liệu')+'</div></div>';
-            let html='<div class="card" style="padding:8px;overflow-x:auto"><table class="sodo-table"><thead><tr>';
-            (data[0]||[]).forEach(()=>html+='<th>-</th>');
-            html+='</tr></thead><tbody>';
-            data.filter(r=>r.some(c=>c!=='')).forEach(row=>{
-                html+='<tr>';
-                row.forEach(cell=>html+='<td>'+cell+'</td>');
-                html+='</tr>';
-            });
-            html+='</tbody></table></div>';
-            return html;
-        }
-
-        async function saveScore(sheet,row,col1,col2,inputIds,btnId){
-            const btn = $(btnId);
-            if(!btn) return;
-            btn.classList.add('saving');
-            btn.textContent='⏳ Đang lưu...';
-            try{
-                const v1 = $(inputIds[0])?.value||'';
-                const v2 = $(inputIds[1])?.value||'';
-                await api(null,{
-                    method:'POST',
-                    body:{
-                        sheet:sheet,
-                        updates:[
-                            {row:row,col:col1,value:v1!==''?parseInt(v1):''},
-                            {row:row,col:col2,value:v2!==''?parseInt(v2):''}
-                        ]
+                row.forEach((cell,ci)=>{
+                    if(sc.indexOf(ci)!==-1){
+                        // Đây là cột tỷ số - render input
+                        const origVal = (cell!==null&&cell!==undefined&&cell!=='') ? parseInt(cell) : '';
+                        const uid = sheetName.replace(/[^a-z0-9]/gi,'')+'_'+sheetR+'_'+ci;
+                        const inputId = 'sc_'+uid;
+                        const origAttr = 'data-orig="'+origVal+'"';
+                        html+='<td><input type="number" class="score-input" id="'+inputId+'" value="'+origVal+'" min="0" '+origAttr+' data-sheet="'+sheetName+'" data-row="'+sheetR+'" data-col="'+(ci+1)+'" oninput="checkScoreChange(this)"></td>';
+                    }else{
+                        html+='<td>'+(cell||'')+'</td>';
                     }
                 });
-                $(inputIds[0])?.classList.add('saved');
-                $(inputIds[1])?.classList.add('saved');
-                btn.classList.remove('saving');
-                btn.classList.add('success');
-                btn.textContent='✅ Đã lưu';
-                toast('Đã lưu tỷ số!','success');
-                setTimeout(()=>{
-                    btn.classList.remove('success');
+                // Cột nút lưu
+                const rowId = 'row_'+sheetName.replace(/[^a-z0-9]/gi,'')+'_'+sheetR;
+                html+='<td class="action-cell"><button class="save-btn" id="btn_'+rowId+'" data-sheet="'+sheetName+'" data-row="'+sheetR+'" data-cols="'+sc.join(',')+'" onclick="saveRow(this)">💾 Lưu</button></td>';
+                html+='</tr>';
+            });
+            html+='</tbody></table></div>';
+            return html;
+        }
+
+        function checkScoreChange(input){
+            const orig = input.getAttribute('data-orig');
+            const current = input.value;
+            const rowBtn = input.closest('tr').querySelector('.save-btn');
+            
+            // Check if any input in this row has changed
+            const inputs = input.closest('tr').querySelectorAll('.score-input');
+            let hasChange = false;
+            inputs.forEach(inp=>{
+                if(inp.value !== inp.getAttribute('data-orig')){
+                    hasChange = true;
+                    inp.classList.add('changed');
+                }else{
+                    inp.classList.remove('changed');
+                }
+            });
+            
+            if(hasChange){
+                rowBtn.classList.add('active');
+            }else{
+                rowBtn.classList.remove('active');
+            }
+        }
+
+        async function saveRow(btn){
+            if(!btn.classList.contains('active')) return;
+            
+            btn.classList.add('saving');
+            btn.textContent='⏳...';
+            
+            try{
+                const sheet = btn.getAttribute('data-sheet');
+                const row = parseInt(btn.getAttribute('data-row'));
+                const colStr = btn.getAttribute('data-cols');
+                const cols = colStr.split(',').map(c=>parseInt(c));
+                
+                const updates = [];
+                const rowInputs = btn.closest('tr').querySelectorAll('.score-input');
+                
+                rowInputs.forEach((inp,i)=>{
+                    const newVal = inp.value;
+                    const origVal = inp.getAttribute('data-orig');
+                    const col = parseInt(inp.getAttribute('data-col'));
+                    
+                    // Chỉ lưu nếu có thay đổi
+                    if(newVal !== origVal){
+                        updates.push({
+                            row: row,
+                            col: col,
+                            value: newVal !== '' ? parseInt(newVal) : ''
+                        });
+                    }
+                });
+                
+                if(updates.length === 0){
+                    toast('Không có thay đổi','error');
+                    btn.classList.remove('saving');
                     btn.textContent='💾 Lưu';
-                    $(inputIds[0])?.classList.remove('saved');
-                    $(inputIds[1])?.classList.remove('saved');
-                },2500);
+                    return;
+                }
+                
+                const res = await api(null,{
+                    method:'POST',
+                    body:{sheet:sheet, updates:updates}
+                });
+                
+                if(res.status === 'success'){
+                    // Update data-orig values
+                    rowInputs.forEach(inp=>{
+                        inp.setAttribute('data-orig', inp.value);
+                        inp.classList.remove('changed');
+                    });
+                    btn.classList.remove('active');
+                    btn.classList.remove('saving');
+                    btn.classList.add('success');
+                    btn.textContent='✅';
+                    toast('Đã lưu tỷ số!','success');
+                    setTimeout(()=>{
+                        btn.classList.remove('success');
+                        btn.textContent='💾 Lưu';
+                    },2500);
+                }else{
+                    throw new Error(res.message || 'Lỗi khi lưu');
+                }
             }catch(e){
                 btn.classList.remove('saving');
                 btn.classList.add('error');
-                btn.textContent='❌ Lỗi';
+                btn.textContent='❌';
                 toast('Lỗi: '+e.message,'error');
                 setTimeout(()=>{btn.classList.remove('error');btn.textContent='💾 Lưu'},2500);
             }
+        }
+
+        function renderSodo(data){
+            if(!data||!data.length||data.error){
+                return '<div class="card"><div class="error-msg">'+(data?.error||'Không có dữ liệu')+'</div></div>';
+            }
+            let html='<div class="card" style="padding:8px;overflow-x:auto"><table class="sodo-table"><thead><tr>';
+            (data[0]||[]).forEach(()=>html+='<th>-</th>');
+            html+='</tr></thead><tbody>';
+            data.filter(r=>r.some(c=>c!==''&&c!==null&&c!==undefined)).forEach(row=>{
+                html+='<tr>';
+                row.forEach(cell=>html+='<td>'+(cell||'')+'</td>');
+                html+='</tr>';
+            });
+            html+='</tbody></table></div>';
+            return html;
         }
 
         async function loadAllData(){
@@ -269,79 +336,67 @@
                 // Bảng xếp hạng A,B,C,D
                 let bangHTML='';
                 ['A','B','C','D'].forEach((g,i)=>{
-                    const key='bang'+g;
-                    bangHTML+=renderStandings(s[key],'Bảng '+g,['dot-a','dot-b','dot-c','dot-d'][i]);
+                    bangHTML+=renderStandings(s['bang'+g],'Bảng '+g,['dot-a','dot-b','dot-c','dot-d'][i]);
                 });
                 $('bangnhom-container').innerHTML=bangHTML;
                 
-                // Vòng bảng
+                // Vòng bảng: scoreCols = [3,5] (cột D và F, 0-indexed)
                 let vbHTML='';
                 [
-                    {key:'bangA_matches',title:'BẢNG A',start:1},
-                    {key:'bangB_matches',title:'BẢNG B',start:10},
-                    {key:'bangC_matches',title:'BẢNG C',start:19},
-                    {key:'bangD_matches',title:'BẢNG D',start:28}
+                    {key:'bangA_matches',title:'BẢNG A',start:1,scoreCols:[3,5]},
+                    {key:'bangB_matches',title:'BẢNG B',start:10,scoreCols:[3,5]},
+                    {key:'bangC_matches',title:'BẢNG C',start:19,scoreCols:[3,5]},
+                    {key:'bangD_matches',title:'BẢNG D',start:28,scoreCols:[3,5]}
                 ].forEach(cfg=>{
-                    vbHTML+=renderMatchTable(s[cfg.key],cfg.title,'bang',cfg.start);
+                    vbHTML+=renderMatchTable(s[cfg.key],cfg.title,'bang',cfg.start,cfg.scoreCols);
                 });
                 $('vongbang-container').innerHTML=vbHTML||'<div class="error-msg">Không có dữ liệu</div>';
                 
-                // Tứ kết
+                // Tứ kết: scoreCols = [3,5]
                 let tkHTML='';
                 [
-                    {key:'tk1',title:'Tứ kết 1',start:2},
-                    {key:'tk2',title:'Tứ kết 2',start:5},
-                    {key:'tk3',title:'Tứ kết 3',start:8},
-                    {key:'tk4',title:'Tứ kết 4',start:11}
+                    {key:'tk1',title:'Tứ kết 1',start:2,scoreCols:[3,5]},
+                    {key:'tk2',title:'Tứ kết 2',start:5,scoreCols:[3,5]},
+                    {key:'tk3',title:'Tứ kết 3',start:8,scoreCols:[3,5]},
+                    {key:'tk4',title:'Tứ kết 4',start:11,scoreCols:[3,5]}
                 ].forEach(cfg=>{
-                    tkHTML+=renderMatchTable(s[cfg.key],cfg.title,'1.8',cfg.start);
+                    tkHTML+=renderMatchTable(s[cfg.key],cfg.title,'1.8',cfg.start,cfg.scoreCols);
                 });
                 $('tuket-container').innerHTML=tkHTML||'<div class="error-msg">Không có dữ liệu</div>';
                 
-                // Bán kết
+                // Bán kết: scoreCols = [3,5]
                 let bkHTML='';
                 [
-                    {key:'bk1',title:'Bán kết 1',start:3},
-                    {key:'bk2',title:'Bán kết 2',start:6}
+                    {key:'bk1',title:'Bán kết 1',start:3,scoreCols:[3,5]},
+                    {key:'bk2',title:'Bán kết 2',start:6,scoreCols:[3,5]}
                 ].forEach(cfg=>{
-                    bkHTML+=renderMatchTable(s[cfg.key],cfg.title,'bk',cfg.start);
+                    bkHTML+=renderMatchTable(s[cfg.key],cfg.title,'bk',cfg.start,cfg.scoreCols);
                 });
                 $('banket-container').innerHTML=bkHTML||'<div class="error-msg">Không có dữ liệu</div>';
                 
-                // Chung kết
-                $('chungket-container').innerHTML=renderMatchTable(s.ck,'CHUNG KẾT','ck',3);
+                // Chung kết: scoreCols = [2,4] (cột C và E, 0-indexed)
+                $('chungket-container').innerHTML=renderMatchTable(s.ck,'CHUNG KẾT','ck',3,[2,4]);
                 
                 // Sơ đồ
                 $('sodo-container').innerHTML=renderSodo(s.sodo);
                 
-                // Update time
                 const now=new Date();
                 $('update-time').innerHTML='KARAOKE RITA 🎤 - <span>'+now.toLocaleDateString('vi-VN')+'</span>';
                 
-                toast('✅ Đã tải dữ liệu thành công!','success');
+                toast('✅ Đã tải dữ liệu!','success');
             }catch(e){
                 console.error('Load error:',e);
-                toast('Lỗi tải dữ liệu: '+e.message,'error');
-                // Hiển thị fallback
-                document.querySelectorAll('.tab-content .card').forEach(c=>{
-                    if(!c.innerHTML.includes('error-msg')){
-                        c.innerHTML='<div class="error-msg">Không thể tải dữ liệu. Vui lòng kiểm tra kết nối.</div>';
-                    }
-                });
+                toast('Lỗi tải: '+e.message,'error');
             }
         }
 
-        // Init
         (async function init(){
             const ok = await testConnection();
             if(ok) loadAllData();
-            else {
-                // Thử load anyway để xem lỗi chi tiết
-                loadAllData();
-            }
-            // Auto refresh mỗi 60s
+            else loadAllData();
             setInterval(loadAllData,60000);
         })();
     </script>
 </body>
 </html>
+
