@@ -417,8 +417,9 @@
         }
     }
 
-    // ==================== LOAD QUARTER FINALS ====================
+        // ==================== LOAD QUARTER FINALS (Đã chỉnh theo hình) ====================
     async function loadQFData() {
+        // Query vùng A2:G12 trả về đúng 11 dòng (index 0 -> 10)
         const data = await getSheet('1.8', 'A2:G12');
         const t = data.table;
         if (!t || !t.rows || t.rows.length === 0) {
@@ -426,52 +427,57 @@
             return;
         }
 
-        const matches = [
-            { displayRow: 3, scoreRow: 3, round: 'Tứ kết 1', t1: val(t.rows[0], 2), t2: val(t.rows[0], 6) },
-            { displayRow: 7, scoreRow: 6, round: 'Tứ kết 2', t1: val(t.rows[1], 2), t2: val(t.rows[1], 6) },
-            { displayRow: 10, scoreRow: 9, round: 'Tứ kết 3', t1: val(t.rows[2], 2), t2: val(t.rows[2], 6) },
-            { displayRow: 13, scoreRow: 12, round: 'Tứ kết 4', t1: val(t.rows[3], 2), t2: val(t.rows[3], 6) }
+        // 📍 MAPPING CHÍNH XÁC THEO HÌNH:
+        // Dòng 3  -> t.rows[1]  | Team 1: Cột C (index 2) | Team 2: Cột G (index 6)
+        // Dòng 6  -> t.rows[4]  | Team 1: Cột C (index 2) | Team 2: Cột G (index 6)
+        // Dòng 9  -> t.rows[7]  | Team 1: Cột C (index 2) | Team 2: Cột G (index 6)
+        // Dòng 12 -> t.rows[10] | Team 1: Cột C (index 2) | Team 2: Cột G (index 6)
+        
+        const matchConfig = [
+            { sheetRow: 3,  rowIdx: 1,  round: 'Tứ kết 1' },
+            { sheetRow: 6,  rowIdx: 4,  round: 'Tứ kết 2' },
+            { sheetRow: 9,  rowIdx: 7,  round: 'Tứ kết 3' },
+            { sheetRow: 12, rowIdx: 10, round: 'Tứ kết 4' }
         ];
 
-        // Read scores from sheet
-        const fullData = await getSheet('1.8', 'D3:F12');
-        const scores = {};
-        [3, 6, 9, 12].forEach(row => {
-            const rowIdx = row - 3;
-            if (fullData.table.rows[rowIdx]) {
-                scores[row] = { s1: val(fullData.table.rows[rowIdx], 0), s2: val(fullData.table.rows[rowIdx], 2) };
-            }
-        });
-
         let h = '<div class="match-grid">';
-        matches.forEach((m, i) => {
-            const sc = scores[m.scoreRow] || { s1: '', s2: '' };
-            const matchId = `qf_${m.scoreRow}`;
-            const match = {
+        matchConfig.forEach((cfg, i) => {
+            const row = t.rows[cfg.rowIdx];
+            
+            // Lấy dữ liệu theo đúng cột trong hình
+            const t1Name = val(row, 2); // Cột C
+            const t2Name = val(row, 6); // Cột G
+            const existingS1 = val(row, 3); // Cột D (tỷ số đội 1)
+            const existingS2 = val(row, 5); // Cột F (tỷ số đội 2)
+
+            const matchId = `qf_${cfg.sheetRow}`;
+            const matchObj = {
                 id: matchId,
-                round: m.round,
-                t1: m.t1,
-                t2: m.t2,
-                existingS1: sc.s1,
-                existingS2: sc.s2,
+                round: cfg.round,
+                t1: t1Name || `Đội 1 Trận ${i+1}`,
+                t2: t2Name || `Đội 2 Trận ${i+1}`,
+                existingS1: existingS1,
+                existingS2: existingS2,
                 sheetName: '1.8',
-                team1Col: 'D',
-                team2Col: 'F',
-                row: m.scoreRow
+                team1Col: 'D', // Nơi ghi tỷ số đội 1
+                team2Col: 'F', // Nơi ghi tỷ số đội 2
+                row: cfg.sheetRow
             };
-            allMatchData.push(match);
-            h += renderMatchCard(match, i);
+            
+            allMatchData.push(matchObj);
+            h += renderMatchCard(matchObj, i);
         });
         h += '</div>';
         document.getElementById('qf-area').innerHTML = h;
 
-        matches.forEach(m => {
-            const sc = scores[m.scoreRow] || { s1: '', s2: '' };
-            const matchId = `qf_${m.scoreRow}`;
+        // Điền lại tỷ số đã có vào ô input
+        matchConfig.forEach(cfg => {
+            const row = t.rows[cfg.rowIdx];
+            const matchId = `qf_${cfg.sheetRow}`;
             const el1 = document.getElementById(`s1-${matchId}`);
             const el2 = document.getElementById(`s2-${matchId}`);
-            if (el1 && sc.s1) el1.value = sc.s1;
-            if (el2 && sc.s2) el2.value = sc.s2;
+            if (el1) el1.value = val(row, 3) || '';
+            if (el2) el2.value = val(row, 5) || '';
         });
     }
 
