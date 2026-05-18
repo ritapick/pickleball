@@ -356,7 +356,7 @@
             const matches = [];
             t.rows.forEach((row, rowIdx) => {
                 const t1Name = val(row, 0);
-                const t2Name = val(row, 2);
+                const t2Name = val(row, 4);
                 const score1 = val(row, 1);
                 const score2 = val(row, 3);
                 const actualRow = groupRanges[g].startRow + rowIdx;
@@ -427,10 +427,10 @@
         }
 
         const matches = [
-            { displayRow: 2, scoreRow: 3, round: 'Tứ kết 1', t1: val(t.rows[0], 0), t2: val(t.rows[0], 2) },
-            { displayRow: 5, scoreRow: 6, round: 'Tứ kết 2', t1: val(t.rows[1], 0), t2: val(t.rows[1], 2) },
-            { displayRow: 8, scoreRow: 9, round: 'Tứ kết 3', t1: val(t.rows[2], 0), t2: val(t.rows[2], 2) },
-            { displayRow: 11, scoreRow: 12, round: 'Tứ kết 4', t1: val(t.rows[3], 0), t2: val(t.rows[3], 2) }
+            { displayRow: 3, scoreRow: 3, round: 'Tứ kết 1', t1: val(t.rows[0], 2), t2: val(t.rows[0], 6) },
+            { displayRow: 6, scoreRow: 6, round: 'Tứ kết 2', t1: val(t.rows[1], 2), t2: val(t.rows[1], 6) },
+            { displayRow: 9, scoreRow: 9, round: 'Tứ kết 3', t1: val(t.rows[2], 2), t2: val(t.rows[2], 6) },
+            { displayRow: 12, scoreRow: 12, round: 'Tứ kết 4', t1: val(t.rows[3], 2), t2: val(t.rows[3], 6) }
         ];
 
         // Read scores from sheet
