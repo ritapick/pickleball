@@ -417,68 +417,63 @@
         }
     }
 
-        // ==================== LOAD QUARTER FINALS (Đã chỉnh theo hình) ====================
+          // ==================== LOAD QUARTER FINALS (TỰ ĐỘNG DÒ TÌM) ====================
     async function loadQFData() {
-        // Query vùng A2:G12 trả về đúng 11 dòng (index 0 -> 10)
         const data = await getSheet('1.8', 'A2:G12');
         const t = data.table;
+        
         if (!t || !t.rows || t.rows.length === 0) {
             document.getElementById('qf-area').innerHTML = '<div class="err-box"><h3>Không có dữ liệu</h3><p>Kiểm tra sheet "1.8"</p></div>';
             return;
         }
 
-        // 📍 MAPPING CHÍNH XÁC THEO HÌNH:
-        // Dòng 3  -> t.rows[1]  | Team 1: Cột C (index 2) | Team 2: Cột G (index 6)
-        // Dòng 6  -> t.rows[4]  | Team 1: Cột C (index 2) | Team 2: Cột G (index 6)
-        // Dòng 9  -> t.rows[7]  | Team 1: Cột C (index 2) | Team 2: Cột G (index 6)
-        // Dòng 12 -> t.rows[10] | Team 1: Cột C (index 2) | Team 2: Cột G (index 6)
-        
-        const matchConfig = [
-            { sheetRow: 3,  rowIdx: 1,  round: 'Tứ kết 1' },
-            { sheetRow: 6,  rowIdx: 4,  round: 'Tứ kết 2' },
-            { sheetRow: 9,  rowIdx: 7,  round: 'Tứ kết 3' },
-            { sheetRow: 12, rowIdx: 10, round: 'Tứ kết 4' }
-        ];
-
         let h = '<div class="match-grid">';
-        matchConfig.forEach((cfg, i) => {
-            const row = t.rows[cfg.rowIdx];
-            
-            // Lấy dữ liệu theo đúng cột trong hình
-            const t1Name = val(row, 2); // Cột C
-            const t2Name = val(row, 6); // Cột G
-            const existingS1 = val(row, 3); // Cột D (tỷ số đội 1)
-            const existingS2 = val(row, 5); // Cột F (tỷ số đội 2)
+        let matchCount = 0;
 
-            const matchId = `qf_${cfg.sheetRow}`;
-            const matchObj = {
-                id: matchId,
-                round: cfg.round,
-                t1: t1Name || `Đội 1 Trận ${i+1}`,
-                t2: t2Name || `Đội 2 Trận ${i+1}`,
-                existingS1: existingS1,
-                existingS2: existingS2,
-                sheetName: '1.8',
-                team1Col: 'D', // Nơi ghi tỷ số đội 1
-                team2Col: 'F', // Nơi ghi tỷ số đội 2
-                row: cfg.sheetRow
-            };
-            
-            allMatchData.push(matchObj);
-            h += renderMatchCard(matchObj, i);
-        });
+        // Duyệt qua tất cả các dòng trong vùng A2:G12
+        for (let i = 0; i < t.rows.length; i++) {
+            if (matchCount >= 4) break; // Chỉ lấy tối đa 4 trận
+
+            const row = t.rows[i];
+            const t1Name = val(row, 2); // Kiểm tra Cột C (Tên đội 1)
+
+            // Nếu dòng này có tên đội 1 -> Đây là dòng dữ liệu trận đấu
+            if (t1Name) {
+                matchCount++;
+                
+                // Tính số hàng thật trên Sheet: Vì query bắt đầu từ A2 nên Hàng = 2 + index (i)
+                const sheetRow = 2 + i; 
+
+                const t2Name = val(row, 6); // Cột G
+                const existingS1 = val(row, 3); // Cột D
+                const existingS2 = val(row, 5); // Cột F
+
+                const matchId = `qf_${sheetRow}`;
+                const matchObj = {
+                    id: matchId,
+                    round: `Tứ kết ${matchCount}`, // Tự gắn nhãn 1, 2, 3, 4 theo thứ tự tìm thấy
+                    t1: t1Name,
+                    t2: t2Name || `Đội 2 Trận ${matchCount}`,
+                    existingS1: existingS1,
+                    existingS2: existingS2,
+                    sheetName: '1.8',
+                    team1Col: 'D',
+                    team2Col: 'F',
+                    row: sheetRow
+                };
+                
+                allMatchData.push(matchObj);
+                h += renderMatchCard(matchObj, matchCount - 1);
+            }
+        }
+
+        if (matchCount === 0) {
+            document.getElementById('qf-area').innerHTML = '<div class="err-box"><h3>Không tìm thấy trận đấu nào</h3><p>Sheet "1.8" không có tên đội ở cột C.</p></div>';
+            return;
+        }
+
         h += '</div>';
         document.getElementById('qf-area').innerHTML = h;
-
-        // Điền lại tỷ số đã có vào ô input
-        matchConfig.forEach(cfg => {
-            const row = t.rows[cfg.rowIdx];
-            const matchId = `qf_${cfg.sheetRow}`;
-            const el1 = document.getElementById(`s1-${matchId}`);
-            const el2 = document.getElementById(`s2-${matchId}`);
-            if (el1) el1.value = val(row, 3) || '';
-            if (el2) el2.value = val(row, 5) || '';
-        });
     }
 
         // ==================== LOAD SEMI FINALS (Đã chỉnh theo hình) ====================
