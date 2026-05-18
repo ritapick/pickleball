@@ -42,9 +42,7 @@
         table tr:last-child td:last-child{border-radius:0 0 10px 0}
         table tr:hover td{background:rgba(26,86,219,.03)}
         table tr:nth-child(even) td{background:rgba(241,245,249,.5)}
-        .rank-1 td:first-child::before{content:'🥇 '}
-        .rank-2 td:first-child::before{content:'🥈 '}
-        .rank-3 td:first-child::before{content:'🥉 '}
+        .rank-1 td:first-child::before{content:'🥇 '}.rank-2 td:first-child::before{content:'🥈 '}.rank-3 td:first-child::before{content:'🥉 '}
         .points-cell{font-weight:700;color:var(--primary);font-size:.9rem}
         .ratio-cell{color:var(--text-secondary);font-weight:600}
         .loading{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;gap:12px}
@@ -65,8 +63,6 @@
         .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
         .grid-2 .card{margin-bottom:0}
         @media(max-width:640px){.grid-2{grid-template-columns:1fr}}
-
-        /* === MATCH CARDS === */
         .matches-list{display:flex;flex-direction:column;gap:12px}
         .match-card{background:#fff;border-radius:12px;padding:14px;border:1px solid var(--border);box-shadow:0 1px 4px rgba(0,0,0,.04);transition:box-shadow .2s}
         .match-card:hover{box-shadow:0 2px 8px rgba(0,0,0,.08)}
@@ -108,7 +104,6 @@
         <h1>HOÀNG QUỐC VIỆT PICKLEBALL</h1>
         <div class="subtitle">Giải đấu HOÀNG QUỐC VIỆT và Những Người Bạn</div>
     </div>
-
     <div class="tabs-container">
         <div class="tabs">
             <button class="tab active" data-tab="bangnhom"><span class="tab-group-label"><span class="group-dot dot-a"></span> BẢNG XẾP HẠNG</span></button>
@@ -119,48 +114,22 @@
             <button class="tab" data-tab="sodo"><span class="tab-group-label"><span class="group-dot dot-sodo"></span> Sơ đồ</span></button>
         </div>
     </div>
-
     <div class="content">
-        <div class="tab-content active" id="tab-bangnhom">
-            <div class="section-title">Bảng thi đấu <span class="badge">Vòng loại</span></div>
-            <div class="grid-2" id="bangnhom-container"><div class="loading"><div class="spinner"></div><div class="loading-text">Đang tải dữ liệu...</div></div></div>
-        </div>
-        <div class="tab-content" id="tab-vongbang">
-            <div class="section-title">Thi đấu vòng bảng <span class="badge">Chi tiết</span></div>
-            <div id="vongbang-container"><div class="loading"><div class="spinner"></div><div class="loading-text">Đang tải dữ liệu...</div></div></div>
-        </div>
-        <div class="tab-content" id="tab-tuket">
-            <div class="section-title">Vòng tứ kết <span class="badge">1/8</span></div>
-            <div id="tuket-container"><div class="loading"><div class="spinner"></div><div class="loading-text">Đang tải dữ liệu...</div></div></div>
-        </div>
-        <div class="tab-content" id="tab-banket">
-            <div class="section-title">Vòng bán kết <span class="badge">1/4</span></div>
-            <div id="banket-container"><div class="loading"><div class="spinner"></div><div class="loading-text">Đang tải dữ liệu...</div></div></div>
-        </div>
-        <div class="tab-content" id="tab-chungket">
-            <div class="section-title">Vòng chung kết <span class="badge">Final</span></div>
-            <div id="chungket-container"><div class="loading"><div class="spinner"></div><div class="loading-text">Đang tải dữ liệu...</div></div></div>
-        </div>
-        <div class="tab-content" id="tab-sodo">
-            <div class="section-title">Sơ đồ vòng loại trực tiếp <span class="badge">Bracket</span></div>
-            <div id="sodo-container"><div class="loading"><div class="spinner"></div><div class="loading-text">Đang tải dữ liệu...</div></div></div>
-        </div>
+        <div class="tab-content active" id="tab-bangnhom"><div class="section-title">Bảng thi đấu <span class="badge">Vòng loại</span></div><div class="grid-2" id="bangnhom-container"><div class="loading"><div class="spinner"></div><div class="loading-text">Đang tải...</div></div></div></div>
+        <div class="tab-content" id="tab-vongbang"><div class="section-title">Thi đấu vòng bảng <span class="badge">Chi tiết</span></div><div id="vongbang-container"><div class="loading"><div class="spinner"></div><div class="loading-text">Đang tải...</div></div></div></div>
+        <div class="tab-content" id="tab-tuket"><div class="section-title">Vòng tứ kết <span class="badge">1/8</span></div><div id="tuket-container"><div class="loading"><div class="spinner"></div><div class="loading-text">Đang tải...</div></div></div></div>
+        <div class="tab-content" id="tab-banket"><div class="section-title">Vòng bán kết <span class="badge">1/4</span></div><div id="banket-container"><div class="loading"><div class="spinner"></div><div class="loading-text">Đang tải...</div></div></div></div>
+        <div class="tab-content" id="tab-chungket"><div class="section-title">Vòng chung kết <span class="badge">Final</span></div><div id="chungket-container"><div class="loading"><div class="spinner"></div><div class="loading-text">Đang tải...</div></div></div></div>
+        <div class="tab-content" id="tab-sodo"><div class="section-title">Sơ đồ vòng loại <span class="badge">Bracket</span></div><div id="sodo-container"><div class="loading"><div class="spinner"></div><div class="loading-text">Đang tải...</div></div></div></div>
         <div class="update-time" id="update-time"></div>
     </div>
-
     <div class="toast" id="toast"></div>
 
     <script>
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyzm5C-Cpal-FKYBy4sgLKOwOtJ4UjiARWxnU0GRVfB9kqOy8fNJEuIVrvhaU2JIaKMJA/exec';
         const SPREADSHEET_ID = '1jcCx9TFq80uFW0tSQJDL1kmTRrYierOARbvevhbxuXg';
         const BASE_URL = 'https://docs.google.com/spreadsheets/d/' + SPREADSHEET_ID + '/gviz/tq';
-
-        /* CẤU HÌNH CỘT TỶ SỐ (1-indexed, Google Sheet column number)
-           Vòng bảng: C=3, E=5
-           Tứ kết:    D=4, F=6
-           Bán kết:   C=3, E=5
-           Chung kết: B=2, D=4
-        */
+        
         const COL_CONFIG = {
             'bang': { s1: 3, s2: 5, t1: 1, t2: 5 },
             '1.8':  { s1: 4, s2: 6, t1: 1, t2: 5 },
@@ -168,7 +137,6 @@
             'ck':   { s1: 2, s2: 4, t1: 1, t2: 3 }
         };
 
-        // Tab switching
         document.querySelectorAll('.tab').forEach(function(tab) {
             tab.addEventListener('click', function() {
                 document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
@@ -185,7 +153,7 @@
             setTimeout(function() { t.classList.remove('show'); }, 3000);
         }
 
-        // === API CALL TO APPS SCRIPT ===
+        // === API CALL - FIX CORS BY PARSING TEXT RESPONSE ===
         async function apiCall(action, params) {
             var url = SCRIPT_URL + (action ? '?action=' + action : '');
             var opts = params || {};
@@ -195,14 +163,15 @@
                     body: opts.body ? JSON.stringify(opts.body) : undefined,
                     headers: opts.body ? { 'Content-Type': 'text/plain' } : {}
                 });
+                // QUAN TRỌNG: Đọc response dưới dạng text rồi parse JSON
                 var text = await res.text();
                 return JSON.parse(text);
             } catch (e) {
+                console.error('API Error:', e);
                 throw new Error('Kết nối thất bại: ' + e.message);
             }
         }
 
-        // === FETCH DATA VIA GVIZ (READ-ONLY) ===
         async function fetchSheetData(sheetName, range) {
             var url = BASE_URL + '?sheet=' + encodeURIComponent(sheetName) + '&range=' + encodeURIComponent(range) + '&tqx=out:json';
             try {
@@ -212,7 +181,7 @@
                 if (!jsonMatch) throw new Error('Parse error');
                 return JSON.parse(jsonMatch[1]).table;
             } catch (e) {
-                console.error('Error fetching ' + sheetName + ' ' + range + ':', e);
+                console.error('Fetch error:', e);
                 return null;
             }
         }
@@ -230,7 +199,6 @@
             return { headers: headers, rows: rows };
         }
 
-        // === RENDER FUNCTIONS ===
         function renderStandingsTable(data, title, dotClass) {
             if (!data || data.rows.length === 0) return '';
             var parsed = parseTable(data);
@@ -238,14 +206,12 @@
             var rows = parsed.rows;
             var filteredRows = rows.filter(function(r) { return r.some(function(c) { return c !== ''; }); });
             if (filteredRows.length === 0) return '';
-
             var html = '<div class="card"><div class="card-title"><span class="icon"><span class="group-dot ' + dotClass + '"></span></span>' + title + '</div><table><thead><tr>';
             filteredRows[0].forEach(function(cell, i) {
                 var h = headers[i] || (i === 0 ? 'Đội' : (i === 1 ? 'Điểm' : 'Hệ số'));
                 html += '<th>' + h + '</th>';
             });
             html += '</tr></thead><tbody>';
-
             filteredRows.forEach(function(row, idx) {
                 var rankClass = idx < 3 ? 'rank-' + (idx + 1) : '';
                 html += '<tr class="' + rankClass + '">';
@@ -266,29 +232,22 @@
             var rows = parsed.rows;
             var filteredRows = rows.filter(function(r) { return r.some(function(c) { return c !== ''; }); });
             if (filteredRows.length === 0) return '';
-
             var cfg = COL_CONFIG[sheetName];
-            if (!cfg) return '<div class="error-msg">Lỗi cấu hình cho sheet: ' + sheetName + '</div>';
-
+            if (!cfg) return '<div class="error-msg">Lỗi cấu hình sheet: ' + sheetName + '</div>';
             var html = '<div class="matches-list">';
-
             filteredRows.forEach(function(row, idx) {
                 var sheetRow = startRow + idx;
                 var matchNum = idx + 1;
-                var team1 = row[cfg.t1] || 'Đội 1';
-                var team2 = row[cfg.t2] || 'Đội 2';
-
-                // Score column indices (0-indexed for array access)
+                var team1 = row[cfg.t1 - 1] || 'Đội 1';
+                var team2 = row[cfg.t2 - 1] || 'Đội 2';
                 var s1Idx = cfg.s1 - 1;
                 var s2Idx = cfg.s2 - 1;
                 var score1 = (row[s1Idx] !== '' && !isNaN(row[s1Idx])) ? parseInt(row[s1Idx]) : '';
                 var score2 = (row[s2Idx] !== '' && !isNaN(row[s2Idx])) ? parseInt(row[s2Idx]) : '';
-
                 var uid = sheetName.replace(/[^a-z0-9]/gi, '') + '_' + sheetRow;
                 var s1Id = 'sc_' + uid + '_' + s1Idx;
                 var s2Id = 'sc_' + uid + '_' + s2Idx;
                 var btnId = 'btn_' + uid;
-
                 if (isFinal) {
                     html += '<div class="match-card final-match-card">';
                     html += '<div class="match-label">🏆 ' + title + '</div>';
@@ -296,41 +255,23 @@
                     html += '<div class="match-card">';
                     html += '<div class="match-label">' + title + ' - Trận ' + matchNum + '</div>';
                 }
-
                 html += '<div class="match-teams">';
-                // Team 1
-                html += '<div class="match-team-side">';
-                html += '<span class="team-name">' + team1 + '</span>';
-                html += '<div class="team-score-wrap">';
+                html += '<div class="match-team-side"><span class="team-name">' + team1 + '</span><div class="team-score-wrap">';
                 html += '<input type="number" class="score-input" id="' + s1Id + '" value="' + score1 + '" min="0" data-orig="' + score1 + '" data-sheet="' + sheetName + '" data-row="' + sheetRow + '" data-col="' + cfg.s1 + '" oninput="checkScoreChange(\'' + uid + '\')">';
-                html += '</div></div>';
-
-                html += '<div class="vs-badge">VS</div>';
-
-                // Team 2
-                html += '<div class="match-team-side">';
-                html += '<span class="team-name">' + team2 + '</span>';
-                html += '<div class="team-score-wrap">';
+                html += '</div></div><div class="vs-badge">VS</div>';
+                html += '<div class="match-team-side"><span class="team-name">' + team2 + '</span><div class="team-score-wrap">';
                 html += '<input type="number" class="score-input" id="' + s2Id + '" value="' + score2 + '" min="0" data-orig="' + score2 + '" data-sheet="' + sheetName + '" data-row="' + sheetRow + '" data-col="' + cfg.s2 + '" oninput="checkScoreChange(\'' + uid + '\')">';
-                html += '</div></div>';
-                html += '</div>';
-
-                html += '<div class="match-actions">';
-                html += '<button class="save-btn" id="' + btnId + '" onclick="saveMatch(\'' + uid + '\')">💾 Lưu</button>';
-                html += '</div>';
-                html += '</div>';
+                html += '</div></div></div>';
+                html += '<div class="match-actions"><button class="save-btn" id="' + btnId + '" onclick="saveMatch(\'' + uid + '\')">💾 Lưu</button></div></div>';
             });
-
             html += '</div>';
             return html;
         }
 
         function checkScoreChange(uid) {
-            // Find all inputs for this match UID
             var inputs = document.querySelectorAll('[id^="sc_' + uid + '_"]');
             var btn = document.getElementById('btn_' + uid);
             if (!btn || inputs.length === 0) return;
-
             var changed = false;
             inputs.forEach(function(inp) {
                 if (inp.value !== inp.getAttribute('data-orig')) {
@@ -340,7 +281,6 @@
                     inp.classList.remove('changed');
                 }
             });
-
             if (changed) btn.classList.add('active');
             else btn.classList.remove('active');
         }
@@ -349,14 +289,11 @@
             var btn = document.getElementById('btn_' + uid);
             var inputs = document.querySelectorAll('[id^="sc_' + uid + '_"]');
             if (!btn || inputs.length === 0) return;
-
             btn.classList.add('saving');
             btn.textContent = '⏳ Đang lưu...';
-
             try {
                 var updates = [];
                 var sheetName = null;
-
                 inputs.forEach(function(inp) {
                     if (!sheetName) sheetName = inp.getAttribute('data-sheet');
                     if (inp.value !== inp.getAttribute('data-orig')) {
@@ -367,19 +304,16 @@
                         });
                     }
                 });
-
                 if (updates.length === 0) {
-                    toast('Không có thay đổi tỷ số', 'error');
+                    toast('Không có thay đổi', 'error');
                     btn.classList.remove('saving');
                     btn.textContent = '💾 Lưu';
                     return;
                 }
-
                 var res = await apiCall(null, {
                     method: 'POST',
                     body: { sheet: sheetName, updates: updates }
                 });
-
                 if (res.status === 'success') {
                     inputs.forEach(function(inp) {
                         inp.setAttribute('data-orig', inp.value);
@@ -389,7 +323,7 @@
                     btn.classList.remove('saving');
                     btn.classList.add('success');
                     btn.textContent = '✅ Đã lưu';
-                    toast('Đã lưu tỷ số thành công!', 'success');
+                    toast('Đã lưu tỷ số!', 'success');
                     setTimeout(function() {
                         btn.classList.remove('success');
                         btn.textContent = '💾 Lưu';
@@ -417,11 +351,9 @@
             var rows = parsed.rows;
             var filteredRows = rows.filter(function(r) { return r.some(function(c) { return c !== ''; }); });
             if (filteredRows.length === 0) return '';
-
             var html = '<div class="card" style="padding:8px;overflow-x:auto"><div class="card-title"><span class="icon">📋</span>Sơ đồ thi đấu</div><table class="sodo-table"><thead><tr>';
             headers.forEach(function(h) { html += '<th>' + (h || '') + '</th>'; });
             html += '</tr></thead><tbody>';
-
             filteredRows.forEach(function(row) {
                 html += '<tr>';
                 row.forEach(function(cell) { html += '<td>' + cell + '</td>'; });
@@ -431,20 +363,19 @@
             return html;
         }
 
-        // === LOAD ALL DATA ===
         async function loadAllData() {
-            // 1. Bảng xếp hạng A, B, C, D
+            // Bảng xếp hạng
             var bangnhomHTML = '';
             var results = await Promise.all(['A','B','C','D'].map(function(name) { return fetchSheetData(name, 'F1:H5'); }));
             var titles = ['Bảng A','Bảng B','Bảng C','Bảng D'];
             var dots = ['dot-a','dot-b','dot-c','dot-d'];
             results.forEach(function(data, idx) {
                 if (data) bangnhomHTML += renderStandingsTable(data, titles[idx], dots[idx]);
-                else bangnhomHTML += '<div class="card"><div class="card-title"><span class="icon"><span class="group-dot '+dots[idx]+'"></span></span>'+titles[idx]+'</div><div class="error-msg">Không thể tải dữ liệu</div></div>';
+                else bangnhomHTML += '<div class="card"><div class="card-title"><span class="icon"><span class="group-dot '+dots[idx]+'"></span></span>'+titles[idx]+'</div><div class="error-msg">Không thể tải</div></div>';
             });
             document.getElementById('bangnhom-container').innerHTML = bangnhomHTML;
 
-            // 2. Vòng bảng - sheet "bang"
+            // Vòng bảng
             var rangesBang = [
                 { range: 'A1:h8', title: 'BẢNG A', startRow: 1 },
                 { range: 'A10:h17', title: 'BẢNG B', startRow: 10 },
@@ -456,9 +387,9 @@
             vbRes.forEach(function(data, idx) {
                 if (data) vbHTML += renderMatchCards(data, rangesBang[idx].title, 'bang', rangesBang[idx].startRow, false);
             });
-            document.getElementById('vongbang-container').innerHTML = vbHTML || '<div class="error-msg">Không thể tải dữ liệu vòng bảng</div>';
+            document.getElementById('vongbang-container').innerHTML = vbHTML || '<div class="error-msg">Không có dữ liệu</div>';
 
-            // 3. Tứ kết - sheet "1.8"
+            // Tứ kết
             var rangesTK = [
                 { range: 'A2:g3', title: 'Tứ kết 1', startRow: 2 },
                 { range: 'A5:g6', title: 'Tứ kết 2', startRow: 5 },
@@ -470,9 +401,9 @@
             tkRes.forEach(function(data, idx) {
                 if (data) tkHTML += renderMatchCards(data, rangesTK[idx].title, '1.8', rangesTK[idx].startRow, false);
             });
-            document.getElementById('tuket-container').innerHTML = tkHTML || '<div class="error-msg">Không thể tải dữ liệu tứ kết</div>';
+            document.getElementById('tuket-container').innerHTML = tkHTML || '<div class="error-msg">Không có dữ liệu</div>';
 
-            // 4. Bán kết - sheet "bk"
+            // Bán kết
             var rangesBK = [
                 { range: 'A3:f4', title: 'Bán kết 1', startRow: 3 },
                 { range: 'A6:f7', title: 'Bán kết 2', startRow: 6 }
@@ -482,20 +413,20 @@
             bkRes.forEach(function(data, idx) {
                 if (data) bkHTML += renderMatchCards(data, rangesBK[idx].title, 'bk', rangesBK[idx].startRow, false);
             });
-            document.getElementById('banket-container').innerHTML = bkHTML || '<div class="error-msg">Không thể tải dữ liệu bán kết</div>';
+            document.getElementById('banket-container').innerHTML = bkHTML || '<div class="error-msg">Không có dữ liệu</div>';
 
-            // 5. Chung kết - sheet "ck"
+            // Chung kết
             var ckData = await fetchSheetData('ck', 'A3:e4');
             if (ckData) {
                 var ckHTML = renderMatchCards(ckData, 'CHUNG KẾT', 'ck', 3, true);
-                document.getElementById('chungket-container').innerHTML = ckHTML || '<div class="error-msg">Chưa có dữ liệu chung kết</div>';
+                document.getElementById('chungket-container').innerHTML = ckHTML || '<div class="error-msg">Chưa có dữ liệu</div>';
             } else {
-                document.getElementById('chungket-container').innerHTML = '<div class="error-msg">Không thể tải dữ liệu chung kết</div>';
+                document.getElementById('chungket-container').innerHTML = '<div class="error-msg">Không thể tải</div>';
             }
 
-            // 6. Sơ đồ - sheet "sodo"
+            // Sơ đồ
             var sodoData = await fetchSheetData('sodo', 'A1:H21');
-            document.getElementById('sodo-container').innerHTML = sodoData ? renderSodoTable(sodoData) : '<div class="error-msg">Không thể tải dữ liệu sơ đồ</div>';
+            document.getElementById('sodo-container').innerHTML = sodoData ? renderSodoTable(sodoData) : '<div class="error-msg">Không thể tải</div>';
 
             // Update time
             var now = new Date();
@@ -508,4 +439,3 @@
     </script>
 </body>
 </html>
-
