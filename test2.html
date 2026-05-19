@@ -641,6 +641,8 @@
             setTimeout(() => { if (sbtn) sbtn.classList.remove('pulse'); }, 1500);
 
             showToast(`✅ Đã lưu tỷ số ${n1} - ${n2}`, 'success');
+            // 🔄 THÊM DÒNG NÀY ĐỂ REFRESH TRANG:
+            setTimeout(() => { location.reload(); }, 1500);
         } catch(e) {
             console.error('Save error:', e);
             cardEl.classList.remove('syncing');
