@@ -113,6 +113,7 @@
         .mc-team { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; text-align: center; }
         .mc-team-label { font-size: 0.55rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--text-dim); }
         .mc-team-names { font-weight: 600; font-size: 0.76rem; line-height: 1.35; }
+        .mc-team-names .amp { display: block; color: var(--text-dim); font-weight: 400; font-size: 0.6rem; }
         .mc-vs { display: flex; flex-direction: column; align-items: center; gap: 6px; flex-shrink: 0; min-width: 96px; }
         .vs-circle { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--accent)); display: flex; align-items: center; justify-content: center; font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 0.6rem; color: #000; }
         .mc-score-row { display: flex; align-items: center; justify-content: center; gap: 6px; }
@@ -166,6 +167,7 @@
         .err-box { background: rgba(239,68,68,0.06); border: 1px solid rgba(239,68,68,0.2); border-radius: 12px; padding: 16px 14px; text-align: center; }
         .err-box h3 { color: var(--red); margin-bottom: 4px; font-size: 0.85rem; }
         .err-box p { color: var(--text-dim); font-size: 0.75rem; }
+        .group-wrap { margin-bottom: 16px; }
         .tabs { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
         .tab-btn {
             padding: 6px 14px; font-family: 'Oswald', sans-serif; font-size: 0.75rem; font-weight: 600;
@@ -324,14 +326,14 @@
 
     async function loadGroupData() {
         const groups = ['a', 'b', 'c', 'd'];
-        const groupConfig = {
-            'a': { rankingRange: 'B3:F8', startRow: 3 },
-            'b': { rankingRange: 'B12:F17', startRow: 12 },
-            'c': { rankingRange: 'B21:F26', startRow: 21 },
-            'd': { rankingRange: 'B30:F35', startRow: 30 }
+        const groupRanges = {
+            'a': { ranking: 'B3:F8', startRow: 3 },
+            'b': { ranking: 'B12:F17', startRow: 12 },
+            'c': { ranking: 'B21:F26', startRow: 21 },
+            'd': { ranking: 'B30:F35', startRow: 30 }
         };
 
-        const promises = groups.map(g => getSheet('bang', groupConfig[g].rankingRange));
+        const promises = groups.map(g => getSheet('bang', groupRanges[g].ranking));
         const results = await Promise.all(promises);
 
         const tabsEl = document.getElementById('group-tabs');
@@ -347,14 +349,14 @@
 
             const matches = [];
             t.rows.forEach((row, rowIdx) => {
-                const t1Name = val(row, 0);
-                const t2Name = val(row, 4);
-                const score1 = val(row, 1);
-                const score2 = val(row, 3);
-                const actualRow = groupConfig[g].startRow + rowIdx;
+                const t1Name = val(row, 0); // B
+                const t2Name = val(row, 4); // F
+                const score1 = val(row, 1); // C
+                const score2 = val(row, 3); // E
+                const actualRow = groupRanges[g].startRow + rowIdx;
                 const matchId = `group_${g}_${rowIdx}`;
 
-                const matchObj = {
+                matches.push({
                     id: matchId,
                     round: `Trận ${rowIdx + 1}`,
                     t1: t1Name,
@@ -366,10 +368,17 @@
                     team2Col: 'E',
                     team1Row: actualRow,
                     team2Row: actualRow
-                };
-
-                matches.push(matchObj);
-                allMatchData.push(matchObj);
+                });
+                allMatchData.push({
+                    id: matchId,
+                    sheetName: 'bang',
+                    team1Col: 'C',
+                    team2Col: 'E',
+                    team1Row: actualRow,
+                    team2Row: actualRow,
+                    existingS1: score1,
+                    existingS2: score2
+                });
                 matchIndex++;
             });
 
@@ -397,47 +406,49 @@
     }
 
     async function loadQFData() {
-        const qfConfig = [
-            { id: 'qf_1', round: 'Tứ kết 1', displayRange: 'A2:G3', team1Col: 'D', team2Col: 'F', team1Row: 3, team2Row: 5, dataRowIdx: 1 },
-            { id: 'qf_2', round: 'Tứ kết 2', displayRange: 'A5:G6', team1Col: 'D', team2Col: 'F', team1Row: 6, team2Row: 6, dataRowIdx: 1 },
-            { id: 'qf_3', round: 'Tứ kết 3', displayRange: 'A8:G9', team1Col: 'D', team2Col: 'F', team1Row: 9, team2Row: 9, dataRowIdx: 1 },
-            { id: 'qf_4', round: 'Tứ kết 4', displayRange: 'A11:G12', team1Col: 'D', team2Col: 'F', team1Row: 12, team2Row: 21, dataRowIdx: 1 }
+        const qfMatches = [
+            { id: 'qf_1', round: 'Tứ kết 1', displayRange: 'A2:G3', team1Col: 'D', team2Col: 'F', team1Row: 3, team2Row: 5 },
+            { id: 'qf_2', round: 'Tứ kết 2', displayRange: 'A5:G6', team1Col: 'D', team2Col: 'F', team1Row: 6, team2Row: 6 },
+            { id: 'qf_3', round: 'Tứ kết 3', displayRange: 'A8:G9', team1Col: 'D', team2Col: 'F', team1Row: 9, team2Row: 9 },
+            { id: 'qf_4', round: 'Tứ kết 4', displayRange: 'A11:G12', team1Col: 'D', team2Col: 'F', team1Row: 12, team2Row: 21 }
         ];
 
-        const promises = qfConfig.map(cfg => Promise.all([
-            getSheet('1.8', cfg.displayRange),
-            getSheet('1.8', `${cfg.team1Col}${cfg.team1Row}`),
-            getSheet('1.8', `${cfg.team2Col}${cfg.team2Row}`)
-        ]));
+        const displayPromises = qfMatches.map(m => getSheet('1.8', m.displayRange));
+        const scoreRanges = qfMatches.flatMap(m => [`${m.team1Col}${m.team1Row}`, `${m.team2Col}${m.team2Row}`]);
+        const scorePromises = scoreRanges.map(r => getSheet('1.8', r));
 
-        const results = await Promise.all(promises);
+        const displayResults = await Promise.all(displayPromises);
+        const scoreResults = await Promise.all(scorePromises);
 
         let h = '<div class="match-grid">';
-        qfConfig.forEach((cfg, i) => {
-            const [displayData, score1Data, score2Data] = results[i];
+        qfMatches.forEach((m, i) => {
+            const displayData = displayResults[i];
             const rows = displayData.table.rows || [];
             
             let t1Name = '', t2Name = '';
-            if (rows.length > cfg.dataRowIdx) {
-                t1Name = val(rows[cfg.dataRowIdx], 2);
-                t2Name = val(rows[cfg.dataRowIdx], 6);
+            if (rows.length > 1) {
+                t1Name = val(rows[1], 2); // C
+                t2Name = val(rows[1], 6); // G
+            } else if (rows.length > 0) {
+                t1Name = val(rows[0], 2);
+                t2Name = val(rows[0], 6);
             }
 
-            const existingS1 = score1Data.table.rows.length > 0 ? val(score1Data.table.rows[0], 0) : '';
-            const existingS2 = score2Data.table.rows.length > 0 ? val(score2Data.table.rows[0], 0) : '';
+            const existingS1 = scoreResults[i * 2].table.rows.length > 0 ? val(scoreResults[i * 2].table.rows[0], 0) : '';
+            const existingS2 = scoreResults[i * 2 + 1].table.rows.length > 0 ? val(scoreResults[i * 2 + 1].table.rows[0], 0) : '';
 
             const matchObj = {
-                id: cfg.id,
-                round: cfg.round,
-                t1: t1Name || `Đội 1 ${cfg.round}`,
-                t2: t2Name || `Đội 2 ${cfg.round}`,
+                id: m.id,
+                round: m.round,
+                t1: t1Name || `Đội 1 ${m.round}`,
+                t2: t2Name || `Đội 2 ${m.round}`,
                 existingS1: existingS1,
                 existingS2: existingS2,
                 sheetName: '1.8',
-                team1Col: cfg.team1Col,
-                team2Col: cfg.team2Col,
-                team1Row: cfg.team1Row,
-                team2Row: cfg.team2Row
+                team1Col: m.team1Col,
+                team2Col: m.team2Col,
+                team1Row: m.team1Row,
+                team2Row: m.team2Row
             };
 
             allMatchData.push(matchObj);
@@ -448,45 +459,49 @@
     }
 
     async function loadSFData() {
-        const sfConfig = [
-            { id: 'sf_1', round: 'Bán kết 1', displayRange: 'A3:F4', team1Col: 'C', team2Col: 'E', team1Row: 4, team2Row: 4, dataRowIdx: 1 },
-            { id: 'sf_2', round: 'Bán kết 2', displayRange: 'A6:F7', team1Col: 'C', team2Col: 'E', team1Row: 7, team2Row: 7, dataRowIdx: 1 }
+        const sfMatches = [
+            { id: 'sf_1', round: 'Bán kết 1', displayRange: 'A3:F4', team1Col: 'C', team2Col: 'E', team1Row: 4, team2Row: 4, team1ColIdx: 2, team2ColIdx: 4, dataRowIdx: 1 },
+            { id: 'sf_2', round: 'Bán kết 2', displayRange: 'A6:F7', team1Col: 'C', team2Col: 'E', team1Row: 7, team2Row: 7, team1ColIdx: 2, team2ColIdx: 4, dataRowIdx: 1 }
         ];
 
-        const promises = sfConfig.map(cfg => Promise.all([
-            getSheet('bk', cfg.displayRange),
-            getSheet('bk', `${cfg.team1Col}${cfg.team1Row}`),
-            getSheet('bk', `${cfg.team2Col}${cfg.team2Row}`)
-        ]));
+        const displayPromises = sfMatches.map(m => getSheet('bk', m.displayRange));
+        const scorePromises = sfMatches.flatMap(m => [
+            getSheet('bk', `${m.team1Col}${m.team1Row}`),
+            getSheet('bk', `${m.team2Col}${m.team2Row}`)
+        ]);
 
-        const results = await Promise.all(promises);
+        const displayResults = await Promise.all(displayPromises);
+        const scoreResults = await Promise.all(scorePromises);
 
         let h = '<div class="match-grid">';
-        sfConfig.forEach((cfg, i) => {
-            const [displayData, score1Data, score2Data] = results[i];
+        sfMatches.forEach((m, i) => {
+            const displayData = displayResults[i];
             const rows = displayData.table.rows || [];
             
             let t1Name = '', t2Name = '';
-            if (rows.length > cfg.dataRowIdx) {
-                t1Name = val(rows[cfg.dataRowIdx], 1);
-                t2Name = val(rows[cfg.dataRowIdx], 5);
+            if (rows.length > m.dataRowIdx) {
+                t1Name = val(rows[m.dataRowIdx], 1); // B
+                t2Name = val(rows[m.dataRowIdx], 5); // F
+            } else if (rows.length > 0) {
+                t1Name = val(rows[0], 1);
+                t2Name = val(rows[0], 5);
             }
 
-            const existingS1 = score1Data.table.rows.length > 0 ? val(score1Data.table.rows[0], 0) : '';
-            const existingS2 = score2Data.table.rows.length > 0 ? val(score2Data.table.rows[0], 0) : '';
+            const existingS1 = scoreResults[i * 2].table.rows.length > 0 ? val(scoreResults[i * 2].table.rows[0], 0) : '';
+            const existingS2 = scoreResults[i * 2 + 1].table.rows.length > 0 ? val(scoreResults[i * 2 + 1].table.rows[0], 0) : '';
 
             const matchObj = {
-                id: cfg.id,
-                round: cfg.round,
-                t1: t1Name || `Đội 1 ${cfg.round}`,
-                t2: t2Name || `Đội 2 ${cfg.round}`,
+                id: m.id,
+                round: m.round,
+                t1: t1Name || `Đội 1 ${m.round}`,
+                t2: t2Name || `Đội 2 ${m.round}`,
                 existingS1: existingS1,
                 existingS2: existingS2,
                 sheetName: 'bk',
-                team1Col: cfg.team1Col,
-                team2Col: cfg.team2Col,
-                team1Row: cfg.team1Row,
-                team2Row: cfg.team2Row
+                team1Col: m.team1Col,
+                team2Col: m.team2Col,
+                team1Row: m.team1Row,
+                team2Row: m.team2Row
             };
 
             allMatchData.push(matchObj);
@@ -497,45 +512,35 @@
     }
 
     async function loadFinalData() {
-        const cfg = {
-            id: 'final_1',
-            round: 'Chung kết',
-            displayRange: 'A3:E4',
-            team1Col: 'B',
-            team2Col: 'D',
-            team1Row: 4,
-            team2Row: 4,
-            dataRowIdx: 1
-        };
-
-        const [displayData, score1Data, score2Data] = await Promise.all([
-            getSheet('ck', cfg.displayRange),
-            getSheet('ck', `${cfg.team1Col}${cfg.team1Row}`),
-            getSheet('ck', `${cfg.team2Col}${cfg.team2Row}`)
-        ]);
+        const displayData = await getSheet('ck', 'A3:E4');
+        const score1Data = await getSheet('ck', 'B4');
+        const score2Data = await getSheet('ck', 'D4');
 
         const rows = displayData.table.rows || [];
         let t1Name = '', t2Name = '';
-        if (rows.length > cfg.dataRowIdx) {
-            t1Name = val(rows[cfg.dataRowIdx], 0);
-            t2Name = val(rows[cfg.dataRowIdx], 4);
+        if (rows.length > 1) {
+            t1Name = val(rows[1], 0); // A
+            t2Name = val(rows[1], 4); // E
+        } else if (rows.length > 0) {
+            t1Name = val(rows[0], 0);
+            t2Name = val(rows[0], 4);
         }
 
         const existingS1 = score1Data.table.rows.length > 0 ? val(score1Data.table.rows[0], 0) : '';
         const existingS2 = score2Data.table.rows.length > 0 ? val(score2Data.table.rows[0], 0) : '';
 
         const matchObj = {
-            id: cfg.id,
-            round: cfg.round,
+            id: 'final_1',
+            round: 'Chung kết',
             t1: t1Name || 'Đội 1 Chung kết',
             t2: t2Name || 'Đội 2 Chung kết',
             existingS1: existingS1,
             existingS2: existingS2,
             sheetName: 'ck',
-            team1Col: cfg.team1Col,
-            team2Col: cfg.team2Col,
-            team1Row: cfg.team1Row,
-            team2Row: cfg.team2Row
+            team1Col: 'B',
+            team2Col: 'D',
+            team1Row: 4,
+            team2Row: 4
         };
 
         allMatchData.push(matchObj);
@@ -664,19 +669,19 @@
 
     document.addEventListener('DOMContentLoaded', init);
 </script>
-<!--
+<!-- 
 =============================================================
-📌 HƯỚNG DẪN CÀI ĐẶT APPS SCRIPT:
+📌 HƯỚNG DẪN TẠO APPS SCRIPT (Copy code bên dưới):
 =============================================================
 1. Mở Google Sheet → Tiện ích mở rộng → Apps Script
-2. Xóa toàn bộ code cũ, dán code bên dưới vào
-3. Nhấn nút "Triển khai" (Deploy) → "Triển khai mới"
-4. Chọn loại: "Ứng dụng web"
-5. Thực thi dưới dạng: "Tôi" (your email)
-6. Người có quyền truy cập: "Bất kỳ ai" (Anyone)
-7. Nhấn "Triển khai" và copy URL Web App
-8. Dán URL vào biến APPS_SCRIPT_URL ở đầu code HTML
+2. Dán toàn bộ code bên dưới vào
+3. Deploy → Triển khai web app → "Bất kỳ ai" → Deploy
+4. Copy Web App URL thay vào biến APPS_SCRIPT_URL ở trên
 =============================================================
+
+function doGet(e) {
+  return ContentService.createTextOutput("OK");
+}
 
 function doPost(e) {
   try {
@@ -691,10 +696,6 @@ function doPost(e) {
   } catch(err) {
     return ContentService.createTextOutput(JSON.stringify({status: 'error', message: err.toString()}));
   }
-}
-
-function doGet(e) {
-  return ContentService.createTextOutput("OK");
 }
 
 function saveScore(data) {
