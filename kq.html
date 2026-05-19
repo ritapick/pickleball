@@ -267,7 +267,7 @@
         const t = data.table;
         if (!t || !t.rows || t.rows.length === 0) return '';
         const hdrs = t.cols.map(c => c.label || '');
-        let h = `<div class="group-title">Bảng ${groupName.toUpperCase()}</div>`;
+        let h = `<div class="group-title">Bảng ${groupName.toUpperCase()} - Bảng xếp hạng</div>`;
         h += '<div class="rank-wrap"><table class="rank-table"><thead><tr><th>#</th>';
         hdrs.forEach(x => { h += `<th>${x}</th>`; });
         h += '</tr></thead><tbody>';
@@ -326,15 +326,29 @@
 
     async function loadGroupData() {
         const groups = ['a', 'b', 'c', 'd'];
-        const groupRanges = {
-            'a': { ranking: 'B3:F8', startRow: 3 },
-            'b': { ranking: 'B12:F17', startRow: 12 },
-            'c': { ranking: 'B21:F26', startRow: 21 },
-            'd': { ranking: 'B30:F35', startRow: 30 }
+        // Cấu hình bảng xếp hạng: đọc từ sheet riêng A, B, C, D, vùng F1:H5
+        const rankingConfig = {
+            'a': { sheet: 'A', range: 'F1:H5' },
+            'b': { sheet: 'B', range: 'F1:H5' },
+            'c': { sheet: 'C', range: 'F1:H5' },
+            'd': { sheet: 'D', range: 'F1:H5' }
+        };
+        // Cấu hình trận đấu: đọc từ sheet 'bang'
+        const matchConfig = {
+            'a': { sheet: 'bang', range: 'B3:F8', startRow: 3 },
+            'b': { sheet: 'bang', range: 'B12:F17', startRow: 12 },
+            'c': { sheet: 'bang', range: 'B21:F26', startRow: 21 },
+            'd': { sheet: 'bang', range: 'B30:F35', startRow: 30 }
         };
 
-        const promises = groups.map(g => getSheet('bang', groupRanges[g].ranking));
-        const results = await Promise.all(promises);
+        // Fetch đồng thời bảng xếp hạng và trận đấu
+        const rankPromises = groups.map(g => getSheet(rankingConfig[g].sheet, rankingConfig[g].range));
+        const matchPromises = groups.map(g => getSheet(matchConfig[g].sheet, matchConfig[g].range));
+        
+        const [rankResults, matchResults] = await Promise.all([
+            Promise.all(rankPromises),
+            Promise.all(matchPromises)
+        ]);
 
         const tabsEl = document.getElementById('group-tabs');
         const areasEl = document.getElementById('group-areas');
@@ -343,47 +357,44 @@
         let matchIndex = 0;
 
         groups.forEach((g, idx) => {
-            const data = results[idx];
-            const t = data.table;
-            if (!t || !t.rows || t.rows.length === 0) return;
+            // Render bảng xếp hạng
+            const rankingHtml = renderGroupRanking(g, rankResults[idx]);
+            
+            // Xử lý trận đấu
+            const matchData = matchResults[idx];
+            const t = matchData.table;
+            let matchesHtml = '';
+            
+            if (t && t.rows && t.rows.length > 0) {
+                const matches = [];
+                t.rows.forEach((row, rowIdx) => {
+                    const t1Name = val(row, 0);
+                    const t2Name = val(row, 4);
+                    const score1 = val(row, 1);
+                    const score2 = val(row, 3);
+                    const actualRow = matchConfig[g].startRow + rowIdx;
+                    const matchId = `group_${g}_${rowIdx}`;
 
-            const matches = [];
-            t.rows.forEach((row, rowIdx) => {
-                const t1Name = val(row, 0); // B
-                const t2Name = val(row, 4); // F
-                const score1 = val(row, 1); // C
-                const score2 = val(row, 3); // E
-                const actualRow = groupRanges[g].startRow + rowIdx;
-                const matchId = `group_${g}_${rowIdx}`;
-
-                matches.push({
-                    id: matchId,
-                    round: `Trận ${rowIdx + 1}`,
-                    t1: t1Name,
-                    t2: t2Name,
-                    existingS1: score1,
-                    existingS2: score2,
-                    sheetName: 'bang',
-                    team1Col: 'C',
-                    team2Col: 'E',
-                    team1Row: actualRow,
-                    team2Row: actualRow
+                    const matchObj = {
+                        id: matchId,
+                        round: `Trận ${rowIdx + 1}`,
+                        t1: t1Name,
+                        t2: t2Name,
+                        existingS1: score1,
+                        existingS2: score2,
+                        sheetName: 'bang',
+                        team1Col: 'C',
+                        team2Col: 'E',
+                        team1Row: actualRow,
+                        team2Row: actualRow
+                    };
+                    
+                    matches.push(matchObj);
+                    allMatchData.push(matchObj);
+                    matchIndex++;
                 });
-                allMatchData.push({
-                    id: matchId,
-                    sheetName: 'bang',
-                    team1Col: 'C',
-                    team2Col: 'E',
-                    team1Row: actualRow,
-                    team2Row: actualRow,
-                    existingS1: score1,
-                    existingS2: score2
-                });
-                matchIndex++;
-            });
-
-            const rankingHtml = renderGroupRanking(g, data);
-            const matchesHtml = renderGroupMatches(g, matches, matchIndex - matches.length);
+                matchesHtml = renderGroupMatches(g, matches, matchIndex - matches.length);
+            }
 
             tabsHtml += `<button class="tab-btn" onclick="switchTab('${g}')">Bảng ${g.toUpperCase()}</button>`;
             areasHtml += `<div class="tab-content ${idx === 0 ? 'active' : ''}" id="tab-${g}">${rankingHtml}${matchesHtml}</div>`;
@@ -407,10 +418,10 @@
 
     async function loadQFData() {
         const qfMatches = [
-            { id: 'qf_1', round: 'Tứ kết 1', displayRange: 'A2:G3', team1Col: 'D', team2Col: 'F', team1Row: 3, team2Row: 3 },
-            { id: 'qf_2', round: 'Tứ kết 2', displayRange: 'A5:G6', team1Col: 'D', team2Col: 'F', team1Row: 6, team2Row: 6 },
-            { id: 'qf_3', round: 'Tứ kết 3', displayRange: 'A8:G9', team1Col: 'D', team2Col: 'F', team1Row: 9, team2Row: 9 },
-            { id: 'qf_4', round: 'Tứ kết 4', displayRange: 'A11:G12', team1Col: 'D', team2Col: 'F', team1Row: 12, team2Row: 12 }
+            { id: 'qf_1', round: 'Tứ kết 1 (nhất a - nhì b)', displayRange: 'A2:G3', team1Col: 'D', team2Col: 'F', team1Row: 3, team2Row: 3 },
+            { id: 'qf_2', round: 'Tứ kết 2 (nhất b - nhì a)', displayRange: 'A5:G6', team1Col: 'D', team2Col: 'F', team1Row: 6, team2Row: 6 },
+            { id: 'qf_3', round: 'Tứ kết 3 (nhất c - nhì d)', displayRange: 'A8:G9', team1Col: 'D', team2Col: 'F', team1Row: 9, team2Row: 9 },
+            { id: 'qf_4', round: 'Tứ kết 4 (nhất d - nhì c)', displayRange: 'A11:G12', team1Col: 'D', team2Col: 'F', team1Row: 12, team2Row: 12 }
         ];
 
         const displayPromises = qfMatches.map(m => getSheet('1.8', m.displayRange));
@@ -427,8 +438,8 @@
             
             let t1Name = '', t2Name = '';
             if (rows.length > 1) {
-                t1Name = val(rows[1], 2); // C
-                t2Name = val(rows[1], 6); // G
+                t1Name = val(rows[1], 2);
+                t2Name = val(rows[1], 6);
             } else if (rows.length > 0) {
                 t1Name = val(rows[0], 2);
                 t2Name = val(rows[0], 6);
@@ -460,8 +471,8 @@
 
     async function loadSFData() {
         const sfMatches = [
-            { id: 'sf_1', round: 'Bán kết 1', displayRange: 'A3:F4', team1Col: 'C', team2Col: 'E', team1Row: 4, team2Row: 4, team1ColIdx: 2, team2ColIdx: 4, dataRowIdx: 1 },
-            { id: 'sf_2', round: 'Bán kết 2', displayRange: 'A6:F7', team1Col: 'C', team2Col: 'E', team1Row: 7, team2Row: 7, team1ColIdx: 2, team2ColIdx: 4, dataRowIdx: 1 }
+            { id: 'sf_1', round: 'Bán kết 1 (tứ kết 1 - tứ kết 3)', displayRange: 'A3:F4', team1Col: 'C', team2Col: 'E', team1Row: 4, team2Row: 4, dataRowIdx: 1 },
+            { id: 'sf_2', round: 'Bán kết 2 (tứ kết 2 - tứ kết 4)', displayRange: 'A6:F7', team1Col: 'C', team2Col: 'E', team1Row: 7, team2Row: 7, dataRowIdx: 1 }
         ];
 
         const displayPromises = sfMatches.map(m => getSheet('bk', m.displayRange));
@@ -480,8 +491,8 @@
             
             let t1Name = '', t2Name = '';
             if (rows.length > m.dataRowIdx) {
-                t1Name = val(rows[m.dataRowIdx], 1); // B
-                t2Name = val(rows[m.dataRowIdx], 5); // F
+                t1Name = val(rows[m.dataRowIdx], 1);
+                t2Name = val(rows[m.dataRowIdx], 5);
             } else if (rows.length > 0) {
                 t1Name = val(rows[0], 1);
                 t2Name = val(rows[0], 5);
@@ -519,8 +530,8 @@
         const rows = displayData.table.rows || [];
         let t1Name = '', t2Name = '';
         if (rows.length > 1) {
-            t1Name = val(rows[1], 0); // A
-            t2Name = val(rows[1], 4); // E
+            t1Name = val(rows[1], 0);
+            t2Name = val(rows[1], 4);
         } else if (rows.length > 0) {
             t1Name = val(rows[0], 0);
             t2Name = val(rows[0], 4);
@@ -630,6 +641,8 @@
             setTimeout(() => { if (sbtn) sbtn.classList.remove('pulse'); }, 1500);
 
             showToast(`✅ Đã lưu tỷ số ${n1} - ${n2}`, 'success');
+            // 🔄 THÊM DÒNG NÀY ĐỂ REFRESH TRANG:
+            setTimeout(() => { location.reload(); }, 1500);
         } catch(e) {
             console.error('Save error:', e);
             cardEl.classList.remove('syncing');
