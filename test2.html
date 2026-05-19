@@ -419,9 +419,9 @@
     async function loadQFData() {
         const qfMatches = [
             { id: 'qf_1', round: 'Tứ kết 1 (nhất a - nhì b)', displayRange: 'A2:G3', team1Col: 'D', team2Col: 'F', team1Row: 3, team2Row: 3 },
-            { id: 'qf_2', round: 'Tứ kết 2', displayRange: 'A5:G6', team1Col: 'D', team2Col: 'F', team1Row: 6, team2Row: 6 },
-            { id: 'qf_3', round: 'Tứ kết 3', displayRange: 'A8:G9', team1Col: 'D', team2Col: 'F', team1Row: 9, team2Row: 9 },
-            { id: 'qf_4', round: 'Tứ kết 4', displayRange: 'A11:G12', team1Col: 'D', team2Col: 'F', team1Row: 12, team2Row: 12 }
+            { id: 'qf_2', round: 'Tứ kết 2 (nhất b - nhì a)', displayRange: 'A5:G6', team1Col: 'D', team2Col: 'F', team1Row: 6, team2Row: 6 },
+            { id: 'qf_3', round: 'Tứ kết 3 (nhất c - nhì d)', displayRange: 'A8:G9', team1Col: 'D', team2Col: 'F', team1Row: 9, team2Row: 9 },
+            { id: 'qf_4', round: 'Tứ kết 4 (nhất d - nhì c)', displayRange: 'A11:G12', team1Col: 'D', team2Col: 'F', team1Row: 12, team2Row: 12 }
         ];
 
         const displayPromises = qfMatches.map(m => getSheet('1.8', m.displayRange));
@@ -471,8 +471,8 @@
 
     async function loadSFData() {
         const sfMatches = [
-            { id: 'sf_1', round: 'Bán kết 1', displayRange: 'A3:F4', team1Col: 'C', team2Col: 'E', team1Row: 4, team2Row: 4, dataRowIdx: 1 },
-            { id: 'sf_2', round: 'Bán kết 2', displayRange: 'A6:F7', team1Col: 'C', team2Col: 'E', team1Row: 7, team2Row: 7, dataRowIdx: 1 }
+            { id: 'sf_1', round: 'Bán kết 1 (tứ kết 1 - tứ kết 3)', displayRange: 'A3:F4', team1Col: 'C', team2Col: 'E', team1Row: 4, team2Row: 4, dataRowIdx: 1 },
+            { id: 'sf_2', round: 'Bán kết 2 (tứ kết 2 - tứ kết 4)', displayRange: 'A6:F7', team1Col: 'C', team2Col: 'E', team1Row: 7, team2Row: 7, dataRowIdx: 1 }
         ];
 
         const displayPromises = sfMatches.map(m => getSheet('bk', m.displayRange));
