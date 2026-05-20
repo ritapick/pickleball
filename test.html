@@ -21,6 +21,11 @@
             --green-dark: #3e4f3c;
             --green-mid: #457d3e;
             --green-light: #309124;
+            --connector-color: #94a3b8;
+            --winner-bg: #fff9db;
+            --winner-border: #f59e0b;
+            --champion-bg: linear-gradient(135deg, #fce4ec, #f8bbd0);
+            --champion-border: #ec4899;
         }
 
         * {
@@ -44,7 +49,7 @@
             text-align: center;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 4px 20px rgba(26, 86, 219, 0.3);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
         }
 
         .header::before {
@@ -150,7 +155,7 @@
         .content {
             padding: 16px;
             padding-bottom: 32px;
-            max-width: 1100px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
@@ -254,7 +259,6 @@
             text-align: center;
             border-bottom: 1px solid var(--border);
             font-weight: 500;
-            transition: background 0.15s ease;
         }
 
         table td:first-child {
@@ -263,24 +267,12 @@
             font-weight: 600;
         }
 
-        table tr:last-child td:first-child {
-            border-radius: 0 0 0 10px;
-        }
-
-        table tr:last-child td:last-child {
-            border-radius: 0 0 10px 0;
-        }
-
         table tr:hover td {
             background: rgba(26, 86, 219, 0.03);
         }
 
         table tr:nth-child(even) td {
             background: rgba(241, 245, 249, 0.5);
-        }
-
-        table tr:nth-child(even):hover td {
-            background: rgba(26, 86, 219, 0.05);
         }
 
         .points-cell {
@@ -347,26 +339,12 @@
         }
 
         @media (max-width: 480px) {
-            .header h1 {
-                font-size: 1.3rem;
-            }
-            .tab {
-                padding: 10px 12px;
-                font-size: 0.7rem;
-            }
-            .content {
-                padding: 12px;
-            }
-            .card {
-                padding: 12px;
-                border-radius: 12px;
-            }
-            table {
-                font-size: 0.75rem;
-            }
-            table th, table td {
-                padding: 8px 6px;
-            }
+            .header h1 { font-size: 1.3rem; }
+            .tab { padding: 10px 12px; font-size: 0.7rem; }
+            .content { padding: 12px; }
+            .card { padding: 12px; border-radius: 12px; }
+            table { font-size: 0.75rem; }
+            table th, table td { padding: 8px 6px; }
         }
 
         .tab-group-label {
@@ -398,14 +376,10 @@
             gap: 12px;
         }
 
-        .grid-2 .card {
-            margin-bottom: 0;
-        }
+        .grid-2 .card { margin-bottom: 0; }
 
         @media (max-width: 640px) {
-            .grid-2 {
-                grid-template-columns: 1fr;
-            }
+            .grid-2 { grid-template-columns: 1fr; }
         }
 
         .final-card {
@@ -416,11 +390,7 @@
             text-align: center;
         }
 
-        .final-card .trophy {
-            font-size: 2rem;
-            margin-bottom: 8px;
-        }
-
+        .final-card .trophy { font-size: 2rem; margin-bottom: 8px; }
         .final-card .match-label {
             font-size: 0.85rem;
             font-weight: 800;
@@ -440,12 +410,7 @@
             align-items: center;
         }
 
-        .final-card .match-team {
-            font-size: 0.95rem;
-            font-weight: 600;
-            flex: 1;
-        }
-
+        .final-card .match-team { font-size: 0.95rem; font-weight: 600; flex: 1; }
         .final-card .match-score {
             font-weight: 800;
             font-size: 1rem;
@@ -457,120 +422,129 @@
             text-align: center;
         }
 
-        /* ============ BRACKET / SƠ ĐỒ STYLES ============ */
+        /* ========== BRACKET STYLES ========== */
         .bracket-wrapper {
             overflow-x: auto;
-            padding: 10px 0;
+            padding: 20px 10px;
+            background: #f8fafc;
+            border-radius: 16px;
+            border: 1px solid var(--border);
         }
 
         .bracket {
             display: flex;
-            align-items: stretch;
-            min-width: 750px;
-            gap: 0;
+            align-items: center;
+            min-width: 850px;
+            position: relative;
         }
 
+        /* Round columns */
         .bracket-round {
             display: flex;
             flex-direction: column;
-            justify-content: space-around;
-            flex: 0 0 auto;
-            width: 220px;
+            flex-shrink: 0;
+            width: 210px;
             position: relative;
         }
 
         .bracket-round-label {
             text-align: center;
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             font-weight: 800;
             color: #dc2626;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            padding: 6px 0 10px;
-            border-bottom: 2px solid #e2e8f0;
-            margin-bottom: 8px;
-            background: #f8fafc;
-            border-radius: 6px 6px 0 0;
+            letter-spacing: 1.5px;
+            padding: 8px 0;
+            background: linear-gradient(135deg, #fef2f2, #fce7f3);
+            border: 1px solid #fbcfe8;
+            border-radius: 8px;
+            margin-bottom: 16px;
         }
 
-        .bracket-matches {
+        .bracket-round-label.ck-label {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border-color: #fbbf24;
+            color: #92400e;
+        }
+
+        /* Match pair containers - each pair of 2 matches that feed into 1 next-round match */
+        .match-pair {
             display: flex;
             flex-direction: column;
-            justify-content: space-around;
+            justify-content: center;
             flex: 1;
-            gap: 0;
-        }
-
-        .bracket-match {
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            overflow: hidden;
             position: relative;
-            margin: 8px 0;
-            box-shadow: 0 1px 6px rgba(0,0,0,0.06);
-            flex-shrink: 0;
         }
 
-        .bracket-match.winner-match .match-player.winner {
-            background: #fff9db;
+        .match-pair.single {
+            flex: 2;
         }
 
-        .bracket-match.champion-match {
-            background: linear-gradient(135deg, #fef3c7, #fde68a);
-            border: 2px solid var(--accent);
+        /* Individual match box */
+        .match-box {
+            background: white;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 4px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            position: relative;
+            z-index: 2;
+        }
+
+        .match-box.champion-box {
+            border: 2px solid var(--champion-border);
+            background: var(--champion-bg);
         }
 
         .match-player {
             display: flex;
             align-items: center;
-            padding: 8px 10px;
-            font-size: 0.78rem;
+            padding: 7px 10px;
+            font-size: 0.75rem;
             font-weight: 600;
-            position: relative;
             gap: 8px;
+            position: relative;
         }
 
         .match-player + .match-player {
             border-top: 1px solid #f1f5f9;
         }
 
-        .match-player .player-name {
+        .match-player .p-name {
             flex: 1;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
-        .match-player .player-score {
+        .match-player .p-score {
             font-weight: 800;
-            font-size: 0.82rem;
+            font-size: 0.8rem;
             color: var(--primary);
             background: rgba(26, 86, 219, 0.08);
             padding: 2px 8px;
             border-radius: 4px;
-            min-width: 28px;
+            min-width: 26px;
             text-align: center;
         }
 
         .match-player.winner {
-            background: #fff9db;
-            border-left: 3px solid #f59e0b;
+            background: var(--winner-bg);
         }
 
-        .match-player.winner .player-score {
+        .match-player.winner .p-score {
             background: rgba(245, 158, 11, 0.2);
             color: #92400e;
         }
 
         .match-player.champion {
             background: linear-gradient(135deg, #fce4ec, #f8bbd0);
-            border-left: 3px solid #ec4899;
             font-weight: 800;
             color: #9d174d;
         }
 
-        .match-player.champion .player-score {
+        .match-player.champion .p-score {
             background: rgba(236, 72, 153, 0.2);
             color: #9d174d;
         }
@@ -581,211 +555,76 @@
             font-style: italic;
         }
 
-        .match-player.empty .player-score {
+        .match-player.empty .p-score {
             background: #e2e8f0;
             color: #94a3b8;
         }
 
-        /* Connecting lines between rounds */
-        .bracket-connector {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-around;
-            width: 30px;
+        /* ========== CONNECTOR LINES (SVG) ========== */
+        .bracket-svg-container {
             flex-shrink: 0;
+            width: 40px;
             position: relative;
         }
 
-        .connector-group {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            flex: 1;
-            position: relative;
-        }
-
-        .connector-group .line-top,
-        .connector-group .line-bottom,
-        .connector-group .line-mid {
-            position: absolute;
-            background: #cbd5e1;
-        }
-
-        .connector-group .line-top {
-            width: 2px;
-            top: 25%;
-            bottom: 50%;
-            left: 0;
-        }
-
-        .connector-group .line-bottom {
-            width: 2px;
-            top: 50%;
-            bottom: 25%;
-            left: 0;
-        }
-
-        .connector-group .line-mid {
-            height: 2px;
-            top: 50%;
-            left: 0;
-            right: 0;
-        }
-
-        .connector-group .line-right {
-            position: absolute;
-            height: 2px;
-            top: 50%;
-            right: 0;
-            width: 50%;
-            background: #cbd5e1;
-        }
-
-        /* Champion connector */
-        .champion-connector {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 30px;
-            flex-shrink: 0;
-        }
-
-        .champion-connector .line-mid {
-            height: 2px;
+        .bracket-svg-container svg {
             width: 100%;
-            background: #cbd5e1;
-            position: relative;
-        }
-
-        .champion-connector .line-mid::before,
-        .champion-connector .line-mid::after {
-            content: '';
+            height: 100%;
             position: absolute;
-            width: 2px;
-            top: -15px;
-            bottom: -15px;
-            background: #cbd5e1;
-        }
-
-        .champion-connector .line-mid::before {
+            top: 0;
             left: 0;
         }
 
-        .champion-connector .line-mid::after {
-            right: 0;
+        /* Champion section */
+        .champion-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-shrink: 0;
+            width: 120px;
+            margin-left: 20px;
+            padding-top: 10px;
         }
 
-        .champion-crown {
+        .champion-badge {
+            background: linear-gradient(135deg, #fef3c7, #fbbf24);
+            border: 2px solid #f59e0b;
+            border-radius: 12px;
+            padding: 10px 16px;
             text-align: center;
-            font-size: 0.7rem;
-            color: var(--accent);
-            margin-top: 8px;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+            animation: glow 2s ease-in-out infinite;
         }
 
-        .champion-crown .crown-icon {
-            font-size: 1.5rem;
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3); }
+            50% { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.6); }
         }
 
-        .champion-crown .crown-text {
+        .champion-badge .crown {
+            font-size: 1.8rem;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .champion-badge .champ-name {
+            font-size: 0.8rem;
             font-weight: 800;
             color: #92400e;
+            display: block;
         }
 
-        /* Round 1 -> Round 2 connectors */
-        .round1-round2-connectors {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-around;
-            width: 30px;
-            flex-shrink: 0;
+        .champion-badge .champ-label {
+            font-size: 0.6rem;
+            font-weight: 600;
+            color: #b45309;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: block;
+            margin-top: 2px;
         }
 
-        .connector-bracket-pair {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            flex: 1;
-            position: relative;
-        }
-
-        .connector-bracket-pair .c-bracket-top {
-            position: absolute;
-            width: 2px;
-            top: 25%;
-            bottom: 50%;
-            left: 0;
-            background: #cbd5e1;
-        }
-
-        .connector-bracket-pair .c-bracket-bottom {
-            position: absolute;
-            width: 2px;
-            top: 50%;
-            bottom: 25%;
-            left: 0;
-            background: #cbd5e1;
-        }
-
-        .connector-bracket-pair .c-bracket-mid {
-            position: absolute;
-            height: 2px;
-            top: 50%;
-            left: 0;
-            right: 0;
-            background: #cbd5e1;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .bracket {
-                min-width: 650px;
-            }
-            .bracket-round {
-                width: 180px;
-            }
-            .match-player {
-                padding: 6px 8px;
-                font-size: 0.72rem;
-            }
-            .match-player .player-name {
-                font-size: 0.7rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .bracket {
-                min-width: 580px;
-            }
-            .bracket-round {
-                width: 160px;
-            }
-        }
-
-        /* Table-based sodo as fallback */
-        .sodo-table-container {
-            overflow-x: auto;
-            margin-top: 16px;
-        }
-
-        .sodo-table-container table {
-            font-size: 0.7rem;
-        }
-
-        .sodo-table-container td, .sodo-table-container th {
-            padding: 5px 4px;
-            text-align: center;
-            border: 1px solid var(--border);
-            font-weight: 500;
-            white-space: nowrap;
-        }
-
-        .sodo-table-container th {
-            background: #1e3a5f !important;
-            color: white !important;
-            font-weight: 700;
-            font-size: 0.65rem;
-        }
-
+        /* View toggle */
         .view-toggle {
             display: flex;
             gap: 8px;
@@ -821,6 +660,40 @@
         .bracket-view.active, .table-view.active {
             display: block;
         }
+
+        .sodo-table-container {
+            overflow-x: auto;
+        }
+
+        .sodo-table-container table {
+            font-size: 0.7rem;
+        }
+
+        .sodo-table-container td, .sodo-table-container th {
+            padding: 5px 4px;
+            text-align: center;
+            border: 1px solid var(--border);
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .sodo-table-container th {
+            background: #1e3a5f !important;
+            color: white !important;
+            font-weight: 700;
+            font-size: 0.65rem;
+        }
+
+        @media (max-width: 768px) {
+            .bracket { min-width: 700px; }
+            .bracket-round { width: 175px; }
+            .match-player { padding: 6px 8px; font-size: 0.7rem; }
+        }
+
+        @media (max-width: 480px) {
+            .bracket { min-width: 600px; }
+            .bracket-round { width: 150px; }
+        }
     </style>
 </head>
 <body>
@@ -832,61 +705,39 @@
 
     <div class="tabs-container">
         <div class="tabs" id="tabs">
-            <button class="tab active" data-tab="bangnhom">
-                <span class="tab-group-label"><span class="group-dot dot-a"></span> BẢNG XẾP HẠNG</span>
-            </button>
-            <button class="tab" data-tab="vongbang">
-                <span class="tab-group-label"><span class="group-dot dot-bang"></span> Vòng bảng</span>
-            </button>
-            <button class="tab" data-tab="tuket">
-                <span class="tab-group-label"><span class="group-dot dot-tuk"></span> Tứ kết</span>
-            </button>
-            <button class="tab" data-tab="banket">
-                <span class="tab-group-label"><span class="group-dot dot-bk"></span> Bán kết</span>
-            </button>
-            <button class="tab" data-tab="chungket">
-                <span class="tab-group-label"><span class="group-dot dot-ck"></span> Chung kết</span>
-            </button>
-            <button class="tab" data-tab="sodo">
-                <span class="tab-group-label"><span class="group-dot dot-sodo"></span> Sơ đồ</span>
-            </button>
+            <button class="tab active" data-tab="bangnhom"><span class="tab-group-label"><span class="group-dot dot-a"></span> BẢNG XẾP HẠNG</span></button>
+            <button class="tab" data-tab="vongbang"><span class="tab-group-label"><span class="group-dot dot-bang"></span> Vòng bảng</span></button>
+            <button class="tab" data-tab="tuket"><span class="tab-group-label"><span class="group-dot dot-tuk"></span> Tứ kết</span></button>
+            <button class="tab" data-tab="banket"><span class="tab-group-label"><span class="group-dot dot-bk"></span> Bán kết</span></button>
+            <button class="tab" data-tab="chungket"><span class="tab-group-label"><span class="group-dot dot-ck"></span> Chung kết</span></button>
+            <button class="tab" data-tab="sodo"><span class="tab-group-label"><span class="group-dot dot-sodo"></span> Sơ đồ</span></button>
         </div>
     </div>
 
     <div class="content">
         <div class="tab-content active" id="tab-bangnhom">
             <div class="section-title">Bảng thi đấu <span class="badge">Vòng loại</span></div>
-            <div class="grid-2" id="bangnhom-container">
-                <div class="loading"><div class="spinner"></div><div class="loading-text">Đang tải dữ liệu...</div></div>
-            </div>
+            <div class="grid-2" id="bangnhom-container"><div class="loading"><div class="spinner"></div><div class="loading-text">Đang tải dữ liệu...</div></div></div>
         </div>
 
         <div class="tab-content" id="tab-vongbang">
             <div class="section-title">Thi đấu vòng bảng <span class="badge">Chi tiết</span></div>
-            <div id="vongbang-container">
-                <div class="loading"><div class="spinner"></div><div class="loading-text">Đang tải dữ liệu...</div></div>
-            </div>
+            <div id="vongbang-container"><div class="loading"><div class="spinner"></div><div class="loading-text">Đang tải dữ liệu...</div></div></div>
         </div>
 
         <div class="tab-content" id="tab-tuket">
             <div class="section-title">Vòng tứ kết <span class="badge">1/8</span></div>
-            <div id="tuket-container">
-                <div class="loading"><div class="spinner"></div><div class="loading-text">Đang tải dữ liệu...</div></div>
-            </div>
+            <div id="tuket-container"><div class="loading"><div class="spinner"></div><div class="loading-text">Đang tải dữ liệu...</div></div></div>
         </div>
 
         <div class="tab-content" id="tab-banket">
             <div class="section-title">Vòng bán kết <span class="badge">1/4</span></div>
-            <div id="banket-container">
-                <div class="loading"><div class="spinner"></div><div class="loading-text">Đang tải dữ liệu...</div></div>
-            </div>
+            <div id="banket-container"><div class="loading"><div class="spinner"></div><div class="loading-text">Đang tải dữ liệu...</div></div></div>
         </div>
 
         <div class="tab-content" id="tab-chungket">
             <div class="section-title">Vòng chung kết <span class="badge">Final</span></div>
-            <div id="chungket-container">
-                <div class="loading"><div class="spinner"></div><div class="loading-text">Đang tải dữ liệu...</div></div>
-            </div>
+            <div id="chungket-container"><div class="loading"><div class="spinner"></div><div class="loading-text">Đang tải dữ liệu...</div></div></div>
         </div>
 
         <div class="tab-content" id="tab-sodo">
@@ -896,9 +747,7 @@
                 <button class="view-btn" onclick="switchView('table')" id="btn-table">📋 Bảng</button>
             </div>
             <div class="bracket-view active" id="bracket-view">
-                <div id="sodo-bracket-container">
-                    <div class="loading"><div class="spinner"></div><div class="loading-text">Đang tải dữ liệu...</div></div>
-                </div>
+                <div id="sodo-bracket-container"><div class="loading"><div class="spinner"></div><div class="loading-text">Đang tải dữ liệu...</div></div></div>
             </div>
             <div class="table-view" id="table-view">
                 <div id="sodo-table-container"></div>
@@ -964,31 +813,21 @@
             var rows = parsed.rows;
             var filteredRows = rows.filter(function(r) { return r.some(function(c) { return c !== ''; }); });
             if (filteredRows.length === 0) return '';
-
             var html = '<div class="card"><div class="card-title"><span class="icon"><span class="group-dot ' + dotClass + '"></span></span>' + title + '</div><table><thead><tr>';
-
             filteredRows[0].forEach(function(cell, i) {
                 var h = headers[i] || (i === 0 ? 'Đội' : (i === 1 ? 'Điểm' : 'Hệ số'));
                 html += '<th>' + h + '</th>';
             });
-
             html += '</tr></thead><tbody>';
-
             filteredRows.forEach(function(row, idx) {
-                var rankClass = idx < 3 ? 'rank-' + (idx + 1) : '';
-                html += '<tr class="' + rankClass + '">';
+                html += '<tr>';
                 row.forEach(function(cell, i) {
-                    if (i === 1) {
-                        html += '<td class="points-cell">' + cell + '</td>';
-                    } else if (i === 2) {
-                        html += '<td class="ratio-cell">' + cell + '</td>';
-                    } else {
-                        html += '<td>' + cell + '</td>';
-                    }
+                    if (i === 1) html += '<td class="points-cell">' + cell + '</td>';
+                    else if (i === 2) html += '<td class="ratio-cell">' + cell + '</td>';
+                    else html += '<td>' + cell + '</td>';
                 });
                 html += '</tr>';
             });
-
             html += '</tbody></table></div>';
             return html;
         }
@@ -1000,22 +839,14 @@
             var rows = parsed.rows;
             var filteredRows = rows.filter(function(r) { return r.some(function(c) { return c !== ''; }); });
             if (filteredRows.length === 0) return '';
-
             var html = '<div class="card"><div class="card-title"><span class="icon">🏆</span>' + title + '</div><table><thead><tr>';
-
-            headers.forEach(function(h) {
-                html += '<th>' + (h || '-') + '</th>';
-            });
+            headers.forEach(function(h) { html += '<th>' + (h || '-') + '</th>'; });
             html += '</tr></thead><tbody>';
-
             filteredRows.forEach(function(row) {
                 html += '<tr>';
-                row.forEach(function(cell) {
-                    html += '<td>' + cell + '</td>';
-                });
+                row.forEach(function(cell) { html += '<td>' + cell + '</td>'; });
                 html += '</tr>';
             });
-
             html += '</tbody></table></div>';
             return html;
         }
@@ -1027,25 +858,19 @@
             var rows = parsed.rows;
             var filteredRows = rows.filter(function(r) { return r.some(function(c) { return c !== ''; }); });
             if (filteredRows.length === 0) return '';
-
-            var html = '<div class="card sodo-table-container"><div class="card-title"><span class="icon">📋</span>Sơ đồ thi đấu (dạng bảng)</div><table><thead><tr>';
-
-            headers.forEach(function(h) {
-                html += '<th>' + (h || '') + '</th>';
-            });
+            var html = '<div class="card sodo-table-container"><div class="card-title"><span class="icon"></span>Sơ đồ thi đấu (dạng bảng)</div><table><thead><tr>';
+            headers.forEach(function(h) { html += '<th>' + (h || '') + '</th>'; });
             html += '</tr></thead><tbody>';
-
             filteredRows.forEach(function(row) {
                 html += '<tr>';
-                row.forEach(function(cell) {
-                    html += '<td>' + cell + '</td>';
-                });
+                row.forEach(function(cell) { html += '<td>' + cell + '</td>'; });
                 html += '</tr>';
             });
-
             html += '</tbody></table></div>';
             return html;
         }
+
+        /* ========== BRACKET PARSING & RENDERING ========== */
 
         function parseBracketData(rows) {
             var round1Matches = [];
@@ -1055,297 +880,271 @@
             var i = 0;
             while (i < rows.length) {
                 var row = rows[i];
-                if (!row || row.length < 2) {
-                    i++;
-                    continue;
-                }
+                if (!row || row.length < 2) { i++; continue; }
 
                 var teamA = row[0] || '';
                 var scoreA = row[1] || '';
-
-                if (teamA === '' && scoreA === '') {
-                    i++;
-                    continue;
-                }
+                if (teamA === '' && scoreA === '') { i++; continue; }
 
                 var nextRow = i + 1 < rows.length ? rows[i + 1] : null;
                 var teamB = nextRow ? (nextRow[0] || '') : '';
                 var scoreB = nextRow ? (nextRow[1] || '') : '';
 
                 round1Matches.push({
-                    teamA: teamA,
-                    scoreA: scoreA,
-                    teamB: teamB,
-                    scoreB: scoreB
+                    teamA: teamA, scoreA: scoreA,
+                    teamB: teamB, scoreB: scoreB
                 });
 
                 if (nextRow) {
-                    var winnerR1 = nextRow[2] || '';
-                    var winnerScoreR1 = nextRow[3] || '';
-                    var loserR1 = row[2] || '';
-                    var loserScoreR1 = row[3] || '';
-
-                    if (winnerR1 || winnerScoreR1) {
-                        round2Matches.push({
-                            teamA: loserR1,
-                            scoreA: loserScoreR1,
-                            teamB: winnerR1,
-                            scoreB: winnerScoreR1
-                        });
+                    var w2 = nextRow[2] || '', ws2 = nextRow[3] || '';
+                    var l2 = row[2] || '', ls2 = row[3] || '';
+                    if (w2 || ws2) {
+                        round2Matches.push({ teamA: l2, scoreA: ls2, teamB: w2, scoreB: ws2 });
                     }
 
-                    var winnerR2 = row[4] || '';
-                    var winnerScoreR2 = row[5] || '';
-                    var loserR2 = nextRow ? (nextRow[4] || '') : '';
-                    var loserScoreR2 = nextRow ? (nextRow[5] || '') : '';
-
-                    if (winnerR2 || winnerScoreR2) {
-                        var existingMatch = round3Matches.length > 0 ? round3Matches[0] : null;
-                        if (!existingMatch) {
-                            round3Matches.push({
-                                teamA: loserR2,
-                                scoreA: loserScoreR2,
-                                teamB: winnerR2,
-                                scoreB: winnerScoreR2
-                            });
-                        } else {
-                            existingMatch.teamA = loserR2;
-                            existingMatch.scoreA = loserScoreR2;
-                            existingMatch.teamB = winnerR2;
-                            existingMatch.scoreB = winnerScoreR2;
-                        }
+                    var w3 = row[4] || '', ws3 = row[5] || '';
+                    var l3 = nextRow[4] || '', ls3 = nextRow[5] || '';
+                    if (w3 || ws3) {
+                        round3Matches.push({ teamA: l3, scoreA: ls3, teamB: w3, scoreB: ws3 });
                     }
                 }
-
                 i += 2;
             }
 
-            return {
-                round1: round1Matches,
-                round2: round2Matches,
-                round3: round3Matches
-            };
+            return { round1: round1Matches, round2: round2Matches, round3: round3Matches };
         }
 
         function isWinner(teamName, match) {
             if (!teamName || teamName === '') return false;
-            var scoreA = parseFloat(match.scoreA) || 0;
-            var scoreB = parseFloat(match.scoreB) || 0;
-            if (scoreA === 0 && scoreB === 0) return false;
-            if (scoreA > scoreB) {
-                return teamName === match.teamA;
-            } else if (scoreB > scoreA) {
-                return teamName === match.teamB;
-            }
+            var sA = parseFloat(match.scoreA) || 0;
+            var sB = parseFloat(match.scoreB) || 0;
+            if (sA === 0 && sB === 0) return false;
+            if (sA > sB) return teamName === match.teamA;
+            if (sB > sA) return teamName === match.teamB;
             return false;
         }
 
-        function getChampionName(round1, round2, round3) {
+        function getChampionName(round3) {
             if (round3.length > 0) {
                 var m = round3[0];
-                var scoreA = parseFloat(m.scoreA) || 0;
-                var scoreB = parseFloat(m.scoreB) || 0;
-                if (scoreA > scoreB) return m.teamA;
-                if (scoreB > scoreA) return m.teamB;
+                var sA = parseFloat(m.scoreA) || 0;
+                var sB = parseFloat(m.scoreB) || 0;
+                if (sA > sB) return m.teamA;
+                if (sB > sA) return m.teamB;
             }
             return '';
         }
+
+        function matchHTML(match, roundNum) {
+            var sA = parseFloat(match.scoreA) || 0;
+            var sB = parseFloat(match.scoreB) || 0;
+            var hasScores = sA > 0 || sB > 0;
+            var tA = match.teamA || '';
+            var tB = match.teamB || '';
+            var eA = tA === '' ? ' empty' : '';
+            var eB = tB === '' ? ' empty' : '';
+            var wA = hasScores && isWinner(tA, match) ? ' winner' : '';
+            var wB = hasScores && isWinner(tB, match) ? ' winner' : '';
+            var dSA = match.scoreA !== '' ? match.scoreA : '-';
+            var dSB = match.scoreB !== '' ? match.scoreB : '-';
+
+            return '<div class="match-box">' +
+                '<div class="match-player' + eA + wA + '"><span class="p-name">' + (tA || 'TBD') + '</span><span class="p-score">' + (tA === '' ? '-' : dSA) + '</span></div>' +
+                '<div class="match-player' + eB + wB + '"><span class="p-name">' + (tB || 'TBD') + '</span><span class="p-score">' + (tB === '' ? '-' : dSB) + '</span></div>' +
+                '</div>';
+        }
+
+        /*
+         * Render bracket with SVG connector lines.
+         *
+         * Layout structure:
+         *   [Round 1: 4 matches in 2 pairs] --[SVG connectors]-- [Round 2: 2 matches in 1 pair] --[SVG connectors]-- [Round 3: 1 match] -- [Champion]
+         *
+         * Each "pair" in round 1 has 2 match boxes stacked vertically.
+         * SVG draws a "[" shape from the right side of each match box to the center,
+         * then connects to the left side of the round 2 match box.
+         */
 
         function renderBracketHTML(data) {
             var round1 = data.round1;
             var round2 = data.round2;
             var round3 = data.round3;
-            var championName = getChampionName(round1, round2, round3);
-
-            function matchHTML(match, roundNum) {
-                var scoreA = parseFloat(match.scoreA) || 0;
-                var scoreB = parseFloat(match.scoreB) || 0;
-                var hasScores = scoreA > 0 || scoreB > 0;
-                var teamA = match.teamA || '';
-                var teamB = match.teamB || '';
-                var emptyClassA = teamA === '' ? ' empty' : '';
-                var emptyClassB = teamB === '' ? ' empty' : '';
-                var winnerA = hasScores ? (isWinner(teamA, match) ? ' winner' : '') : '';
-                var winnerB = hasScores ? (isWinner(teamB, match) ? ' winner' : '') : '';
-                var championA = hasScores && isChampion(teamA, match) ? ' champion' : '';
-                var championB = hasScores && isChampion(teamB, match) ? ' champion' : '';
-
-                function isChampion(name, mtch) {
-                    if (roundNum !== 3 || name === '') return false;
-                    return name === championName;
-                }
-
-                var displayScoreA = match.scoreA !== '' ? match.scoreA : '-';
-                var displayScoreB = match.scoreB !== '' ? match.scoreB : '-';
-
-                return '<div class="bracket-match' + (roundNum === 3 && hasScores ? ' champion-match' : '') + '">' +
-                    '<div class="match-player' + emptyClassA + winnerA + championA + '">' +
-                    '<span class="player-name">' + (teamA || 'TBD') + '</span>' +
-                    '<span class="player-score">' + (teamA === '' ? '-' : displayScoreA) + '</span>' +
-                    '</div>' +
-                    '<div class="match-player' + emptyClassB + winnerB + championB + '">' +
-                    '<span class="player-name">' + (teamB || 'TBD') + '</span>' +
-                    '<span class="player-score">' + (teamB === '' ? '-' : displayScoreB) + '</span>' +
-                    '</div>' +
-                    '</div>';
-            }
-
-            function connectorPairHTML() {
-                return '<div class="connector-bracket-pair">' +
-                    '<div class="c-bracket-top"></div>' +
-                    '<div class="c-bracket-bottom"></div>' +
-                    '<div class="c-bracket-mid"></div>' +
-                    '</div>';
-            }
-
-            function championConnectorHTML() {
-                return '<div class="connector-bracket-pair">' +
-                    '<div class="c-bracket-top" style="top:25%;bottom:50%"></div>' +
-                    '<div class="c-bracket-bottom" style="top:50%;bottom:25%"></div>' +
-                    '<div class="c-bracket-mid"></div>' +
-                    '</div>';
-            }
+            var championName = getChampionName(round3);
 
             var html = '<div class="bracket-wrapper"><div class="bracket">';
 
+            // ---- ROUND 1 ----
             html += '<div class="bracket-round">';
             html += '<div class="bracket-round-label">TỨ KẾT</div>';
-            html += '<div class="bracket-matches">';
-            round1.forEach(function(m) {
-                html += matchHTML(m, 1);
-            });
-            html += '</div></div>';
 
-            html += '<div class="round1-round2-connectors">';
-            connectorPairHTML();
-            connectorPairHTML();
+            // Pair 1: matches 0,1 → feeds into round2[0]
+            html += '<div class="match-pair">';
+            html += matchHTML(round1[0] || {teamA:'',scoreA:'',teamB:'',scoreB:''}, 1);
+            html += matchHTML(round1[1] || {teamA:'',scoreA:'',teamB:'',scoreB:''}, 1);
             html += '</div>';
 
+            // Pair 2: matches 2,3 → feeds into round2[1]
+            html += '<div class="match-pair">';
+            html += matchHTML(round1[2] || {teamA:'',scoreA:'',teamB:'',scoreB:''}, 1);
+            html += matchHTML(round1[3] || {teamA:'',scoreA:'',teamB:'',scoreB:''}, 1);
+            html += '</div>';
+
+            html += '</div>'; // end round1
+
+            // ---- SVG CONNECTORS: Round1 → Round2 ----
+            html += '<div class="bracket-svg-container">';
+            html += '<svg viewBox="0 0 40 300" preserveAspectRatio="none" style="height:100%;">';
+            // Pair 1 bracket: from match 0 & 1 to center
+            // Top line from match0 right-middle going right, then down to center
+            html += '<line x1="0" y1="37.5" x2="15" y2="37.5" stroke="#94a3b8" stroke-width="2"/>';
+            html += '<line x1="15" y1="37.5" x2="15" y2="75" stroke="#94a3b8" stroke-width="2"/>';
+            html += '<line x1="15" y1="75" x2="40" y2="75" stroke="#94a3b8" stroke-width="2"/>';
+            // Bottom line from match1 right-middle going right, then up to center
+            html += '<line x1="0" y1="112.5" x2="15" y2="112.5" stroke="#94a3b8" stroke-width="2"/>';
+            html += '<line x1="15" y1="112.5" x2="15" y2="75" stroke="#94a3b8" stroke-width="2"/>';
+            // Pair 2 bracket
+            html += '<line x1="0" y1="187.5" x2="15" y2="187.5" stroke="#94a3b8" stroke-width="2"/>';
+            html += '<line x1="15" y1="187.5" x2="15" y2="225" stroke="#94a3b8" stroke-width="2"/>';
+            html += '<line x1="15" y1="225" x2="40" y2="225" stroke="#94a3b8" stroke-width="2"/>';
+            html += '<line x1="0" y1="262.5" x2="15" y2="262.5" stroke="#94a3b8" stroke-width="2"/>';
+            html += '<line x1="15" y1="262.5" x2="15" y2="225" stroke="#94a3b8" stroke-width="2"/>';
+            html += '</svg>';
+            html += '</div>';
+
+            // ---- ROUND 2 ----
             html += '<div class="bracket-round">';
             html += '<div class="bracket-round-label">BÁN KẾT</div>';
-            html += '<div class="bracket-matches">';
-            round2.forEach(function(m) {
-                html += matchHTML(m, 2);
-            });
-            html += '</div></div>';
 
-            html += '<div class="round1-round2-connectors">';
-            championConnectorHTML();
+            // Pair: matches 0,1 → feeds into round3[0]
+            html += '<div class="match-pair single">';
+            html += matchHTML(round2[0] || {teamA:'',scoreA:'',teamB:'',scoreB:''}, 2);
+            html += matchHTML(round2[1] || {teamA:'',scoreA:'',teamB:'',scoreB:''}, 2);
             html += '</div>';
 
+            html += '</div>'; // end round2
+
+            // ---- SVG CONNECTORS: Round2 → Round3 ----
+            html += '<div class="bracket-svg-container">';
+            html += '<svg viewBox="0 0 40 150" preserveAspectRatio="none" style="height:100%;">';
+            // Pair 1 bracket
+            html += '<line x1="0" y1="37.5" x2="15" y2="37.5" stroke="#94a3b8" stroke-width="2"/>';
+            html += '<line x1="15" y1="37.5" x2="15" y2="75" stroke="#94a3b8" stroke-width="2"/>';
+            html += '<line x1="15" y1="75" x2="40" y2="75" stroke="#94a3b8" stroke-width="2"/>';
+            html += '<line x1="0" y1="112.5" x2="15" y2="112.5" stroke="#94a3b8" stroke-width="2"/>';
+            html += '<line x1="15" y1="112.5" x2="15" y2="75" stroke="#94a3b8" stroke-width="2"/>';
+            html += '</svg>';
+            html += '</div>';
+
+            // ---- ROUND 3 (CHUNG KẾT) ----
             html += '<div class="bracket-round">';
-            html += '<div class="bracket-round-label">CHUNG KẾT</div>';
-            html += '<div class="bracket-matches">';
-            round3.forEach(function(m) {
-                html += matchHTML(m, 3);
-            });
-            html += '</div>';
-            if (championName) {
-                html += '<div class="champion-crown"><div class="crown-icon">👑</div><div class="crown-text">' + championName + '</div></div>';
+            html += '<div class="bracket-round-label ck-label">CHUNG KẾT</div>';
+
+            html += '<div class="match-pair single" style="flex:1;">';
+            if (round3.length > 0) {
+                var m = round3[0];
+                var sA = parseFloat(m.scoreA) || 0;
+                var sB = parseFloat(m.scoreB) || 0;
+                var hasScores = sA > 0 || sB > 0;
+                var tA = m.teamA || '';
+                var tB = m.teamB || '';
+                var wA = hasScores && isWinner(tA, m) ? ' winner' : '';
+                var wB = hasScores && isWinner(tB, m) ? ' winner' : '';
+                var cA = tA === championName && hasScores ? ' champion' : '';
+                var cB = tB === championName && hasScores ? ' champion' : '';
+                var dSA = m.scoreA !== '' ? m.scoreA : '-';
+                var dSB = m.scoreB !== '' ? m.scoreB : '-';
+
+                html += '<div class="match-box champion-box">';
+                html += '<div class="match-player' + (tA === '' ? ' empty' : '') + wA + cA + '"><span class="p-name">' + (tA || 'TBD') + '</span><span class="p-score">' + (tA === '' ? '-' : dSA) + '</span></div>';
+                html += '<div class="match-player' + (tB === '' ? ' empty' : '') + wB + cB + '"><span class="p-name">' + (tB || 'TBD') + '</span><span class="p-score">' + (tB === '' ? '-' : dSB) + '</span></div>';
+                html += '</div>';
+            } else {
+                html += '<div class="match-box"><div class="match-player empty"><span class="p-name">TBD</span><span class="p-score">-</span></div><div class="match-player empty"><span class="p-name">TBD</span><span class="p-score">-</span></div></div>';
             }
             html += '</div>';
 
-            html += '</div></div>';
+            html += '</div>'; // end round3
+
+            // ---- CHAMPION SECTION ----
+            html += '<div class="champion-section">';
+            if (championName) {
+                html += '<div class="champion-badge">';
+                html += '<span class="crown">👑</span>';
+                html += '<span class="champ-name">' + championName + '</span>';
+                html += '<span class="champ-label">Vô địch</span>';
+                html += '</div>';
+            } else {
+                html += '<div class="champion-badge" style="opacity:0.4;">';
+                html += '<span class="crown"></span>';
+                html += '<span class="champ-name">?</span>';
+                html += '<span class="champ-label">Vô địch</span>';
+                html += '</div>';
+            }
+            html += '</div>';
+
+            html += '</div></div>'; // end bracket, wrapper
 
             return html;
         }
 
         async function loadAllData() {
+            // Bảng A-D
             var sheetNames = ['A', 'B', 'C', 'D'];
             var titles = ['Bảng A', 'Bảng B', 'Bảng C', 'Bảng D'];
             var dotClasses = ['dot-a', 'dot-b', 'dot-c', 'dot-d'];
-
             var bangnhomContainer = document.getElementById('bangnhom-container');
             var bangnhomHTML = '';
 
-            var results = await Promise.all(
-                sheetNames.map(function(name) { return fetchSheetData(name, 'F1:H5'); })
-            );
-
+            var results = await Promise.all(sheetNames.map(function(name) { return fetchSheetData(name, 'F1:H5'); }));
             results.forEach(function(data, idx) {
-                if (data) {
-                    bangnhomHTML += renderStandingsTable(data, titles[idx], dotClasses[idx]);
-                } else {
-                    bangnhomHTML += '<div class="card"><div class="card-title"><span class="icon"><span class="group-dot ' + dotClasses[idx] + '"></span></span>' + titles[idx] + '</div><div class="error-msg">Không thể tải dữ liệu</div></div>';
-                }
+                if (data) bangnhomHTML += renderStandingsTable(data, titles[idx], dotClasses[idx]);
+                else bangnhomHTML += '<div class="card"><div class="card-title"><span class="icon"><span class="group-dot ' + dotClasses[idx] + '"></span></span>' + titles[idx] + '</div><div class="error-msg">Không thể tải dữ liệu</div></div>';
             });
             bangnhomContainer.innerHTML = bangnhomHTML;
 
+            // Vòng bảng
             var rangesBang = [
-                { range: 'A1:h8', title: 'BẢNG A' },
-                { range: 'A10:h17', title: 'BẢNG B' },
-                { range: 'A19:h26', title: 'BẢNG C' },
-                { range: 'A28:h35', title: 'BẢNG D' }
+                { range: 'A1:h8', title: 'BẢNG A' }, { range: 'A10:h17', title: 'BẢNG B' },
+                { range: 'A19:h26', title: 'BẢNG C' }, { range: 'A28:h35', title: 'BẢNG D' }
             ];
-
             var vongbangContainer = document.getElementById('vongbang-container');
             var vongbangHTML = '';
-
-            var bangResults = await Promise.all(
-                rangesBang.map(function(r) { return fetchSheetData('bang', r.range); })
-            );
-
-            bangResults.forEach(function(data, idx) {
-                if (data) {
-                    vongbangHTML += renderMatchTable(data, rangesBang[idx].title);
-                }
-            });
+            var bangResults = await Promise.all(rangesBang.map(function(r) { return fetchSheetData('bang', r.range); }));
+            bangResults.forEach(function(data, idx) { if (data) vongbangHTML += renderMatchTable(data, rangesBang[idx].title); });
             vongbangContainer.innerHTML = vongbangHTML || '<div class="error-msg">Không thể tải dữ liệu vòng bảng</div>';
 
+            // Tứ kết
             var rangesTuKet = [
-                { range: 'A2:g3', title: 'Tứ kết 1' },
-                { range: 'A5:g6', title: 'Tứ kết 2' },
-                { range: 'A8:g9', title: 'Tứ kết 3' },
-                { range: 'A11:g12', title: 'Tứ kết 4' }
+                { range: 'A2:g3', title: 'Tứ kết 1' }, { range: 'A5:g6', title: 'Tứ kết 2' },
+                { range: 'A8:g9', title: 'Tứ kết 3' }, { range: 'A11:g12', title: 'Tứ kết 4' }
             ];
-
             var tuketContainer = document.getElementById('tuket-container');
             var tuketHTML = '';
-
-            var tuketResults = await Promise.all(
-                rangesTuKet.map(function(r) { return fetchSheetData('1.8', r.range); })
-            );
-
-            tuketResults.forEach(function(data, idx) {
-                if (data) {
-                    tuketHTML += renderMatchTable(data, rangesTuKet[idx].title);
-                }
-            });
+            var tuketResults = await Promise.all(rangesTuKet.map(function(r) { return fetchSheetData('1.8', r.range); }));
+            tuketResults.forEach(function(data, idx) { if (data) tuketHTML += renderMatchTable(data, rangesTuKet[idx].title); });
             tuketContainer.innerHTML = tuketHTML || '<div class="error-msg">Không thể tải dữ liệu tứ kết</div>';
 
+            // Bán kết
             var rangesBanKet = [
-                { range: 'A3:f4', title: 'Bán kết 1' },
-                { range: 'A6:f7', title: 'Bán kết 2' }
+                { range: 'A3:f4', title: 'Bán kết 1' }, { range: 'A6:f7', title: 'Bán kết 2' }
             ];
-
             var banketContainer = document.getElementById('banket-container');
             var banketHTML = '';
-
-            var banketResults = await Promise.all(
-                rangesBanKet.map(function(r) { return fetchSheetData('bk', r.range); })
-            );
-
-            banketResults.forEach(function(data, idx) {
-                if (data) {
-                    banketHTML += renderMatchTable(data, rangesBanKet[idx].title);
-                }
-            });
+            var banketResults = await Promise.all(rangesBanKet.map(function(r) { return fetchSheetData('bk', r.range); }));
+            banketResults.forEach(function(data, idx) { if (data) banketHTML += renderMatchTable(data, rangesBanKet[idx].title); });
             banketContainer.innerHTML = banketHTML || '<div class="error-msg">Không thể tải dữ liệu bán kết</div>';
 
+            // Chung kết
             var ckContainer = document.getElementById('chungket-container');
             var ckData = await fetchSheetData('ck', 'A3:e4');
             if (ckData) {
                 var ckHTML = renderMatchTable(ckData, 'Chung Kết');
-                if (ckHTML) {
-                    ckContainer.innerHTML = ckHTML;
-                } else {
-                    ckContainer.innerHTML = '<div class="error-msg">Chưa có dữ liệu chung kết</div>';
-                }
+                ckContainer.innerHTML = ckHTML || '<div class="error-msg">Chưa có dữ liệu chung kết</div>';
             } else {
                 ckContainer.innerHTML = '<div class="error-msg">Không thể tải dữ liệu chung kết</div>';
             }
 
-            // SODO - Bracket visualization
+            // SODO
             var sodoContainer = document.getElementById('sodo-bracket-container');
             var sodoTableContainer = document.getElementById('sodo-table-container');
             var sodoData = await fetchSheetData('sodo', 'A1:H30');
@@ -1360,7 +1159,6 @@
                 } else {
                     sodoContainer.innerHTML = '<div class="error-msg">Chưa có dữ liệu sơ đồ</div>';
                 }
-
                 sodoTableContainer.innerHTML = renderSodoTable(sodoData);
             } else {
                 sodoContainer.innerHTML = '<div class="error-msg">Không thể tải dữ liệu sơ đồ</div>';
