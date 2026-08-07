@@ -585,7 +585,7 @@
                     seriaHTML += `<div class="round-section"><div class="round-header">🔵 ${round.title}</div>${renderMatchTable(data, round.title, 'blue')}</div>`;
                 }
             }
-            let sodoAData = await fetchSheetData('sodo A', 'A1:Z50');
+            let sodoAData = await fetchSheetData('sodo A', 'A1:b5');
             if (sodoAData) seriaHTML += `<div class="round-section">${renderSodoTable(sodoAData, 'blue')}</div>`;
             seriaContainer.innerHTML = seriaHTML || '<div class="error-msg">Chưa có dữ liệu Seri A</div>';
 
@@ -605,7 +605,7 @@
                     seribHTML += `<div class="round-section"><div class="round-header">🔴 ${round.title}</div>${renderMatchTable(data, round.title, 'red')}</div>`;
                 }
             }
-            let sodoBData = await fetchSheetData('sodo B', 'A1:Z50');
+            let sodoBData = await fetchSheetData('sodo B', 'A1:b5');
             if (sodoBData) seribHTML += `<div class="round-section">${renderSodoTable(sodoBData, 'red')}</div>`;
             seribContainer.innerHTML = seribHTML || '<div class="error-msg">Chưa có dữ liệu Seri B</div>';
 
