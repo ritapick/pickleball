@@ -43,6 +43,7 @@
             position: relative;
             overflow: hidden;
             box-shadow: 0 4px 20px rgba(26, 86, 219, 0.3);
+            cursor: pointer;
         }
 
         .header::before {
@@ -52,12 +53,30 @@
             width: 200%; height: 200%;
             background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 60%);
             animation: shimmer 8s ease-in-out infinite;
+            z-index: 0;
         }
 
         @keyframes shimmer {
             0%, 100% { transform: translate(0, 0); }
             50% { transform: translate(20%, 10%); }
         }
+
+        /* === LINK BANNER - MỚI THÊM === */
+        .header-link {
+            display: block;
+            color: white;
+            text-decoration: none;
+            position: relative;
+            z-index: 1;
+            transition: opacity 0.2s ease;
+        }
+
+        .header-link:hover {
+            color: white;
+            text-decoration: none;
+            opacity: 0.92;
+        }
+        /* === END LINK BANNER === */
 
         .header h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px; position: relative; z-index: 1; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
         .header .subtitle { font-size: 0.8rem; opacity: 0.85; margin-top: 4px; font-weight: 500; position: relative; z-index: 1; }
@@ -310,16 +329,17 @@
             gap: 8px;
         }
 
-        /* Cell with custom color from sheet */
         .cell-custom-bg { background-color: inherit; }
         .cell-custom-color { color: inherit; }
     </style>
 </head>
 <body>
     <div class="header">
-        <div class="ball-icon">🎾</div>
-        <h1>DTD PICKLEBALL TOURNAMENT</h1>
-        <div class="subtitle">Giải đấu PICKLEBALL - Trình 5.25</div>
+        <a href="https://ritapick.github.io/pickleball/" class="header-link">
+            <div class="ball-icon">🎾</div>
+            <h1>DTD PICKLEBALL TOURNAMENT</h1>
+            <div class="subtitle">Giải đấu PICKLEBALL - Trình 5.25</div>
+        </a>
     </div>
 
     <div class="tabs-container">
@@ -415,11 +435,9 @@
         function renderStandingsTable(data, title, dotClass, colorTheme) {
             if (!data || !data.rows || data.rows.length === 0) return '';
             
-            // Filter empty rows
             const filteredRows = data.rows.filter(row => row.some(cell => cell.value && cell.value.toString().trim() !== ''));
             if (filteredRows.length === 0) return '';
 
-            // Get headers from first row (if they look like headers)
             const firstRow = filteredRows[0];
             const isHeaderRow = firstRow.some(cell => {
                 const val = cell.value.toString().toLowerCase();
@@ -428,22 +446,19 @@
 
             let html = `<div class="card"><div class="card-title ${colorTheme}"><span class="icon ${colorTheme}"><span class="group-dot ${dotClass}"></span></span>${title}</div><table><thead><tr>`;
 
-            // Render headers
             if (isHeaderRow) {
                 firstRow.forEach(cell => {
                     html += `<th class="${colorTheme === 'red' ? 'red' : 'blue'}">${cell.value || '-'}</th>`;
                 });
                 html += '</tr></thead><tbody>';
-                filteredRows.shift(); // Remove header row
+                filteredRows.shift();
             } else {
-                // Default headers
                 ['Đội', 'Điểm', 'Hệ số'].forEach(h => {
                     html += `<th class="${colorTheme === 'red' ? 'red' : 'blue'}">${h}</th>`;
                 });
                 html += '</tr></thead><tbody>';
             }
 
-            // Render data rows
             filteredRows.forEach(row => {
                 html += '<tr>';
                 row.forEach((cell, i) => {
@@ -473,7 +488,6 @@
             const thClass = colorTheme === 'red' ? 'red' : 'blue';
             let html = `<div class="card"><div class="card-title ${colorTheme}"><span class="icon ${colorTheme}">🏆</span>${title}</div><table><thead><tr>`;
 
-            // Assume first row is headers
             const firstRow = filteredRows[0];
             firstRow.forEach(cell => {
                 html += `<th class="${thClass}">${cell.value || '-'}</th>`;
@@ -506,7 +520,6 @@
                 <div class="card-title ${colorTheme}"><span class="icon ${colorTheme}">📋</span>BẢNG THÀNH TÍCH</div>
                 <table class="sodo-table"><thead><tr>`;
 
-            // First row as headers
             const firstRow = filteredRows[0];
             firstRow.forEach(cell => {
                 const bgStyle = !isDefaultColor(cell.bg) ? `background-color: ${cell.bg};` : '';
