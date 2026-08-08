@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DTD TOURNAMENT CUP - Giải Pickleball</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500;600;700&family=Anton&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-green: #00d26a;
+            --dark-green: #007a3d;
+            --neon-green: #39ff14;
+            --accent-orange: #ff6b1a;
+            --accent-yellow: #ffd23f;
+            --dark-bg: #0a0e1a;
+            --card-bg: rgba(10, 14, 26, 0.75);
+            --white: #ffffff;
+            --text-light: #e5e7eb;
+        }
+
+        body {
+            font-family: 'Oswald', sans-serif;
+            background: var(--dark-bg);
+            color: var(--white);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Background */
+        .bg-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-image: url('https://oaid.opalplatform.com/image/fetch/f_auto,q_auto/https://storage.googleapis.com/opal-platform-prod/images/5d82d20d-7f63-483d-9f03-9b83e44b2a5b.png');
+            background-size: cover;
+            background-position: center;
+            z-index: -2;
+            animation: bgZoom 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes bgZoom {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+
+        .bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(0, 210, 106, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255, 107, 26, 0.15) 0%, transparent 50%),
+                linear-gradient(135deg, rgba(10, 14, 26, 0.85) 0%, rgba(10, 14, 26, 0.6) 100%);
+            z-index: -1;
+        }
+
+        /* Diagonal stripes pattern */
+        .stripes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200%;
+            height: 100%;
+            background-image: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 50px,
+                rgba(0, 210, 106, 0.03) 50px,
+                rgba(0, 210, 106, 0.03) 100px
+            );
+            z-index: -1;
+            animation: stripeMove 30s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes stripeMove {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100px); }
+        }
+
+        /* Hero Container */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            position: relative;
+            text-align: center;
+        }
+
+        /* Top Badge */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 210, 106, 0.15);
+            border: 1px solid rgba(0, 210, 106, 0.4);
+            backdrop-filter: blur(10px);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--neon-green);
+            margin-bottom: 30px;
+            animation: fadeInDown 1s ease;
+        }
+
+        .badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--neon-green);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--neon-green);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.3); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Title 2 Lines */
+        .title-container {
+            margin-bottom: 50px;
+            animation: fadeInUp 1.2s ease;
+        }
+
+        .title-line-1 {
+            font-family: 'Oswald', sans-serif;
+            font-size: clamp(2rem, 7vw, 5rem);
+            font-weight: 700;
+            letter-spacing: 8px;
+            color: var(--white);
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            line-height: 1;
+            text-shadow: 
+                0 0 20px rgba(255, 255, 255, 0.3),
+                0 4px 20px rgba(0, 0, 0, 0.8);
+        }
+
+        .title-line-1 .highlight {
+            color: var(--accent-yellow);
+            position: relative;
+            display: inline-block;
+        }
+
+        .title-line-1 .highlight::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--accent-yellow);
+            transform: skewX(-20deg);
+        }
+
+        .title-line-2 {
+            font-family: 'Anton', sans-serif;
+            font-size: clamp(3rem, 12vw, 9rem);
+            font-weight: 400;
+            letter-spacing: 4px;
+            line-height: 0.9;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--neon-green) 50%, var(--accent-yellow) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            filter: drop-shadow(0 0 30px rgba(0, 210, 106, 0.5));
+        }
+
+        .title-line-2 .cup {
+            background: linear-gradient(135deg, var(--accent-orange) 0%, var(--accent-yellow) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Countdown */
+        .countdown-container {
+            margin-bottom: 50px;
+            animation: fadeIn 1.5s ease;
+        }
+
+        .countdown-label {
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            color: var(--text-light);
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+
+        .countdown {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .countdown-item {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 210, 106, 0.3);
+            border-radius: 16px;
+            padding: 20px 16px;
+            min-width: 90px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .countdown-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-green), var(--neon-green), var(--accent-yellow));
+        }
+
+        .countdown-item:hover {
+            transform: translateY(-5px);
+            border-color: var(--neon-green);
+            box-shadow: 
+                0 15px 40px rgba(0, 210, 106, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .countdown-number {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 400;
+            line-height: 1;
+            background: linear-gradient(180deg, var(--white) 0%, var(--text-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: block;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        }
+
+        .countdown-unit {
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--neon-green);
+            margin-top: 8px;
+            display: block;
+        }
+
+        /* Location */
+        .location-container {
+            animation: fadeIn 1.8s ease;
+        }
+
+        .location-box {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 24px 32px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .location-box:hover {
+            transform: scale(1.02);
+            border-color: var(--accent-orange);
+            box-shadow: 0 15px 50px rgba(255, 107, 26, 0.2);
+        }
+
+        .location-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 107, 26, 0.1) 0%, transparent 70%);
+            animation: shimmer 8s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(30%, 30%); }
+        }
+
+        .location-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--accent-orange), var(--accent-yellow));
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            flex-shrink: 0;
+            box-shadow: 0 8px 20px rgba(255, 107, 26, 0.4);
+            position: relative;
+            z-index: 1;
+        }
+
+        .location-info {
+            text-align: left;
+            position: relative;
+            z-index: 1;
+        }
+
+        .location-label {
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--accent-yellow);
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+        .location-name {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--white);
+            letter-spacing: 1px;
+        }
+
+        .location-sub {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-top: 2px;
+            font-weight: 400;
+            opacity: 0.8;
+        }
+
+        /* CTA Button */
+        .cta-container {
+            margin-top: 40px;
+            animation: fadeIn 2s ease;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--dark-green) 100%);
+            color: var(--white);
+            padding: 16px 36px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 10px 30px rgba(0, 210, 106, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 
+                0 15px 40px rgba(0, 210, 106, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .cta-button:active {
+            transform: translateY(-1px);
+        }
+
+        .cta-button span {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Decorative Pickleball */
+        .pickleball-decor {
+            position: absolute;
+            font-size: 4rem;
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .pickleball-decor.top-left {
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+
+        .pickleball-decor.top-right {
+            top: 15%;
+            right: 8%;
+            animation-delay: 2s;
+        }
+
+        .pickleball-decor.bottom-left {
+            bottom: 15%;
+            left: 8%;
+            animation-delay: 4s;
+        }
+
+        .pickleball-decor.bottom-right {
+            bottom: 10%;
+            right: 5%;
+            animation-delay: 1s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .countdown {
+                gap: 8px;
+            }
+            
+            .countdown-item {
+                min-width: 70px;
+                padding: 16px 10px;
+                border-radius: 12px;
+            }
+            
+            .countdown-unit {
+                letter-spacing: 2px;
+                font-size: 0.65rem;
+            }
+            
+            .location-box {
+                padding: 20px;
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .location-info {
+                text-align: center;
+            }
+            
+            .title-line-1 {
+                letter-spacing: 4px;
+            }
+            
+            .title-line-2 {
+                letter-spacing: 2px;
+            }
+            
+            .badge {
+                font-size: 0.7rem;
+                letter-spacing: 2px;
+                padding: 6px 16px;
+            }
+            
+            .countdown-label {
+                letter-spacing: 3px;
+                font-size: 0.8rem;
+            }
+            
+            .pickleball-decor {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .countdown-item {
+                min-width: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-layer"></div>
+    <div class="bg-overlay"></div>
+    <div class="stripes"></div>
+
+    <!-- Decorative Pickleballs -->
+    <div class="pickleball-decor top-left">🎾</div>
+    <div class="pickleball-decor top-right">🏓</div>
+    <div class="pickleball-decor bottom-left">🏓</div>
+    <div class="pickleball-decor bottom-right">🎾</div>
+
+    <section class="hero">
+        <!-- Badge -->
+        <div class="badge">
+            <span>12 Tháng 8 Năm 2026</span>
+        </div>
+
+        <!-- Title 2 Lines -->
+        <div class="title-container">
+            <div class="title-line-1">
+                Giải <span class="highlight">Pickleball</span>
+            </div>
+            <div class="title-line-2">
+                DTD <span class="cup">Tournament Cup</span>
+            </div>
+        </div>
+
+        <!-- Countdown -->
+        <div class="countdown-container">
+            <div class="countdown-label">⚡ Đếm ngược đến ngày khai mạc ⚡</div>
+            <div class="countdown" id="countdown">
+                <div class="countdown-item">
+                    <span class="countdown-number" id="days">00</span>
+                    <span class="countdown-unit">Ngày</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number" id="hours">00</span>
+                    <span class="countdown-unit">Giờ</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number" id="minutes">00</span>
+                    <span class="countdown-unit">Phút</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number" id="seconds">00</span>
+                    <span class="countdown-unit">Giây</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Location -->
+        <div class="location-container">
+            <div class="location-box">
+                <div class="location-icon">📍</div>
+                <div class="location-info">
+                    <div class="location-label">Địa điểm tổ chức</div>
+                    <div class="location-name">CLB PICKLEBALL LEGO</div>
+                    <div class="location-sub">Đức Trọng, Lâm Đồng</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA Button -->
+        <div class="cta-container">
+            <a href="#register" class="cta-button">
+                <span>Đăng ký tham gia</span>
+                <span>→</span>
+            </a>
+        </div>
+    </section>
+
+    <script>
+        // Target date: 12/8/2026 (August 12, 2026)
+        const targetDate = new Date('2026-08-12T00:00:00').getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            if (distance < 0) {
+                document.getElementById('countdown').innerHTML = 
+                    '<div style="font-size: 2rem; color: var(--neon-green);">🏆 GIẢI ĐẤU ĐÃ BẮT ĐẦU! 🏆</div>';
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Add leading zero
+            const pad = (n) => n < 10 ? '0' + n : n;
+
+            // Update with animation
+            updateNumber('days', pad(days));
+            updateNumber('hours', pad(hours));
+            updateNumber('minutes', pad(minutes));
+            updateNumber('seconds', pad(seconds));
+        }
+
+        function updateNumber(id, value) {
+            const element = document.getElementById(id);
+            if (element.textContent !== value) {
+                element.style.transform = 'scale(1.1)';
+                element.style.transition = 'transform 0.2s ease';
+                element.textContent = value;
+                setTimeout(() => {
+                    element.style.transform = 'scale(1)';
+                }, 200);
+            }
+        }
+
+        // Update every second
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+    </script>
+</body>
+</html>
