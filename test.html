@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DTD PICKLEBALL CUP 4.75</title>
+    <title>DTD PICKLEBALL CUP 5.25</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -24,9 +25,7 @@
             --text-secondary: #64748b;
             --border: #e2e8f0;
         }
-
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--bg);
@@ -34,23 +33,16 @@
             min-height: 100vh;
             overflow-x: hidden;
         }
-
         .header {
             background: linear-gradient(135deg, #3e4f3c 0%, #457d3e 50%, #309124 100%);
             color: white;
-            text-decoration: none;
-            display: block;
             padding: 20px 16px 16px;
             text-align: center;
             position: relative;
             overflow: hidden;
             box-shadow: 0 4px 20px rgba(26, 86, 219, 0.3);
             cursor: pointer;
-            transition: filter 0.2s ease;
         }
-
-        .header:hover { filter: brightness(1.05); }
-
         .header::before {
             content: '';
             position: absolute;
@@ -58,17 +50,24 @@
             width: 200%; height: 200%;
             background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 60%);
             animation: shimmer 8s ease-in-out infinite;
+            z-index: 0;
         }
-
         @keyframes shimmer {
             0%, 100% { transform: translate(0, 0); }
             50% { transform: translate(20%, 10%); }
         }
-
-        .header h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px; position: relative; z-index: 1; text-shadow: 0 2px 4px rgba(0,0,0,0.2); color: white; }
-        .header .subtitle { font-size: 0.8rem; opacity: 0.85; margin-top: 4px; font-weight: 500; position: relative; z-index: 1; color: white; }
+        .header-link {
+            display: block;
+            color: white;
+            text-decoration: none;
+            position: relative;
+            z-index: 1;
+            transition: opacity 0.2s ease;
+        }
+        .header-link:hover { color: white; text-decoration: none; opacity: 0.92; }
+        .header h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px; position: relative; z-index: 1; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .header .subtitle { font-size: 0.8rem; opacity: 0.85; margin-top: 4px; font-weight: 500; position: relative; z-index: 1; }
         .header .ball-icon { font-size: 2rem; margin-bottom: 4px; position: relative; z-index: 1; }
-
         .tabs-container {
             background: white;
             position: sticky;
@@ -77,7 +76,6 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.08);
             border-bottom: 1px solid var(--border);
         }
-
         .tabs {
             display: flex;
             overflow-x: auto;
@@ -87,7 +85,6 @@
             gap: 2px;
         }
         .tabs::-webkit-scrollbar { display: none; }
-
         .tab {
             flex: none;
             padding: 12px 14px;
@@ -103,10 +100,8 @@
             border-radius: 8px 8px 0 0;
             margin-bottom: -1px;
         }
-
         .tab:hover { color: var(--primary); background: rgba(26, 86, 219, 0.05); }
         .tab.active { color: var(--primary); background: rgba(26, 86, 219, 0.08); }
-
         .tab.active::after {
             content: '';
             position: absolute;
@@ -115,248 +110,52 @@
             background: var(--primary);
             border-radius: 3px 3px 0 0;
         }
-
-        .content {
-            padding: 16px;
-            padding-bottom: 32px;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
+        .content { padding: 16px; padding-bottom: 32px; max-width: 800px; margin: 0 auto; }
         .tab-content { display: none; animation: fadeIn 0.3s ease; }
         .tab-content.active { display: block; }
-
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
-        .section-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--text);
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
+        .section-title { font-size: 1.1rem; font-weight: 700; color: var(--text); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
         .section-title.seri-a { color: var(--seri-a); }
         .section-title.seri-b { color: var(--seri-b); }
-
-        .badge {
-            background: var(--primary);
-            color: white;
-            font-size: 0.65rem;
-            padding: 3px 8px;
-            border-radius: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
+        .badge { background: var(--primary); color: white; font-size: 0.65rem; padding: 3px 8px; border-radius: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
         .badge.a { background: var(--seri-a); }
         .badge.b { background: var(--seri-b); }
-
-        .card {
-            background: var(--card);
-            border-radius: 16px;
-            padding: 16px;
-            margin-bottom: 16px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-            border: 1px solid var(--border);
-            overflow-x: auto;
-        }
-
-        .card-title {
-            font-size: 0.95rem;
-            font-weight: 700;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+        .card { background: var(--card); border-radius: 16px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); border: 1px solid var(--border); overflow-x: auto; }
+        .card-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
         .card-title.blue { color: var(--primary-dark); }
         .card-title.red { color: var(--seri-b-dark); }
-
-        .card-title .icon {
-            width: 28px; height: 28px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 0.85rem;
-            font-weight: 800;
-        }
+        .card-title .icon { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.85rem; font-weight: 800; }
         .icon.blue { background: linear-gradient(135deg, var(--primary), var(--primary-light)); }
         .icon.red { background: linear-gradient(135deg, var(--seri-b), var(--seri-b-light)); }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.82rem;
-        }
-
-        table th {
-            color: white;
-            padding: 10px 8px;
-            text-align: center;
-            font-weight: 600;
-            font-size: 0.72rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            white-space: nowrap;
-        }
+        table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+        table th { color: white; padding: 10px 8px; text-align: center; font-weight: 600; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
         table th.blue { background: linear-gradient(135deg, #1e3a5f, #1a56db); }
         table th.red { background: linear-gradient(135deg, #7f1d1d, #dc2626); }
-
         table th:first-child { border-radius: 10px 0 0 0; text-align: left; padding-left: 12px; }
         table th:last-child { border-radius: 0 10px 0 0; }
-
-        table td {
-            padding: 10px 8px;
-            text-align: center;
-            border-bottom: 1px solid var(--border);
-            font-weight: 500;
-            transition: background 0.15s ease;
-        }
+        table td { padding: 10px 8px; text-align: center; border-bottom: 1px solid var(--border); font-weight: 500; transition: background 0.15s ease; }
         table td:first-child { text-align: left; padding-left: 12px; font-weight: 600; }
         table tr:last-child td:first-child { border-radius: 0 0 0 10px; }
         table tr:last-child td:last-child { border-radius: 0 0 10px 0; }
         table tr:hover td { background: rgba(26, 86, 219, 0.03); }
         table tr:nth-child(even) td { background: rgba(241, 245, 249, 0.5); }
-
         .points-cell { font-weight: 700; font-size: 0.9rem; }
         .points-cell.blue { color: var(--seri-a); }
         .points-cell.red { color: var(--seri-b); }
-
         .ratio-cell { color: var(--text-secondary); font-weight: 600; }
-
-        .loading {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 20px;
-            gap: 12px;
-        }
-        .spinner {
-            width: 36px; height: 36px;
-            border: 3px solid var(--border);
-            border-top-color: var(--primary);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
+        .loading { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; gap: 12px; }
+        .spinner { width: 36px; height: 36px; border: 3px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
         .loading-text { color: var(--text-secondary); font-size: 0.85rem; font-weight: 500; }
-
-        .error-msg {
-            background: #fef2f2;
-            border: 1px solid #fecaca;
-            color: #dc2626;
-            padding: 16px;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            text-align: center;
-            margin: 16px 0;
-        }
-
+        .error-msg { background: #fef2f2; border: 1px solid #fecaca; color: #dc2626; padding: 16px; border-radius: 12px; font-size: 0.85rem; text-align: center; margin: 16px 0; }
         .sodo-table { width: 100%; font-size: 0.7rem; border-collapse: collapse; }
-        .sodo-table td, .sodo-table th { 
-            padding: 6px 4px; 
-            text-align: center; 
-            border: 1px solid var(--border); 
-            font-weight: 500;
-        }
-        .sodo-table th { 
-            background: #1e3a5f !important; 
-            color: white !important; 
-            font-weight: 700; 
-            font-size: 0.65rem; 
-        }
-
-        /* Update bar styles */
-        .update-bar {
-            background: white;
-            border-bottom: 1px solid var(--border);
-            padding: 8px 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            position: sticky;
-            top: 41px;
-            z-index: 99;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-
-        .update-info {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .live-dot {
-            width: 8px;
-            height: 8px;
-            background: #10b981;
-            border-radius: 50%;
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.2); }
-        }
-
-        .refresh-btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            transition: all 0.2s ease;
-        }
-
-        .refresh-btn:hover {
-            background: var(--primary-dark);
-            transform: scale(1.05);
-        }
-
-        .refresh-btn:active {
-            transform: scale(0.95);
-        }
-
-        .refresh-btn.loading {
-            opacity: 0.7;
-            pointer-events: none;
-        }
-
-        .refresh-icon {
-            display: inline-block;
-            transition: transform 0.3s ease;
-        }
-
-        .refresh-btn.loading .refresh-icon {
-            animation: spin 0.8s linear infinite;
-        }
-
-        .update-time {
-            text-align: center;
-            font-size: 0.7rem;
-            color: var(--text-secondary);
-            padding: 16px;
-            font-weight: 500;
-        }
+        .sodo-table td, .sodo-table th { padding: 6px 4px; text-align: center; border: 1px solid var(--border); font-weight: 500; }
+        .sodo-table th { background: #1e3a5f !important; color: white !important; font-weight: 700; font-size: 0.65rem; }
+        .update-time { text-align: center; font-size: 0.7rem; color: var(--text-secondary); padding: 16px; font-weight: 500; }
         .update-time span { color: var(--primary); font-weight: 600; }
-
         @media (max-width: 480px) {
             .header h1 { font-size: 1.3rem; }
             .tab { padding: 10px 12px; font-size: 0.7rem; }
@@ -364,100 +163,46 @@
             .card { padding: 12px; border-radius: 12px; }
             table { font-size: 0.75rem; }
             table th, table td { padding: 8px 6px; }
-            .update-bar { top: 37px; padding: 6px 12px; }
         }
-
         .tab-group-label { display: flex; align-items: center; gap: 4px; }
         .group-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
         .dot-a { background: #3b82f6; }
         .dot-b { background: #ef4444; }
         .dot-c { background: #10b981; }
         .dot-d { background: #f59e0b; }
-
+        .dot-e { background: #8b5cf6; }
+        .dot-f { background: #ec4899; }
+        .dot-g { background: #f97316; }
+        .dot-h { background: #06b6d4; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .grid-2 .card { margin-bottom: 0; }
         @media (max-width: 640px) { .grid-2 { grid-template-columns: 1fr; } }
-
         .round-section { margin-bottom: 24px; padding-bottom: 16px; border-bottom: 2px dashed var(--border); }
         .round-section:last-child { border-bottom: none; }
-        .round-header {
-            font-size: 0.9rem;
-            font-weight: 800;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        /* Toast notification */
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: #1f2937;
-            color: white;
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            z-index: 1000;
-            opacity: 0;
-            transition: all 0.3s ease;
-        }
-
-        .toast.show {
-            transform: translateX(-50%) translateY(0);
-            opacity: 1;
-        }
-
-        .toast.success { background: #059669; }
-        .toast.error { background: #dc2626; }
+        .round-header { font-size: 0.9rem; font-weight: 800; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
     </style>
 </head>
 <body>
-    <a href="https://ritapick.github.io/pickleball/" rel="noopener" class="header">
-        <div class="ball-icon">🎾</div>
-        <h1>DTD PICKLEBALL TOURNAMENT</h1>
-        <div class="subtitle">Giải đấu PICKLEBALL - Trình 4.75</div>
-    </a>
+    <div class="header">
+        <a href="https://ritapick.github.io/pickleball/" class="header-link">
+            <div class="ball-icon">🎾</div>
+            <h1>DTD PICKLEBALL TOURNAMENT</h1>
+            <div class="subtitle">Giải đấu PICKLEBALL - Trình 5.25</div>
+        </a>
+    </div>
 
     <div class="tabs-container">
         <div class="tabs" id="tabs">
-            <button class="tab active" data-tab="bxh">
-                <span class="tab-group-label">🏆 Bảng Xếp Hạng</span>
-            </button>
-            <button class="tab" data-tab="vongbang">
-                <span class="tab-group-label">🏸 Vòng Bảng</span>
-            </button>
-            <button class="tab" data-tab="seria">
-                <span class="tab-group-label"><span class="group-dot dot-a"></span> Seri A</span>
-            </button>
-            <button class="tab" data-tab="serib">
-                <span class="tab-group-label"><span class="group-dot dot-b"></span> Seri B</span>
-            </button>
+            <button class="tab active" data-tab="bxh"><span class="tab-group-label">🏆 Bảng Xếp Hạng</span></button>
+            <button class="tab" data-tab="vongbang"><span class="tab-group-label">🏸 Vòng Bảng</span></button>
+            <button class="tab" data-tab="seria"><span class="tab-group-label"><span class="group-dot dot-a"></span> Seri A</span></button>
+            <button class="tab" data-tab="serib"><span class="tab-group-label"><span class="group-dot dot-b"></span> Seri B</span></button>
         </div>
-    </div>
-
-    <!-- Update Bar -->
-    <div class="update-bar">
-        <div class="update-info">
-            <div class="live-dot"></div>
-            <span id="update-status">Đang tải...</span>
-        </div>
-        <button class="refresh-btn" id="refresh-btn" onclick="manualRefresh()">
-            <span class="refresh-icon">🔄</span>
-            <span>Cập nhật</span>
-        </button>
     </div>
 
     <div class="content">
         <div class="tab-content active" id="tab-bxh">
-            <div class="section-title">Bảng thi đấu <span class="badge">4 Bảng</span></div>
+            <div class="section-title">Bảng thi đấu <span class="badge">8 Bảng</span></div>
             <div class="grid-2" id="bxh-container">
                 <div class="loading"><div class="spinner"></div><div class="loading-text">Đang tải dữ liệu...</div></div>
             </div>
@@ -487,403 +232,345 @@
         <div class="update-time" id="update-time"></div>
     </div>
 
-    <!-- Toast notification -->
-    <div class="toast" id="toast"></div>
-
     <script>
-        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzLGFpZlg9d5oM-ih-0t9s61_-ZK6sRMw5nhjqQJvbGhAAJ_9791CQv6AgD3KO7eTFfEQ/exec';
+        // ================== CẤU HÌNH ==================
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzkizSfp3gMbDqH97mqZ8Mea8Eyv3HyspuklANFHw12PGeLrwElMK82gar3xqMegBX1/exec'; // Thay bằng URL của bạn
+        const ACTIVE_REFRESH = 15000;  // 15 giây khi tab active
+        const IDLE_REFRESH = 60000;    // 60 giây khi tab inactive
         
-        // Cache variables
-        let cachedData = null;
-        let lastFetchTime = 0;
-        const CACHE_DURATION = 5000; // 5 giây (client cache)
-        let isLoading = false;
-        let pollingInterval = null;
-        let lastUpdateTime = null;
-        const POLLING_INTERVAL = 10000; // Poll mỗi 10 giây
+        // ================== STATE ==================
+        let APP_DATA = null;
+        let CURRENT_HASH = '';
+        let IS_LOADING = false;
+        let ACTIVE_TAB = 'bxh';
+        let REFRESH_TIMER = null;
+        let IS_PAGE_VISIBLE = !document.hidden;
+        
+        // ================== VISIBILITY API ==================
+        document.addEventListener('visibilitychange', () => {
+            IS_PAGE_VISIBLE = !document.hidden;
+            clearInterval(REFRESH_TIMER);
+            const interval = IS_PAGE_VISIBLE ? ACTIVE_REFRESH : IDLE_REFRESH;
+            REFRESH_TIMER = setInterval(fetchData, interval);
+        });
 
-        // Tab switching
+        // ================== TAB SWITCHING ==================
         document.querySelectorAll('.tab').forEach(tab => {
-            tab.addEventListener('click', async () => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.dataset.tab;
+                if (tabId === ACTIVE_TAB) return;
+                
                 document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
                 document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
                 tab.classList.add('active');
-                const tabId = 'tab-' + tab.dataset.tab;
-                document.getElementById(tabId).classList.add('active');
-                await loadTabData(tab.dataset.tab);
+                document.getElementById('tab-' + tabId).classList.add('active');
+                
+                ACTIVE_TAB = tabId;
+                
+                requestAnimationFrame(() => {
+                    renderCurrentTab();
+                });
             });
         });
 
-        // Show toast notification
-        function showToast(message, type = 'success') {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.className = `toast ${type} show`;
-            
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
-        }
-
-        // Update status display
-        function updateStatus(text, isUpdating = false) {
-            const statusEl = document.getElementById('update-status');
-            statusEl.textContent = text;
-            
-            const refreshBtn = document.getElementById('refresh-btn');
-            if (isUpdating) {
-                refreshBtn.classList.add('loading');
-            } else {
-                refreshBtn.classList.remove('loading');
-            }
-        }
-
-        // Format time ago
-        function formatTimeAgo(timestamp) {
-            const seconds = Math.floor((Date.now() - timestamp) / 1000);
-            if (seconds < 5) return 'Vừa xong';
-            if (seconds < 60) return `${seconds} giây trước`;
-            const minutes = Math.floor(seconds / 60);
-            return `${minutes} phút trước`;
-        }
-
-        // Manual refresh
-        async function manualRefresh() {
-            if (isLoading) return;
-            
-            cachedData = null;
-            lastFetchTime = 0;
-            await refreshCurrentTab(true);
-            showToast('✓ Đã cập nhật dữ liệu mới!', 'success');
-        }
-
-        // Fetch all data
-        async function fetchAllData(forceRefresh = false) {
-            const now = Date.now();
-            
-            if (!forceRefresh && cachedData && (now - lastFetchTime < CACHE_DURATION)) {
-                return cachedData;
-            }
-            
-            if (isLoading) {
-                while (isLoading) {
-                    await new Promise(resolve => setTimeout(resolve, 100));
-                }
-                return cachedData;
-            }
-            
-            isLoading = true;
-            updateStatus('Đang cập nhật...', true);
+        // ================== FETCH DATA ==================
+        async function fetchData() {
+            if (IS_LOADING) return;
+            IS_LOADING = true;
             
             try {
-                const url = `${APPS_SCRIPT_URL}?action=getAllData&t=${now}`;
-                const response = await fetch(url);
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                const result = await response.json();
+                const url = `${APPS_SCRIPT_URL}?action=all&hash=${CURRENT_HASH}&_=${Date.now()}`;
+                const response = await fetch(url, { cache: 'no-cache' });
                 
-                if (result.success && result.data) {
-                    cachedData = result.data;
-                    lastFetchTime = now;
-                    lastUpdateTime = now;
-                    updateUpdateTime();
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                
+                const data = await response.json();
+                if (data.error) throw new Error(data.error);
+                
+                // Nếu data không thay đổi -> skip render
+                if (data.changed === false && data.hash === CURRENT_HASH) {
+                    updateTimestamp(data.timestamp);
+                    return;
                 }
-                return cachedData;
-            } catch (error) {
-                console.error('Error fetching data:', error);
-                updateStatus('Lỗi kết nối', false);
-                return cachedData;
+                
+                // Data có thay đổi
+                CURRENT_HASH = data.hash || '';
+                APP_DATA = { ...APP_DATA, ...data };
+                
+                requestAnimationFrame(() => {
+                    renderCurrentTab();
+                    updateTimestamp(APP_DATA.timestamp);
+                });
+                
+            } catch (e) {
+                console.error('Lỗi tải dữ liệu:', e);
+                if (!APP_DATA) {
+                    showLoadingError(e.message);
+                }
             } finally {
-                isLoading = false;
-                updateStatus(`Cập nhật ${formatTimeAgo(lastUpdateTime)}`, false);
+                IS_LOADING = false;
             }
         }
 
-        // Update time display
-        function updateUpdateTime() {
-            if (lastUpdateTime) {
-                const time = new Date(lastUpdateTime).toLocaleTimeString('vi-VN');
-                updateStatus(`Cập nhật ${formatTimeAgo(lastUpdateTime)}`, false);
+        // ================== RENDER FUNCTIONS ==================
+        function renderCurrentTab() {
+            if (!APP_DATA) return;
+            
+            switch(ACTIVE_TAB) {
+                case 'bxh': renderBXH(); break;
+                case 'vongbang': renderVongBang(); break;
+                case 'seria': renderSeriA(); break;
+                case 'serib': renderSeriB(); break;
             }
         }
 
-        // Update status every second
-        setInterval(updateUpdateTime, 1000);
+        function updateTimestamp(timestamp) {
+            if (!timestamp) return;
+            const ts = new Date(timestamp).toLocaleString('vi-VN');
+            document.getElementById('update-time').innerHTML = 
+                `DTD PICKLEBALL • Cập nhật: <span>${ts}</span>`;
+        }
 
+        function showLoadingError(message) {
+            const containers = ['bxh-container', 'vongbang-container', 'seria-container', 'serib-container'];
+            containers.forEach(id => {
+                const el = document.getElementById(id);
+                if (el && el.querySelector('.loading')) {
+                    el.innerHTML = `<div class="error-msg">⚠️ Không thể kết nối máy chủ.<br><small>${message}</small></div>`;
+                }
+            });
+        }
+
+        const DEFAULT_COLORS = new Set(['#ffffff', '#000000', 'rgb(255, 255, 255)', 'rgb(0, 0, 0)', '#fff', '#000']);
         function isDefaultColor(color) {
-            return !color || color === '#ffffff' || color === '#000000' || 
-                   color === 'rgb(255, 255, 255)' || color === 'rgb(0, 0, 0)';
+            return !color || DEFAULT_COLORS.has(color.toLowerCase());
         }
 
-        function hasValue(value) {
-            if (value === null || value === undefined) return false;
-            if (typeof value === 'string' && value.trim() === '') return false;
-            return true;
+        function renderBXH() {
+            const container = document.getElementById('bxh-container');
+            const names = ['A','B','C','D','E','F','G','H'];
+            const titles = ['Bảng A','Bảng B','Bảng C','Bảng D','Bảng E','Bảng F','Bảng G','Bảng H'];
+            const dotClasses = ['dot-a','dot-b','dot-c','dot-d','dot-e','dot-f','dot-g','dot-h'];
+            
+            const fragment = document.createDocumentFragment();
+            
+            names.forEach((name, idx) => {
+                const data = APP_DATA.bxh?.[name];
+                if (data?.rows?.length > 0) {
+                    const html = renderStandingsTable(data, titles[idx], dotClasses[idx], 'blue');
+                    const div = document.createElement('div');
+                    div.innerHTML = html;
+                    fragment.appendChild(div.firstElementChild);
+                }
+            });
+            
+            container.innerHTML = '';
+            container.appendChild(fragment);
         }
 
         function renderStandingsTable(data, title, dotClass, colorTheme) {
-            if (!data || !data.rows || data.rows.length === 0 || data.error) return '';
+            if (!data?.rows?.length) return '';
             
             const filteredRows = data.rows.filter(row => 
-                row.some(cell => hasValue(cell.value))
+                row.some(cell => cell.value && cell.value.toString().trim() !== '')
             );
-            
             if (filteredRows.length === 0) return '';
 
             const firstRow = filteredRows[0];
             const isHeaderRow = firstRow.some(cell => {
-                const val = cell.value?.toString().toLowerCase() || '';
+                const val = cell.value.toString().toLowerCase();
                 return val.includes('đội') || val.includes('điểm') || val.includes('hệ số') || val.includes('trận');
             });
 
             let html = `<div class="card"><div class="card-title ${colorTheme}"><span class="icon ${colorTheme}"><span class="group-dot ${dotClass}"></span></span>${title}</div><table><thead><tr>`;
 
             if (isHeaderRow) {
-                firstRow.forEach(cell => {
-                    html += `<th class="${colorTheme === 'red' ? 'red' : 'blue'}">${hasValue(cell.value) ? cell.value : '-'}</th>`;
-                });
+                html += firstRow.map(cell => 
+                    `<th class="${colorTheme === 'red' ? 'red' : 'blue'}">${cell.value || '-'}</th>`
+                ).join('');
                 html += '</tr></thead><tbody>';
                 filteredRows.shift();
             } else {
-                ['Đội', 'Điểm', 'Hệ số'].forEach(h => {
-                    html += `<th class="${colorTheme === 'red' ? 'red' : 'blue'}">${h}</th>`;
-                });
+                html += ['Đội', 'Điểm', 'Hệ số'].map(h => 
+                    `<th class="${colorTheme === 'red' ? 'red' : 'blue'}">${h}</th>`
+                ).join('');
                 html += '</tr></thead><tbody>';
             }
 
-            filteredRows.forEach(row => {
-                html += '<tr>';
-                row.forEach((cell, i) => {
-                    const bgStyle = !isDefaultColor(cell.bg) ? `background-color: ${cell.bg};` : '';
-                    const colorStyle = !isDefaultColor(cell.color) ? `color: ${cell.color};` : '';
+            html += filteredRows.map(row => {
+                const cells = row.map((cell, i) => {
+                    const bgStyle = !isDefaultColor(cell.bg) ? `background-color:${cell.bg};` : '';
+                    const colorStyle = !isDefaultColor(cell.color) ? `color:${cell.color};` : '';
                     const style = bgStyle + colorStyle;
                     
                     let cellClass = '';
                     if (i === 1 && !style) cellClass = `points-cell ${colorTheme}`;
                     else if (i === 2 && !style) cellClass = 'ratio-cell';
                     
-                    html += `<td class="${cellClass}" style="${style}">${hasValue(cell.value) ? cell.value : ''}</td>`;
-                });
-                html += '</tr>';
-            });
+                    return `<td class="${cellClass}" style="${style}">${cell.value || ''}</td>`;
+                }).join('');
+                return `<tr>${cells}</tr>`;
+            }).join('');
+            
             html += '</tbody></table></div>';
             return html;
+        }
+
+        function renderVongBang() {
+            const container = document.getElementById('vongbang-container');
+            const titles = ['BẢNG A','BẢNG B','BẢNG C','BẢNG D','BẢNG E','BẢNG F','BẢNG G','BẢNG H'];
+            
+            if (!APP_DATA.vongbang?.ranges?.length) {
+                container.innerHTML = '<div class="error-msg">Không thể tải dữ liệu vòng bảng.</div>';
+                return;
+            }
+            
+            const fragment = document.createDocumentFragment();
+            
+            APP_DATA.vongbang.ranges.forEach((data, idx) => {
+                if (data?.rows?.length > 0) {
+                    const section = document.createElement('div');
+                    section.className = 'round-section';
+                    section.innerHTML = `
+                        <div class="round-header">📍 ${titles[idx]}</div>
+                        ${renderMatchTable(data, 'Kết quả ' + titles[idx], 'blue')}
+                    `;
+                    fragment.appendChild(section);
+                }
+            });
+            
+            container.innerHTML = '';
+            if (fragment.children.length === 0) {
+                container.innerHTML = '<div class="error-msg">Không có dữ liệu vòng bảng.</div>';
+            } else {
+                container.appendChild(fragment);
+            }
+        }
+
+        function renderSeriA() {
+            const container = document.getElementById('seria-container');
+            const titles = { r16: 'Vòng 1/16 - Seri A', qf: 'Tứ kết - Seri A', sf: 'Bán kết - Seri A', f: 'Chung kết - Seri A' };
+            const keys = ['r16','qf','sf','f','sodo'];
+            
+            const fragment = document.createDocumentFragment();
+            
+            keys.forEach(k => {
+                const data = APP_DATA.seria?.[k];
+                if (!data?.rows?.length) return;
+                
+                const section = document.createElement('div');
+                section.className = 'round-section';
+                
+                if (k === 'sodo') {
+                    section.innerHTML = renderSodoTable(data, 'blue');
+                } else {
+                    section.innerHTML = `
+                        <div class="round-header">🔵 ${titles[k]}</div>
+                        ${renderMatchTable(data, titles[k], 'blue')}
+                    `;
+                }
+                fragment.appendChild(section);
+            });
+            
+            container.innerHTML = '';
+            container.appendChild(fragment.children.length ? fragment : (() => {
+                const d = document.createElement('div');
+                d.className = 'error-msg';
+                d.textContent = 'Chưa có dữ liệu Seri A';
+                return d;
+            })());
+        }
+
+        function renderSeriB() {
+            const container = document.getElementById('serib-container');
+            const titles = { r16: 'Vòng 1/16 - Seri B', qf: 'Tứ kết - Seri B', sf: 'Bán kết - Seri B', f: 'Chung kết - Seri B' };
+            const keys = ['r16','qf','sf','f','sodo'];
+            
+            const fragment = document.createDocumentFragment();
+            
+            keys.forEach(k => {
+                const data = APP_DATA.serib?.[k];
+                if (!data?.rows?.length) return;
+                
+                const section = document.createElement('div');
+                section.className = 'round-section';
+                
+                if (k === 'sodo') {
+                    section.innerHTML = renderSodoTable(data, 'red');
+                } else {
+                    section.innerHTML = `
+                        <div class="round-header">🔴 ${titles[k]}</div>
+                        ${renderMatchTable(data, titles[k], 'red')}
+                    `;
+                }
+                fragment.appendChild(section);
+            });
+            
+            container.innerHTML = '';
+            container.appendChild(fragment.children.length ? fragment : (() => {
+                const d = document.createElement('div');
+                d.className = 'error-msg';
+                d.textContent = 'Chưa có dữ liệu Seri B';
+                return d;
+            })());
         }
 
         function renderMatchTable(data, title, colorTheme) {
-            if (!data || !data.rows || data.rows.length === 0 || data.error) return '';
+            if (!data?.rows?.length) return '';
             
             const filteredRows = data.rows.filter(row => 
-                row.some(cell => hasValue(cell.value))
+                row.some(cell => cell.value && cell.value.toString().trim() !== '')
             );
-            
             if (filteredRows.length === 0) return '';
 
             const thClass = colorTheme === 'red' ? 'red' : 'blue';
-            let html = `<div class="card"><div class="card-title ${colorTheme}"><span class="icon ${colorTheme}">🏆</span>${title}</div><table><thead><tr>`;
-
             const firstRow = filteredRows[0];
-            firstRow.forEach(cell => {
-                html += `<th class="${thClass}">${hasValue(cell.value) ? cell.value : '-'}</th>`;
-            });
-            html += '</tr></thead><tbody>';
-            filteredRows.shift();
-
-            filteredRows.forEach(row => {
-                html += '<tr>';
-                row.forEach(cell => {
-                    const bgStyle = !isDefaultColor(cell.bg) ? `background-color: ${cell.bg};` : '';
-                    const colorStyle = !isDefaultColor(cell.color) ? `color: ${cell.color};` : '';
-                    const style = bgStyle + colorStyle;
-                    html += `<td style="${style}">${hasValue(cell.value) ? cell.value : ''}</td>`;
-                });
-                html += '</tr>';
-            });
-            html += '</tbody></table></div>';
-            return html;
+            const headerCells = firstRow.map(cell => 
+                `<th class="${thClass}">${cell.value || '-'}</th>`
+            ).join('');
+            
+            const bodyRows = filteredRows.slice(1).map(row => {
+                const cells = row.map(cell => {
+                    const bgStyle = !isDefaultColor(cell.bg) ? `background-color:${cell.bg};` : '';
+                    const colorStyle = !isDefaultColor(cell.color) ? `color:${cell.color};` : '';
+                    return `<td style="${bgStyle}${colorStyle}">${cell.value || ''}</td>`;
+                }).join('');
+                return `<tr>${cells}</tr>`;
+            }).join('');
+            
+            return `<div class="card"><div class="card-title ${colorTheme}"><span class="icon ${colorTheme}">🏆</span>${title}</div><table><thead><tr>${headerCells}</tr></thead><tbody>${bodyRows}</tbody></table></div>`;
         }
 
         function renderSodoTable(data, colorTheme) {
-            if (!data || !data.rows || data.rows.length === 0 || data.error) return '';
+            if (!data?.rows?.length) return '';
             
             const filteredRows = data.rows.filter(row => 
-                row.some(cell => hasValue(cell.value))
+                row.some(cell => cell.value && cell.value.toString().trim() !== '')
             );
-            
             if (filteredRows.length === 0) return '';
 
-            let html = `<div class="card" style="padding: 8px; overflow-x: auto;">
-                <div class="card-title ${colorTheme}"><span class="icon ${colorTheme}">📋</span>BẢNG THÀNH TÍCH</div>
-                <table class="sodo-table"><thead><tr>`;
-
             const firstRow = filteredRows[0];
-            firstRow.forEach(cell => {
-                const bgStyle = !isDefaultColor(cell.bg) ? `background-color: ${cell.bg};` : '';
-                const colorStyle = !isDefaultColor(cell.color) ? `color: ${cell.color};` : '';
-                const style = bgStyle + colorStyle;
-                html += `<th style="${style}">${hasValue(cell.value) ? cell.value : ''}</th>`;
-            });
-            html += '</tr></thead><tbody>';
-            filteredRows.shift();
-
-            filteredRows.forEach(row => {
-                html += '<tr>';
-                row.forEach(cell => {
-                    const bgStyle = !isDefaultColor(cell.bg) ? `background-color: ${cell.bg};` : '';
-                    const colorStyle = !isDefaultColor(cell.color) ? `color: ${cell.color};` : '';
-                    const style = bgStyle + colorStyle;
-                    html += `<td style="${style}">${hasValue(cell.value) ? cell.value : ''}</td>`;
-                });
-                html += '</tr>';
-            });
-            html += '</tbody></table></div>';
-            return html;
+            const headerCells = firstRow.map(cell => {
+                const bgStyle = !isDefaultColor(cell.bg) ? `background-color:${cell.bg};` : '';
+                const colorStyle = !isDefaultColor(cell.color) ? `color:${cell.color};` : '';
+                return `<th style="${bgStyle}${colorStyle}">${cell.value || ''}</th>`;
+            }).join('');
+            
+            const bodyRows = filteredRows.slice(1).map(row => {
+                const cells = row.map(cell => {
+                    const bgStyle = !isDefaultColor(cell.bg) ? `background-color:${cell.bg};` : '';
+                    const colorStyle = !isDefaultColor(cell.color) ? `color:${cell.color};` : '';
+                    return `<td style="${bgStyle}${colorStyle}">${cell.value || ''}</td>`;
+                }).join('');
+                return `<tr>${cells}</tr>`;
+            }).join('');
+            
+            return `<div class="card" style="padding:8px;overflow-x:auto;"><div class="card-title ${colorTheme}"><span class="icon ${colorTheme}">📋</span>BẢNG THÀNH TÍCH</div><table class="sodo-table"><thead><tr>${headerCells}</tr></thead><tbody>${bodyRows}</tbody></table></div>`;
         }
 
-        async function loadTabData(tabName) {
-            const data = await fetchAllData();
-            
-            if (!data) {
-                console.error('No data available');
-                return;
-            }
-
-            switch(tabName) {
-                case 'bxh':
-                    renderBXH(data);
-                    break;
-                case 'vongbang':
-                    renderVongBang(data);
-                    break;
-                case 'seria':
-                    renderSeriA(data);
-                    break;
-                case 'serib':
-                    renderSeriB(data);
-                    break;
-            }
-        }
-
-        function renderBXH(data) {
-            const container = document.getElementById('bxh-container');
-            const titles = ['Bảng A', 'Bảng B', 'Bảng C', 'Bảng D'];
-            const dotClasses = ['dot-a', 'dot-b', 'dot-c', 'dot-d'];
-            const keys = ['bxh_A', 'bxh_B', 'bxh_C', 'bxh_D'];
-            
-            let html = '';
-            keys.forEach((key, idx) => {
-                const tableData = data[key];
-                if (tableData && !tableData.error) {
-                    html += renderStandingsTable(tableData, titles[idx], dotClasses[idx], 'blue');
-                } else {
-                    html += `<div class="card"><div class="error-msg">Không tải được ${titles[idx]}</div></div>`;
-                }
-            });
-            container.innerHTML = html;
-        }
-
-        function renderVongBang(data) {
-            const container = document.getElementById('vongbang-container');
-            const titles = ['BẢNG A', 'BẢNG B', 'BẢNG C', 'BẢNG D'];
-            const keys = ['vb_A', 'vb_B', 'vb_C', 'vb_D'];
-            
-            let html = '';
-            keys.forEach((key, idx) => {
-                const tableData = data[key];
-                if (tableData && !tableData.error) {
-                    html += `<div class="round-section"><div class="round-header">📍 ${titles[idx]}</div>${renderMatchTable(tableData, 'Kết quả ' + titles[idx], 'blue')}</div>`;
-                }
-            });
-            container.innerHTML = html || '<div class="error-msg">Không thể tải dữ liệu vòng bảng.</div>';
-        }
-
-        function renderSeriA(data) {
-            const container = document.getElementById('seria-container');
-            const rounds = [
-                { key: 'seria_tk', title: 'Tứ kết - Seri A' },
-                { key: 'seria_bk', title: 'Bán kết - Seri A' },
-                { key: 'seria_ck', title: 'Chung kết - Seri A' }
-            ];
-            
-            let html = '';
-            rounds.forEach(round => {
-                const tableData = data[round.key];
-                if (tableData && !tableData.error) {
-                    html += `<div class="round-section"><div class="round-header">🔵 ${round.title}</div>${renderMatchTable(tableData, round.title, 'blue')}</div>`;
-                }
-            });
-            
-            const sodoData = data['seria_sodo'];
-            if (sodoData && !sodoData.error) {
-                html += `<div class="round-section">${renderSodoTable(sodoData, 'blue')}</div>`;
-            }
-            
-            container.innerHTML = html || '<div class="error-msg">Chưa có dữ liệu Seri A</div>';
-        }
-
-        function renderSeriB(data) {
-            const container = document.getElementById('serib-container');
-            const rounds = [
-                { key: 'serib_tk', title: 'Tứ kết - Seri B' },
-                { key: 'serib_bk', title: 'Bán kết - Seri B' },
-                { key: 'serib_ck', title: 'Chung kết - Seri B' }
-            ];
-            
-            let html = '';
-            rounds.forEach(round => {
-                const tableData = data[round.key];
-                if (tableData && !tableData.error) {
-                    html += `<div class="round-section"><div class="round-header">🔴 ${round.title}</div>${renderMatchTable(tableData, round.title, 'red')}</div>`;
-                }
-            });
-            
-            const sodoData = data['serib_sodo'];
-            if (sodoData && !sodoData.error) {
-                html += `<div class="round-section">${renderSodoTable(sodoData, 'red')}</div>`;
-            }
-            
-            container.innerHTML = html || '<div class="error-msg">Chưa có dữ liệu Seri B</div>';
-        }
-
-        // Refresh current tab
-        async function refreshCurrentTab(showToast = false) {
-            const activeTab = document.querySelector('.tab.active').dataset.tab;
-            await loadTabData(activeTab);
-            if (showToast) {
-                // Toast already shown in manualRefresh
-            }
-        }
-
-        // Start polling
-        function startPolling() {
-            if (pollingInterval) {
-                clearInterval(pollingInterval);
-            }
-            
-            pollingInterval = setInterval(async () => {
-                // Only poll if document is visible
-                if (!document.hidden) {
-                    cachedData = null; // Force refresh
-                    await refreshCurrentTab(false);
-                }
-            }, POLLING_INTERVAL);
-        }
-
-        // Handle visibility change
-        document.addEventListener('visibilitychange', () => {
-            if (!document.hidden) {
-                // Tab became visible, refresh immediately
-                refreshCurrentTab(false);
-            }
-        });
-
-        // Initialize
-        async function init() {
-            await loadTabData('bxh');
-            startPolling();
-            updateStatus('Đang theo dõi trực tiếp', false);
-        }
-
-        init();
+        // ================== KHỞI CHẠY ==================
+        fetchData();
+        REFRESH_TIMER = setInterval(fetchData, ACTIVE_REFRESH);
     </script>
 </body>
 </html>
