@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DTD PICKLEBALL CUP 4.75</title>
+    <title>DTD PICKLEBALL CUP 5.25</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
@@ -35,23 +35,15 @@
             overflow-x: hidden;
         }
 
-        /* 🔹 Chuyển header thành <a>, thêm display: block + text-decoration: none + color: white */
         .header {
             background: linear-gradient(135deg, #3e4f3c 0%, #457d3e 50%, #309124 100%);
             color: white;
-            text-decoration: none;
-            display: block;
             padding: 20px 16px 16px;
             text-align: center;
             position: relative;
             overflow: hidden;
             box-shadow: 0 4px 20px rgba(26, 86, 219, 0.3);
             cursor: pointer;
-            transition: filter 0.2s ease;
-        }
-
-        .header:hover {
-            filter: brightness(1.05);
         }
 
         .header::before {
@@ -61,6 +53,7 @@
             width: 200%; height: 200%;
             background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 60%);
             animation: shimmer 8s ease-in-out infinite;
+            z-index: 0;
         }
 
         @keyframes shimmer {
@@ -68,8 +61,25 @@
             50% { transform: translate(20%, 10%); }
         }
 
-        .header h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px; position: relative; z-index: 1; text-shadow: 0 2px 4px rgba(0,0,0,0.2); color: white; }
-        .header .subtitle { font-size: 0.8rem; opacity: 0.85; margin-top: 4px; font-weight: 500; position: relative; z-index: 1; color: white; }
+        /* === LINK BANNER - MỚI THÊM === */
+        .header-link {
+            display: block;
+            color: white;
+            text-decoration: none;
+            position: relative;
+            z-index: 1;
+            transition: opacity 0.2s ease;
+        }
+
+        .header-link:hover {
+            color: white;
+            text-decoration: none;
+            opacity: 0.92;
+        }
+        /* === END LINK BANNER === */
+
+        .header h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px; position: relative; z-index: 1; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .header .subtitle { font-size: 0.8rem; opacity: 0.85; margin-top: 4px; font-weight: 500; position: relative; z-index: 1; }
         .header .ball-icon { font-size: 2rem; margin-bottom: 4px; position: relative; z-index: 1; }
 
         .tabs-container {
@@ -324,12 +334,13 @@
     </style>
 </head>
 <body>
-    <!-- 🔹 BANNER ĐÃ ĐƯỢC CHUYỂN THÀNH THẺ <a> VỚI LINK GOOGLE -->
-    <a href="https://ritapick.github.io/pickleball/" rel="noopener" class="header">
-        <div class="ball-icon">🎾</div>
-        <h1>DTD PICKLEBALL TOURNAMENT</h1>
-        <div class="subtitle">Giải đấu PICKLEBALL - Trình 4.75</div>
-    </a>
+    <div class="header">
+        <a href="https://ritapick.github.io/pickleball/" class="header-link">
+            <div class="ball-icon">🎾</div>
+            <h1>DTD PICKLEBALL TOURNAMENT</h1>
+            <div class="subtitle">Giải đấu PICKLEBALL - Trình 5.25</div>
+        </a>
+    </div>
 
     <div class="tabs-container">
         <div class="tabs" id="tabs">
@@ -351,7 +362,7 @@
     <div class="content">
         <!-- TAB 1: BXH -->
         <div class="tab-content active" id="tab-bxh">
-            <div class="section-title">Bảng thi đấu <span class="badge">4 Bảng</span></div>
+            <div class="section-title">Bảng thi đấu <span class="badge">8 Bảng</span></div>
             <div class="grid-2" id="bxh-container">
                 <div class="loading"><div class="spinner"></div><div class="loading-text">Đang tải dữ liệu...</div></div>
             </div>
@@ -385,7 +396,7 @@
     </div>
 
     <script>
-        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwtuQLH6tZ1Cw83uoGgQRzk3PrwnM012oBiqG6nWvHMmDN4n1_T841ayAgaWUZkxjK6GQ/exec';
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzKsonoFp3lh8iBa77RrfSFNhL0HpWvCDppA7GkA8sEH1bFvZr0B2rdh-IKqRMIgFLk/exec';
 
         // Tab switching
         document.querySelectorAll('.tab').forEach(tab => {
@@ -535,9 +546,9 @@
 
         async function loadAllData() {
             // --- TAB 1: BẢNG XẾP HẠNG ---
-            const sheetNames = ['A', 'B', 'C', 'D'];
-            const titles = ['Bảng A', 'Bảng B', 'Bảng C', 'Bảng D',];
-            const dotClasses = ['dot-a', 'dot-b', 'dot-c', 'dot-d'];
+            const sheetNames = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+            const titles = ['Bảng A', 'Bảng B', 'Bảng C', 'Bảng D', 'Bảng E', 'Bảng F', 'Bảng G', 'Bảng H'];
+            const dotClasses = ['dot-a', 'dot-b', 'dot-c', 'dot-d', 'dot-e', 'dot-f', 'dot-g', 'dot-h'];
             const bxhContainer = document.getElementById('bxh-container');
             let bxhHTML = '';
 
@@ -550,9 +561,10 @@
 
             // --- TAB 2: VÒNG BẢNG ---
             const rangesBang = [
-                { range: 'A2:F8', title: 'BẢNG A' }, { range: 'A11:F17', title: 'BẢNG B' },
-                { range: 'A20:F26', title: 'BẢNG C' }, { range: 'A29:F35', title: 'BẢNG D' },
-                
+                { range: 'A2:F5', title: 'BẢNG A' }, { range: 'A8:F11', title: 'BẢNG B' },
+                { range: 'A14:F17', title: 'BẢNG C' }, { range: 'A20:F23', title: 'BẢNG D' },
+                { range: 'A26:F29', title: 'BẢNG E' }, { range: 'A32:F35', title: 'BẢNG F' },
+                { range: 'A38:F41', title: 'BẢNG G' }, { range: 'A44:F47', title: 'BẢNG H' }
             ];
             const vongbangContainer = document.getElementById('vongbang-container');
             vongbangContainer.innerHTML = '<div class="loading"><div class="spinner"></div><div class="loading-text">Đang tải vòng bảng...</div></div>';
@@ -573,6 +585,7 @@
             // --- TAB 3: SERI A ---
             const seriaContainer = document.getElementById('seria-container');
             const seriARounds = [
+                { sheet: '1.16 A', range: 'A1:G24', title: 'Vòng 1/16 - Seri A' },
                 { sheet: '1.8 A', range: 'A1:G12', title: 'Tứ kết - Seri A' },
                 { sheet: 'bk A', range: 'A2:F7', title: 'Bán kết - Seri A' },
                 { sheet: 'ck A', range: 'A2:E4', title: 'Chung kết - Seri A' }
@@ -592,7 +605,7 @@
             // --- TAB 4: SERI B ---
             const seribContainer = document.getElementById('serib-container');
             const seriBRounds = [
-                
+                { sheet: '1.16 B', range: 'A1:G24', title: 'Vòng 1/16 - Seri B' },
                 { sheet: '1.8 B', range: 'A1:G12', title: 'Tứ kết - Seri B' },
                 { sheet: 'bk B', range: 'A2:F7', title: 'Bán kết - Seri B' },
                 { sheet: 'ck B', range: 'A2:E4', title: 'Chung kết - Seri B' }
