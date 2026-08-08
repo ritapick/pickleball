@@ -375,7 +375,7 @@
         // Cache để lưu data đã fetch
         let cachedData = null;
         let lastFetchTime = 0;
-        const CACHE_DURATION = 10000; // 30 giây
+        const CACHE_DURATION = 10000; // 10 giây
         let isLoading = false;
 
         // Tab switching với lazy loading
@@ -434,15 +434,26 @@
                    color === 'rgb(255, 255, 255)' || color === 'rgb(0, 0, 0)';
         }
 
+        // Hàm kiểm tra cell có giá trị hay không (bao gồm cả số 0)
+        function hasValue(value) {
+            if (value === null || value === undefined) return false;
+            if (typeof value === 'string' && value.trim() === '') return false;
+            return true;
+        }
+
         function renderStandingsTable(data, title, dotClass, colorTheme) {
             if (!data || !data.rows || data.rows.length === 0 || data.error) return '';
             
-            const filteredRows = data.rows.filter(row => row.some(cell => cell.value && cell.value.toString().trim() !== ''));
+            // Filter bỏ các hàng hoàn toàn trống (giữ lại các hàng có ít nhất 1 giá trị, kể cả 0)
+            const filteredRows = data.rows.filter(row => 
+                row.some(cell => hasValue(cell.value))
+            );
+            
             if (filteredRows.length === 0) return '';
 
             const firstRow = filteredRows[0];
             const isHeaderRow = firstRow.some(cell => {
-                const val = cell.value.toString().toLowerCase();
+                const val = cell.value?.toString().toLowerCase() || '';
                 return val.includes('đội') || val.includes('điểm') || val.includes('hệ số') || val.includes('trận');
             });
 
@@ -450,7 +461,7 @@
 
             if (isHeaderRow) {
                 firstRow.forEach(cell => {
-                    html += `<th class="${colorTheme === 'red' ? 'red' : 'blue'}">${cell.value || '-'}</th>`;
+                    html += `<th class="${colorTheme === 'red' ? 'red' : 'blue'}">${hasValue(cell.value) ? cell.value : '-'}</th>`;
                 });
                 html += '</tr></thead><tbody>';
                 filteredRows.shift();
@@ -472,7 +483,7 @@
                     if (i === 1 && !style) cellClass = `points-cell ${colorTheme}`;
                     else if (i === 2 && !style) cellClass = 'ratio-cell';
                     
-                    html += `<td class="${cellClass}" style="${style}">${cell.value || ''}</td>`;
+                    html += `<td class="${cellClass}" style="${style}">${hasValue(cell.value) ? cell.value : ''}</td>`;
                 });
                 html += '</tr>';
             });
@@ -483,7 +494,11 @@
         function renderMatchTable(data, title, colorTheme) {
             if (!data || !data.rows || data.rows.length === 0 || data.error) return '';
             
-            const filteredRows = data.rows.filter(row => row.some(cell => cell.value && cell.value.toString().trim() !== ''));
+            // Filter bỏ các hàng hoàn toàn trống
+            const filteredRows = data.rows.filter(row => 
+                row.some(cell => hasValue(cell.value))
+            );
+            
             if (filteredRows.length === 0) return '';
 
             const thClass = colorTheme === 'red' ? 'red' : 'blue';
@@ -491,7 +506,7 @@
 
             const firstRow = filteredRows[0];
             firstRow.forEach(cell => {
-                html += `<th class="${thClass}">${cell.value || '-'}</th>`;
+                html += `<th class="${thClass}">${hasValue(cell.value) ? cell.value : '-'}</th>`;
             });
             html += '</tr></thead><tbody>';
             filteredRows.shift();
@@ -502,7 +517,7 @@
                     const bgStyle = !isDefaultColor(cell.bg) ? `background-color: ${cell.bg};` : '';
                     const colorStyle = !isDefaultColor(cell.color) ? `color: ${cell.color};` : '';
                     const style = bgStyle + colorStyle;
-                    html += `<td style="${style}">${cell.value || ''}</td>`;
+                    html += `<td style="${style}">${hasValue(cell.value) ? cell.value : ''}</td>`;
                 });
                 html += '</tr>';
             });
@@ -513,7 +528,11 @@
         function renderSodoTable(data, colorTheme) {
             if (!data || !data.rows || data.rows.length === 0 || data.error) return '';
             
-            const filteredRows = data.rows.filter(row => row.some(cell => cell.value && cell.value.toString().trim() !== ''));
+            // Filter bỏ các hàng hoàn toàn trống
+            const filteredRows = data.rows.filter(row => 
+                row.some(cell => hasValue(cell.value))
+            );
+            
             if (filteredRows.length === 0) return '';
 
             let html = `<div class="card" style="padding: 8px; overflow-x: auto;">
@@ -525,7 +544,7 @@
                 const bgStyle = !isDefaultColor(cell.bg) ? `background-color: ${cell.bg};` : '';
                 const colorStyle = !isDefaultColor(cell.color) ? `color: ${cell.color};` : '';
                 const style = bgStyle + colorStyle;
-                html += `<th style="${style}">${cell.value || ''}</th>`;
+                html += `<th style="${style}">${hasValue(cell.value) ? cell.value : ''}</th>`;
             });
             html += '</tr></thead><tbody>';
             filteredRows.shift();
@@ -536,7 +555,7 @@
                     const bgStyle = !isDefaultColor(cell.bg) ? `background-color: ${cell.bg};` : '';
                     const colorStyle = !isDefaultColor(cell.color) ? `color: ${cell.color};` : '';
                     const style = bgStyle + colorStyle;
-                    html += `<td style="${style}">${cell.value || ''}</td>`;
+                    html += `<td style="${style}">${hasValue(cell.value) ? cell.value : ''}</td>`;
                 });
                 html += '</tr>';
             });
