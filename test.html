@@ -89,7 +89,7 @@
     justify-content: center;
   }
 
-  /* ===== SPONSORS SECTION (NEW) ===== */
+  /* ===== SPONSORS SECTION ===== */
   .sponsors-section {
     margin-bottom: 40px;
     animation: slideDown 0.6s ease-out;
@@ -125,22 +125,25 @@
     margin: 0 10px;
   }
 
+  /* SỬA: Dùng Flexbox để tự động căn giữa khi số lượng logo lẻ */
   .sponsors-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    justify-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     align-items: center;
+    gap: 15px;
+    padding: 5px 0;
   }
 
+  /* SỬA: Logo hình vuông (bo góc 12px), kích thước cố định để flex hoạt động tốt */
   .sponsor-item {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100%;
+    width: 90px;
+    height: 90px;
     aspect-ratio: 1 / 1;
-    max-width: 90px;
-    border-radius: 50%;
+    border-radius: 12px; /* Vuông bo góc nhẹ */
     background: linear-gradient(145deg, #1f1f1f, #0f0f0f);
     border: 2px solid rgba(255,255,255,0.1);
     padding: 8px;
@@ -149,6 +152,7 @@
     overflow: hidden;
   }
 
+  /* Hiệu ứng viền xoay (conic) vẫn chạy tốt trên nền vuông */
   .sponsor-item::before {
     content: '';
     position: absolute;
@@ -166,7 +170,7 @@
     content: '';
     position: absolute;
     inset: 2px;
-    border-radius: 50%;
+    border-radius: 10px; /* Khớp với hình vuông (nhỏ hơn 12px 1 chút để vừa khít viền) */
     background: linear-gradient(145deg, #1f1f1f, #0f0f0f);
     z-index: 1;
   }
@@ -357,8 +361,12 @@
   @media (max-width: 350px) {
     .main-title { font-size: 26px; }
     .card-label { font-size: 16px; }
-    .sponsor-item { max-width: 75px; }
+    .sponsor-item { 
+      width: 75px; 
+      height: 75px;
+    }
     .sponsors-title { font-size: 12px; letter-spacing: 2px; }
+    .sponsors-grid { gap: 10px; }
   }
 </style>
 </head>
@@ -378,7 +386,7 @@
 
 <div class="main-wrapper">
 
-  <!-- ===== SPONSORS LOGO SECTION (NEW) ===== -->
+  <!-- ===== SPONSORS LOGO SECTION ===== -->
   <div class="sponsors-section">
     <div class="sponsors-title">Nhà Tài Trợ</div>
     <div class="sponsors-grid">
@@ -397,7 +405,7 @@
       <a href="https://www.logo5.com" target="_blank" rel="noopener" class="sponsor-item" title="Nhà tài trợ 5">
         <img src="logo5.jpeg" alt="Nhà tài trợ 5" onerror="this.src='https://placehold.co/120x120/1a1a1a/00f2ff?text=Logo+5'">
       </a>
-       <a href="https://www.logo6.com" target="_blank" rel="noopener" class="sponsor-item" title="Nhà tài trợ 6">
+      <a href="https://www.logo6.com" target="_blank" rel="noopener" class="sponsor-item" title="Nhà tài trợ 6">
         <img src="logo6.jpeg" alt="Nhà tài trợ 6" onerror="this.src='https://placehold.co/120x120/1a1a1a/00f2ff?text=Logo+6'">
       </a>
     </div>
