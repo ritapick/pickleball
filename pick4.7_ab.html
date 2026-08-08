@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DTD PICKLEBALL CUP 5.25</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a56db;
+            --primary-light: #3b82f6;
+            --primary-dark: #1e40af;
+            --seri-a: #1a56db;
+            --seri-a-light: #3b82f6;
+            --seri-a-dark: #1e3a5f;
+            --seri-b: #dc2626;
+            --seri-b-light: #ef4444;
+            --seri-b-dark: #7f1d1d;
+            --accent: #f59e0b;
+            --bg: #e7f7e6;
+            --card: #ffffff;
+            --text: #222f3d;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #3e4f3c 0%, #457d3e 50%, #309124 100%);
+            color: white;
+            padding: 20px 16px 16px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(26, 86, 219, 0.3);
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 60%);
+            animation: shimmer 8s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(20%, 10%); }
+        }
+
+        .header h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px; position: relative; z-index: 1; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .header .subtitle { font-size: 0.8rem; opacity: 0.85; margin-top: 4px; font-weight: 500; position: relative; z-index: 1; }
+        .header .ball-icon { font-size: 2rem; margin-bottom: 4px; position: relative; z-index: 1; }
+
+        .tabs-container {
+            background: white;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tabs {
+            display: flex;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            padding: 0 8px;
+            gap: 2px;
+        }
+        .tabs::-webkit-scrollbar { display: none; }
+
+        .tab {
+            flex: none;
+            padding: 12px 14px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            background: none;
+            border: none;
+            cursor: pointer;
+            white-space: nowrap;
+            position: relative;
+            transition: all 0.2s ease;
+            border-radius: 8px 8px 0 0;
+            margin-bottom: -1px;
+        }
+
+        .tab:hover { color: var(--primary); background: rgba(26, 86, 219, 0.05); }
+        .tab.active { color: var(--primary); background: rgba(26, 86, 219, 0.08); }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 3px 3px 0 0;
+        }
+
+        .content {
+            padding: 16px;
+            padding-bottom: 32px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .tab-content { display: none; animation: fadeIn 0.3s ease; }
+        .tab-content.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title.seri-a { color: var(--seri-a); }
+        .section-title.seri-b { color: var(--seri-b); }
+
+        .badge {
+            background: var(--primary);
+            color: white;
+            font-size: 0.65rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .badge.a { background: var(--seri-a); }
+        .badge.b { background: var(--seri-b); }
+
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            border: 1px solid var(--border);
+            overflow-x: auto;
+        }
+
+        .card-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .card-title.blue { color: var(--primary-dark); }
+        .card-title.red { color: var(--seri-b-dark); }
+
+        .card-title .icon {
+            width: 28px; height: 28px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 800;
+        }
+        .icon.blue { background: linear-gradient(135deg, var(--primary), var(--primary-light)); }
+        .icon.red { background: linear-gradient(135deg, var(--seri-b), var(--seri-b-light)); }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.82rem;
+        }
+
+        table th {
+            color: white;
+            padding: 10px 8px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+        table th.blue { background: linear-gradient(135deg, #1e3a5f, #1a56db); }
+        table th.red { background: linear-gradient(135deg, #7f1d1d, #dc2626); }
+
+        table th:first-child { border-radius: 10px 0 0 0; text-align: left; padding-left: 12px; }
+        table th:last-child { border-radius: 0 10px 0 0; }
+
+        table td {
+            padding: 10px 8px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+            font-weight: 500;
+            transition: background 0.15s ease;
+        }
+        table td:first-child { text-align: left; padding-left: 12px; font-weight: 600; }
+        table tr:last-child td:first-child { border-radius: 0 0 0 10px; }
+        table tr:last-child td:last-child { border-radius: 0 0 10px 0; }
+        table tr:hover td { background: rgba(26, 86, 219, 0.03); }
+        table tr:nth-child(even) td { background: rgba(241, 245, 249, 0.5); }
+
+        .points-cell { font-weight: 700; font-size: 0.9rem; }
+        .points-cell.blue { color: var(--seri-a); }
+        .points-cell.red { color: var(--seri-b); }
+
+        .ratio-cell { color: var(--text-secondary); font-weight: 600; }
+
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            gap: 12px;
+        }
+        .spinner {
+            width: 36px; height: 36px;
+            border: 3px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loading-text { color: var(--text-secondary); font-size: 0.85rem; font-weight: 500; }
+
+        .error-msg {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            text-align: center;
+            margin: 16px 0;
+        }
+
+        .sodo-table { width: 100%; font-size: 0.7rem; border-collapse: collapse; }
+        .sodo-table td, .sodo-table th { 
+            padding: 6px 4px; 
+            text-align: center; 
+            border: 1px solid var(--border); 
+            font-weight: 500;
+        }
+        .sodo-table th { 
+            background: #1e3a5f !important; 
+            color: white !important; 
+            font-weight: 700; 
+            font-size: 0.65rem; 
+        }
+
+        .update-time { text-align: center; font-size: 0.7rem; color: var(--text-secondary); padding: 16px; font-weight: 500; }
+        .update-time span { color: var(--primary); font-weight: 600; }
+
+        @media (max-width: 480px) {
+            .header h1 { font-size: 1.3rem; }
+            .tab { padding: 10px 12px; font-size: 0.7rem; }
+            .content { padding: 12px; }
+            .card { padding: 12px; border-radius: 12px; }
+            table { font-size: 0.75rem; }
+            table th, table td { padding: 8px 6px; }
+        }
+
+        .tab-group-label { display: flex; align-items: center; gap: 4px; }
+        .group-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+        .dot-a { background: #3b82f6; }
+        .dot-b { background: #ef4444; }
+        .dot-c { background: #10b981; }
+        .dot-d { background: #f59e0b; }
+        .dot-e { background: #8b5cf6; }
+        .dot-f { background: #ec4899; }
+        .dot-g { background: #f97316; }
+        .dot-h { background: #06b6d4; }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .grid-2 .card { margin-bottom: 0; }
+        @media (max-width: 640px) { .grid-2 { grid-template-columns: 1fr; } }
+
+        .round-section { margin-bottom: 24px; padding-bottom: 16px; border-bottom: 2px dashed var(--border); }
+        .round-section:last-child { border-bottom: none; }
+        .round-header {
+            font-size: 0.9rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Cell with custom color from sheet */
+        .cell-custom-bg { background-color: inherit; }
+        .cell-custom-color { color: inherit; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="ball-icon">🎾</div>
+        <h1>DTD PICKLEBALL TOURNAMEN</h1>
+        <div class="subtitle">Giải đấu PICKLEBALL - Trình 5.25</div>
+    </div>
+
+    <div class="tabs-container">
+        <div class="tabs" id="tabs">
+            <button class="tab active" data-tab="bxh">
+                <span class="tab-group-label">🏆 Bảng Xếp Hạng</span>
+            </button>
+            <button class="tab" data-tab="vongbang">
+                <span class="tab-group-label">🏸 Vòng Bảng</span>
+            </button>
+            <button class="tab" data-tab="seria">
+                <span class="tab-group-label"><span class="group-dot dot-a"></span> Seri A</span>
+            </button>
+            <button class="tab" data-tab="serib">
+                <span class="tab-group-label"><span class="group-dot dot-b"></span> Seri B</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="content">
+        <!-- TAB 1: BXH -->
+        <div class="tab-content active" id="tab-bxh">
+            <div class="section-title">Bảng thi đấu <span class="badge">8 Bảng</span></div>
+            <div class="grid-2" id="bxh-container">
+                <div class="loading"><div class="spinner"></div><div class="loading-text">Đang tải dữ liệu...</div></div>
+            </div>
+        </div>
+
+        <!-- TAB 2: VÒNG BẢNG -->
+        <div class="tab-content" id="tab-vongbang">
+            <div class="section-title">Kết quả thi đấu vòng bảng <span class="badge">Chi tiết</span></div>
+            <div id="vongbang-container">
+                <div class="loading"><div class="spinner"></div><div class="loading-text">Đang tải dữ liệu...</div></div>
+            </div>
+        </div>
+
+        <!-- TAB 3: SERI A -->
+        <div class="tab-content" id="tab-seria">
+            <div class="section-title seri-a">🔵 Nhánh thi đấu Seri A <span class="badge a">Knock-out</span></div>
+            <div id="seria-container">
+                <div class="loading"><div class="spinner"></div><div class="loading-text">Đang tải nhánh Seri A...</div></div>
+            </div>
+        </div>
+
+        <!-- TAB 4: SERI B -->
+        <div class="tab-content" id="tab-serib">
+            <div class="section-title seri-b">🔴 Nhánh thi đấu Seri B <span class="badge b">Knock-out</span></div>
+            <div id="serib-container">
+                <div class="loading"><div class="spinner"></div><div class="loading-text">Đang tải nhánh Seri B...</div></div>
+            </div>
+        </div>
+
+        <div class="update-time" id="update-time"></div>
+    </div>
+
+    <script>
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwtuQLH6tZ1Cw83uoGgQRzk3PrwnM012oBiqG6nWvHMmDN4n1_T841ayAgaWUZkxjK6GQ/exec';
+
+        // Tab switching
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+            });
+        });
+
+        // Fetch data from Apps Script with formatting
+        async function fetchSheetData(sheetName, range) {
+            const url = `${APPS_SCRIPT_URL}?sheet=${encodeURIComponent(sheetName)}&range=${encodeURIComponent(range)}`;
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                const data = await response.json();
+                if (data.error) {
+                    console.warn('Sheet error on ' + sheetName + ':', data.error);
+                    return null;
+                }
+                return data;
+            } catch (e) {
+                console.error('Error fetching ' + sheetName + ' ' + range + ':', e);
+                return null;
+            }
+        }
+
+        // Check if color is default (white bg or black text)
+        function isDefaultColor(color) {
+            return !color || color === '#ffffff' || color === '#000000' || color === 'rgb(255, 255, 255)' || color === 'rgb(0, 0, 0)';
+        }
+
+        // Render BXH (8 bảng A-H)
+        function renderStandingsTable(data, title, dotClass, colorTheme) {
+            if (!data || !data.rows || data.rows.length === 0) return '';
+            
+            // Filter empty rows
+            const filteredRows = data.rows.filter(row => row.some(cell => cell.value && cell.value.toString().trim() !== ''));
+            if (filteredRows.length === 0) return '';
+
+            // Get headers from first row (if they look like headers)
+            const firstRow = filteredRows[0];
+            const isHeaderRow = firstRow.some(cell => {
+                const val = cell.value.toString().toLowerCase();
+                return val.includes('đội') || val.includes('điểm') || val.includes('hệ số') || val.includes('trận');
+            });
+
+            let html = `<div class="card"><div class="card-title ${colorTheme}"><span class="icon ${colorTheme}"><span class="group-dot ${dotClass}"></span></span>${title}</div><table><thead><tr>`;
+
+            // Render headers
+            if (isHeaderRow) {
+                firstRow.forEach(cell => {
+                    html += `<th class="${colorTheme === 'red' ? 'red' : 'blue'}">${cell.value || '-'}</th>`;
+                });
+                html += '</tr></thead><tbody>';
+                filteredRows.shift(); // Remove header row
+            } else {
+                // Default headers
+                ['Đội', 'Điểm', 'Hệ số'].forEach(h => {
+                    html += `<th class="${colorTheme === 'red' ? 'red' : 'blue'}">${h}</th>`;
+                });
+                html += '</tr></thead><tbody>';
+            }
+
+            // Render data rows
+            filteredRows.forEach(row => {
+                html += '<tr>';
+                row.forEach((cell, i) => {
+                    const bgStyle = !isDefaultColor(cell.bg) ? `background-color: ${cell.bg};` : '';
+                    const colorStyle = !isDefaultColor(cell.color) ? `color: ${cell.color};` : '';
+                    const style = bgStyle + colorStyle;
+                    
+                    let cellClass = '';
+                    if (i === 1 && !style) cellClass = `points-cell ${colorTheme}`;
+                    else if (i === 2 && !style) cellClass = 'ratio-cell';
+                    
+                    html += `<td class="${cellClass}" style="${style}">${cell.value || ''}</td>`;
+                });
+                html += '</tr>';
+            });
+            html += '</tbody></table></div>';
+            return html;
+        }
+
+        // Render các trận đấu knock-out
+        function renderMatchTable(data, title, colorTheme) {
+            if (!data || !data.rows || data.rows.length === 0) return '';
+            
+            const filteredRows = data.rows.filter(row => row.some(cell => cell.value && cell.value.toString().trim() !== ''));
+            if (filteredRows.length === 0) return '';
+
+            const thClass = colorTheme === 'red' ? 'red' : 'blue';
+            let html = `<div class="card"><div class="card-title ${colorTheme}"><span class="icon ${colorTheme}">🏆</span>${title}</div><table><thead><tr>`;
+
+            // Assume first row is headers
+            const firstRow = filteredRows[0];
+            firstRow.forEach(cell => {
+                html += `<th class="${thClass}">${cell.value || '-'}</th>`;
+            });
+            html += '</tr></thead><tbody>';
+            filteredRows.shift();
+
+            filteredRows.forEach(row => {
+                html += '<tr>';
+                row.forEach(cell => {
+                    const bgStyle = !isDefaultColor(cell.bg) ? `background-color: ${cell.bg};` : '';
+                    const colorStyle = !isDefaultColor(cell.color) ? `color: ${cell.color};` : '';
+                    const style = bgStyle + colorStyle;
+                    html += `<td style="${style}">${cell.value || ''}</td>`;
+                });
+                html += '</tr>';
+            });
+            html += '</tbody></table></div>';
+            return html;
+        }
+
+        // Render Sơ đồ (with exact formatting from sheet)
+        function renderSodoTable(data, colorTheme) {
+            if (!data || !data.rows || data.rows.length === 0) return '';
+            
+            const filteredRows = data.rows.filter(row => row.some(cell => cell.value && cell.value.toString().trim() !== ''));
+            if (filteredRows.length === 0) return '';
+
+            let html = `<div class="card" style="padding: 8px; overflow-x: auto;">
+                <div class="card-title ${colorTheme}"><span class="icon ${colorTheme}">📋</span>BẢNG THÀNH TÍCH</div>
+                <table class="sodo-table"><thead><tr>`;
+
+            // First row as headers
+            const firstRow = filteredRows[0];
+            firstRow.forEach(cell => {
+                const bgStyle = !isDefaultColor(cell.bg) ? `background-color: ${cell.bg};` : '';
+                const colorStyle = !isDefaultColor(cell.color) ? `color: ${cell.color};` : '';
+                const style = bgStyle + colorStyle;
+                html += `<th style="${style}">${cell.value || ''}</th>`;
+            });
+            html += '</tr></thead><tbody>';
+            filteredRows.shift();
+
+            filteredRows.forEach(row => {
+                html += '<tr>';
+                row.forEach(cell => {
+                    const bgStyle = !isDefaultColor(cell.bg) ? `background-color: ${cell.bg};` : '';
+                    const colorStyle = !isDefaultColor(cell.color) ? `color: ${cell.color};` : '';
+                    const style = bgStyle + colorStyle;
+                    html += `<td style="${style}">${cell.value || ''}</td>`;
+                });
+                html += '</tr>';
+            });
+            html += '</tbody></table></div>';
+            return html;
+        }
+
+        async function loadAllData() {
+            // --- TAB 1: BẢNG XẾP HẠNG ---
+            const sheetNames = ['A', 'B', 'C', 'D'];
+            const titles = ['Bảng A', 'Bảng B', 'Bảng C', 'Bảng D',];
+            const dotClasses = ['dot-a', 'dot-b', 'dot-c', 'dot-d'];
+            const bxhContainer = document.getElementById('bxh-container');
+            let bxhHTML = '';
+
+            const bxhResults = await Promise.all(sheetNames.map(n => fetchSheetData(n, 'F1:H5')));
+            bxhResults.forEach((data, idx) => {
+                if (data) bxhHTML += renderStandingsTable(data, titles[idx], dotClasses[idx], 'blue');
+                else bxhHTML += `<div class="card"><div class="error-msg">Không tải được ${titles[idx]}</div></div>`;
+            });
+            bxhContainer.innerHTML = bxhHTML;
+
+            // --- TAB 2: VÒNG BẢNG ---
+            const rangesBang = [
+                { range: 'A2:F8', title: 'BẢNG A' }, { range: 'A11:F17', title: 'BẢNG B' },
+                { range: 'A20:F26', title: 'BẢNG C' }, { range: 'A29:F35', title: 'BẢNG D' },
+                
+            ];
+            const vongbangContainer = document.getElementById('vongbang-container');
+            vongbangContainer.innerHTML = '<div class="loading"><div class="spinner"></div><div class="loading-text">Đang tải vòng bảng...</div></div>';
+            
+            let vongbangSheetName = 'vongbang';
+            let vbResults = await Promise.all(rangesBang.map(r => fetchSheetData(vongbangSheetName, r.range)));
+            if (vbResults.every(r => r === null)) {
+                vongbangSheetName = 'bang';
+                vbResults = await Promise.all(rangesBang.map(r => fetchSheetData(vongbangSheetName, r.range)));
+            }
+
+            let vbHTML = '';
+            vbResults.forEach((data, idx) => {
+                if (data) vbHTML += `<div class="round-section"><div class="round-header">📍 ${rangesBang[idx].title}</div>${renderMatchTable(data, 'Kết quả ' + rangesBang[idx].title, 'blue')}</div>`;
+            });
+            vongbangContainer.innerHTML = vbHTML || '<div class="error-msg">Không thể tải dữ liệu vòng bảng. Kiểm tra tên sheet là "vongbang" hoặc "bang".</div>';
+
+            // --- TAB 3: SERI A ---
+            const seriaContainer = document.getElementById('seria-container');
+            const seriARounds = [
+                { sheet: '1.8 A', range: 'A1:G12', title: 'Tứ kết - Seri A' },
+                { sheet: 'bk A', range: 'A2:F7', title: 'Bán kết - Seri A' },
+                { sheet: 'ck A', range: 'A2:E4', title: 'Chung kết - Seri A' }
+            ];
+            
+            let seriaHTML = '';
+            for (let round of seriARounds) {
+                let data = await fetchSheetData(round.sheet, round.range);
+                if (data) {
+                    seriaHTML += `<div class="round-section"><div class="round-header">🔵 ${round.title}</div>${renderMatchTable(data, round.title, 'blue')}</div>`;
+                }
+            }
+            let sodoAData = await fetchSheetData('sodo A', 'A1:b5');
+            if (sodoAData) seriaHTML += `<div class="round-section">${renderSodoTable(sodoAData, 'blue')}</div>`;
+            seriaContainer.innerHTML = seriaHTML || '<div class="error-msg">Chưa có dữ liệu Seri A</div>';
+
+            // --- TAB 4: SERI B ---
+            const seribContainer = document.getElementById('serib-container');
+            const seriBRounds = [
+                
+                { sheet: '1.8 B', range: 'A1:G12', title: 'Tứ kết - Seri B' },
+                { sheet: 'bk B', range: 'A2:F7', title: 'Bán kết - Seri B' },
+                { sheet: 'ck B', range: 'A2:E4', title: 'Chung kết - Seri B' }
+            ];
+
+            let seribHTML = '';
+            for (let round of seriBRounds) {
+                let data = await fetchSheetData(round.sheet, round.range);
+                if (data) {
+                    seribHTML += `<div class="round-section"><div class="round-header">🔴 ${round.title}</div>${renderMatchTable(data, round.title, 'red')}</div>`;
+                }
+            }
+            let sodoBData = await fetchSheetData('sodo B', 'A1:b5');
+            if (sodoBData) seribHTML += `<div class="round-section">${renderSodoTable(sodoBData, 'red')}</div>`;
+            seribContainer.innerHTML = seribHTML || '<div class="error-msg">Chưa có dữ liệu Seri B</div>';
+
+            // Update time
+            document.getElementById('update-time').innerHTML = `Dữ liệu cập nhật: <span>${new Date().toLocaleTimeString('vi-VN')}</span> - <span>${new Date().toLocaleDateString('vi-VN')}</span>`;
+        }
+
+        loadAllData();
+        setInterval(loadAllData, 60000);
+    </script>
+</body>
+</html>
