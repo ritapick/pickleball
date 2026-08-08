@@ -35,7 +35,6 @@
             overflow-x: hidden;
         }
 
-        /* 🔹 Chuyển header thành <a>, thêm display: block + text-decoration: none + color: white */
         .header {
             background: linear-gradient(135deg, #3e4f3c 0%, #457d3e 50%, #309124 100%);
             color: white;
@@ -50,9 +49,7 @@
             transition: filter 0.2s ease;
         }
 
-        .header:hover {
-            filter: brightness(1.05);
-        }
+        .header:hover { filter: brightness(1.05); }
 
         .header::before {
             content: '';
@@ -278,7 +275,86 @@
             font-size: 0.65rem; 
         }
 
-        .update-time { text-align: center; font-size: 0.7rem; color: var(--text-secondary); padding: 16px; font-weight: 500; }
+        /* Update bar styles */
+        .update-bar {
+            background: white;
+            border-bottom: 1px solid var(--border);
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            position: sticky;
+            top: 41px;
+            z-index: 99;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .update-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .refresh-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .refresh-btn:hover {
+            background: var(--primary-dark);
+            transform: scale(1.05);
+        }
+
+        .refresh-btn:active {
+            transform: scale(0.95);
+        }
+
+        .refresh-btn.loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .refresh-icon {
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+
+        .refresh-btn.loading .refresh-icon {
+            animation: spin 0.8s linear infinite;
+        }
+
+        .update-time {
+            text-align: center;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            padding: 16px;
+            font-weight: 500;
+        }
         .update-time span { color: var(--primary); font-weight: 600; }
 
         @media (max-width: 480px) {
@@ -288,6 +364,7 @@
             .card { padding: 12px; border-radius: 12px; }
             table { font-size: 0.75rem; }
             table th, table td { padding: 8px 6px; }
+            .update-bar { top: 37px; padding: 6px 12px; }
         }
 
         .tab-group-label { display: flex; align-items: center; gap: 4px; }
@@ -296,10 +373,6 @@
         .dot-b { background: #ef4444; }
         .dot-c { background: #10b981; }
         .dot-d { background: #f59e0b; }
-        .dot-e { background: #8b5cf6; }
-        .dot-f { background: #ec4899; }
-        .dot-g { background: #f97316; }
-        .dot-h { background: #06b6d4; }
 
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .grid-2 .card { margin-bottom: 0; }
@@ -319,12 +392,34 @@
             gap: 8px;
         }
 
-        .cell-custom-bg { background-color: inherit; }
-        .cell-custom-color { color: inherit; }
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #1f2937;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success { background: #059669; }
+        .toast.error { background: #dc2626; }
     </style>
 </head>
 <body>
-    <!-- 🔹 BANNER ĐÃ ĐƯỢC CHUYỂN THÀNH THẺ <a> VỚI LINK GOOGLE -->
     <a href="https://ritapick.github.io/pickleball/" rel="noopener" class="header">
         <div class="ball-icon">🎾</div>
         <h1>DTD PICKLEBALL TOURNAMENT</h1>
@@ -348,8 +443,19 @@
         </div>
     </div>
 
+    <!-- Update Bar -->
+    <div class="update-bar">
+        <div class="update-info">
+            <div class="live-dot"></div>
+            <span id="update-status">Đang tải...</span>
+        </div>
+        <button class="refresh-btn" id="refresh-btn" onclick="manualRefresh()">
+            <span class="refresh-icon">🔄</span>
+            <span>Cập nhật</span>
+        </button>
+    </div>
+
     <div class="content">
-        <!-- TAB 1: BXH -->
         <div class="tab-content active" id="tab-bxh">
             <div class="section-title">Bảng thi đấu <span class="badge">4 Bảng</span></div>
             <div class="grid-2" id="bxh-container">
@@ -357,7 +463,6 @@
             </div>
         </div>
 
-        <!-- TAB 2: VÒNG BẢNG -->
         <div class="tab-content" id="tab-vongbang">
             <div class="section-title">Kết quả thi đấu vòng bảng <span class="badge">Chi tiết</span></div>
             <div id="vongbang-container">
@@ -365,7 +470,6 @@
             </div>
         </div>
 
-        <!-- TAB 3: SERI A -->
         <div class="tab-content" id="tab-seria">
             <div class="section-title seri-a">🔵 Nhánh thi đấu Seri A <span class="badge a">Knock-out</span></div>
             <div id="seria-container">
@@ -373,7 +477,6 @@
             </div>
         </div>
 
-        <!-- TAB 4: SERI B -->
         <div class="tab-content" id="tab-serib">
             <div class="section-title seri-b">🔴 Nhánh thi đấu Seri B <span class="badge b">Knock-out</span></div>
             <div id="serib-container">
@@ -384,52 +487,151 @@
         <div class="update-time" id="update-time"></div>
     </div>
 
+    <!-- Toast notification -->
+    <div class="toast" id="toast"></div>
+
     <script>
-        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwbT81qPFFhtIOrGDZk8N7dDnOxIewXvotA0c7fVWkUntWd-z9TSdoU_wOTbf8ssaoWMg/exec';
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzLGFpZlg9d5oM-ih-0t9s61_-ZK6sRMw5nhjqQJvbGhAAJ_9791CQv6AgD3KO7eTFfEQ/exec';
+        
+        // Cache variables
+        let cachedData = null;
+        let lastFetchTime = 0;
+        const CACHE_DURATION = 5000; // 5 giây (client cache)
+        let isLoading = false;
+        let pollingInterval = null;
+        let lastUpdateTime = null;
+        const POLLING_INTERVAL = 10000; // Poll mỗi 10 giây
 
         // Tab switching
         document.querySelectorAll('.tab').forEach(tab => {
-            tab.addEventListener('click', () => {
+            tab.addEventListener('click', async () => {
                 document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
                 document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
                 tab.classList.add('active');
-                document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+                const tabId = 'tab-' + tab.dataset.tab;
+                document.getElementById(tabId).classList.add('active');
+                await loadTabData(tab.dataset.tab);
             });
         });
 
-        // Fetch data from Apps Script with formatting
-        async function fetchSheetData(sheetName, range) {
-            const url = `${APPS_SCRIPT_URL}?sheet=${encodeURIComponent(sheetName)}&range=${encodeURIComponent(range)}`;
-            try {
-                const response = await fetch(url);
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                const data = await response.json();
-                if (data.error) {
-                    console.warn('Sheet error on ' + sheetName + ':', data.error);
-                    return null;
-                }
-                return data;
-            } catch (e) {
-                console.error('Error fetching ' + sheetName + ' ' + range + ':', e);
-                return null;
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type} show`;
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Update status display
+        function updateStatus(text, isUpdating = false) {
+            const statusEl = document.getElementById('update-status');
+            statusEl.textContent = text;
+            
+            const refreshBtn = document.getElementById('refresh-btn');
+            if (isUpdating) {
+                refreshBtn.classList.add('loading');
+            } else {
+                refreshBtn.classList.remove('loading');
             }
         }
 
-        // Check if color is default (white bg or black text)
-        function isDefaultColor(color) {
-            return !color || color === '#ffffff' || color === '#000000' || color === 'rgb(255, 255, 255)' || color === 'rgb(0, 0, 0)';
+        // Format time ago
+        function formatTimeAgo(timestamp) {
+            const seconds = Math.floor((Date.now() - timestamp) / 1000);
+            if (seconds < 5) return 'Vừa xong';
+            if (seconds < 60) return `${seconds} giây trước`;
+            const minutes = Math.floor(seconds / 60);
+            return `${minutes} phút trước`;
         }
 
-        // Render BXH (8 bảng A-H)
-        function renderStandingsTable(data, title, dotClass, colorTheme) {
-            if (!data || !data.rows || data.rows.length === 0) return '';
+        // Manual refresh
+        async function manualRefresh() {
+            if (isLoading) return;
             
-            const filteredRows = data.rows.filter(row => row.some(cell => cell.value && cell.value.toString().trim() !== ''));
+            cachedData = null;
+            lastFetchTime = 0;
+            await refreshCurrentTab(true);
+            showToast('✓ Đã cập nhật dữ liệu mới!', 'success');
+        }
+
+        // Fetch all data
+        async function fetchAllData(forceRefresh = false) {
+            const now = Date.now();
+            
+            if (!forceRefresh && cachedData && (now - lastFetchTime < CACHE_DURATION)) {
+                return cachedData;
+            }
+            
+            if (isLoading) {
+                while (isLoading) {
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                }
+                return cachedData;
+            }
+            
+            isLoading = true;
+            updateStatus('Đang cập nhật...', true);
+            
+            try {
+                const url = `${APPS_SCRIPT_URL}?action=getAllData&t=${now}`;
+                const response = await fetch(url);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                const result = await response.json();
+                
+                if (result.success && result.data) {
+                    cachedData = result.data;
+                    lastFetchTime = now;
+                    lastUpdateTime = now;
+                    updateUpdateTime();
+                }
+                return cachedData;
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                updateStatus('Lỗi kết nối', false);
+                return cachedData;
+            } finally {
+                isLoading = false;
+                updateStatus(`Cập nhật ${formatTimeAgo(lastUpdateTime)}`, false);
+            }
+        }
+
+        // Update time display
+        function updateUpdateTime() {
+            if (lastUpdateTime) {
+                const time = new Date(lastUpdateTime).toLocaleTimeString('vi-VN');
+                updateStatus(`Cập nhật ${formatTimeAgo(lastUpdateTime)}`, false);
+            }
+        }
+
+        // Update status every second
+        setInterval(updateUpdateTime, 1000);
+
+        function isDefaultColor(color) {
+            return !color || color === '#ffffff' || color === '#000000' || 
+                   color === 'rgb(255, 255, 255)' || color === 'rgb(0, 0, 0)';
+        }
+
+        function hasValue(value) {
+            if (value === null || value === undefined) return false;
+            if (typeof value === 'string' && value.trim() === '') return false;
+            return true;
+        }
+
+        function renderStandingsTable(data, title, dotClass, colorTheme) {
+            if (!data || !data.rows || data.rows.length === 0 || data.error) return '';
+            
+            const filteredRows = data.rows.filter(row => 
+                row.some(cell => hasValue(cell.value))
+            );
+            
             if (filteredRows.length === 0) return '';
 
             const firstRow = filteredRows[0];
             const isHeaderRow = firstRow.some(cell => {
-                const val = cell.value.toString().toLowerCase();
+                const val = cell.value?.toString().toLowerCase() || '';
                 return val.includes('đội') || val.includes('điểm') || val.includes('hệ số') || val.includes('trận');
             });
 
@@ -437,7 +639,7 @@
 
             if (isHeaderRow) {
                 firstRow.forEach(cell => {
-                    html += `<th class="${colorTheme === 'red' ? 'red' : 'blue'}">${cell.value || '-'}</th>`;
+                    html += `<th class="${colorTheme === 'red' ? 'red' : 'blue'}">${hasValue(cell.value) ? cell.value : '-'}</th>`;
                 });
                 html += '</tr></thead><tbody>';
                 filteredRows.shift();
@@ -459,7 +661,7 @@
                     if (i === 1 && !style) cellClass = `points-cell ${colorTheme}`;
                     else if (i === 2 && !style) cellClass = 'ratio-cell';
                     
-                    html += `<td class="${cellClass}" style="${style}">${cell.value || ''}</td>`;
+                    html += `<td class="${cellClass}" style="${style}">${hasValue(cell.value) ? cell.value : ''}</td>`;
                 });
                 html += '</tr>';
             });
@@ -467,11 +669,13 @@
             return html;
         }
 
-        // Render các trận đấu knock-out
         function renderMatchTable(data, title, colorTheme) {
-            if (!data || !data.rows || data.rows.length === 0) return '';
+            if (!data || !data.rows || data.rows.length === 0 || data.error) return '';
             
-            const filteredRows = data.rows.filter(row => row.some(cell => cell.value && cell.value.toString().trim() !== ''));
+            const filteredRows = data.rows.filter(row => 
+                row.some(cell => hasValue(cell.value))
+            );
+            
             if (filteredRows.length === 0) return '';
 
             const thClass = colorTheme === 'red' ? 'red' : 'blue';
@@ -479,7 +683,7 @@
 
             const firstRow = filteredRows[0];
             firstRow.forEach(cell => {
-                html += `<th class="${thClass}">${cell.value || '-'}</th>`;
+                html += `<th class="${thClass}">${hasValue(cell.value) ? cell.value : '-'}</th>`;
             });
             html += '</tr></thead><tbody>';
             filteredRows.shift();
@@ -490,7 +694,7 @@
                     const bgStyle = !isDefaultColor(cell.bg) ? `background-color: ${cell.bg};` : '';
                     const colorStyle = !isDefaultColor(cell.color) ? `color: ${cell.color};` : '';
                     const style = bgStyle + colorStyle;
-                    html += `<td style="${style}">${cell.value || ''}</td>`;
+                    html += `<td style="${style}">${hasValue(cell.value) ? cell.value : ''}</td>`;
                 });
                 html += '</tr>';
             });
@@ -498,11 +702,13 @@
             return html;
         }
 
-        // Render Sơ đồ (with exact formatting from sheet)
         function renderSodoTable(data, colorTheme) {
-            if (!data || !data.rows || data.rows.length === 0) return '';
+            if (!data || !data.rows || data.rows.length === 0 || data.error) return '';
             
-            const filteredRows = data.rows.filter(row => row.some(cell => cell.value && cell.value.toString().trim() !== ''));
+            const filteredRows = data.rows.filter(row => 
+                row.some(cell => hasValue(cell.value))
+            );
+            
             if (filteredRows.length === 0) return '';
 
             let html = `<div class="card" style="padding: 8px; overflow-x: auto;">
@@ -514,7 +720,7 @@
                 const bgStyle = !isDefaultColor(cell.bg) ? `background-color: ${cell.bg};` : '';
                 const colorStyle = !isDefaultColor(cell.color) ? `color: ${cell.color};` : '';
                 const style = bgStyle + colorStyle;
-                html += `<th style="${style}">${cell.value || ''}</th>`;
+                html += `<th style="${style}">${hasValue(cell.value) ? cell.value : ''}</th>`;
             });
             html += '</tr></thead><tbody>';
             filteredRows.shift();
@@ -525,7 +731,7 @@
                     const bgStyle = !isDefaultColor(cell.bg) ? `background-color: ${cell.bg};` : '';
                     const colorStyle = !isDefaultColor(cell.color) ? `color: ${cell.color};` : '';
                     const style = bgStyle + colorStyle;
-                    html += `<td style="${style}">${cell.value || ''}</td>`;
+                    html += `<td style="${style}">${hasValue(cell.value) ? cell.value : ''}</td>`;
                 });
                 html += '</tr>';
             });
@@ -533,88 +739,151 @@
             return html;
         }
 
-        async function loadAllData() {
-            // --- TAB 1: BẢNG XẾP HẠNG ---
-            const sheetNames = ['A', 'B', 'C', 'D'];
-            const titles = ['Bảng A', 'Bảng B', 'Bảng C', 'Bảng D',];
-            const dotClasses = ['dot-a', 'dot-b', 'dot-c', 'dot-d'];
-            const bxhContainer = document.getElementById('bxh-container');
-            let bxhHTML = '';
-
-            const bxhResults = await Promise.all(sheetNames.map(n => fetchSheetData(n, 'F1:H5')));
-            bxhResults.forEach((data, idx) => {
-                if (data) bxhHTML += renderStandingsTable(data, titles[idx], dotClasses[idx], 'blue');
-                else bxhHTML += `<div class="card"><div class="error-msg">Không tải được ${titles[idx]}</div></div>`;
-            });
-            bxhContainer.innerHTML = bxhHTML;
-
-            // --- TAB 2: VÒNG BẢNG ---
-            const rangesBang = [
-                { range: 'A2:F8', title: 'BẢNG A' }, { range: 'A11:F17', title: 'BẢNG B' },
-                { range: 'A20:F26', title: 'BẢNG C' }, { range: 'A29:F35', title: 'BẢNG D' },
-                
-            ];
-            const vongbangContainer = document.getElementById('vongbang-container');
-            vongbangContainer.innerHTML = '<div class="loading"><div class="spinner"></div><div class="loading-text">Đang tải vòng bảng...</div></div>';
+        async function loadTabData(tabName) {
+            const data = await fetchAllData();
             
-            let vongbangSheetName = 'vongbang';
-            let vbResults = await Promise.all(rangesBang.map(r => fetchSheetData(vongbangSheetName, r.range)));
-            if (vbResults.every(r => r === null)) {
-                vongbangSheetName = 'bang';
-                vbResults = await Promise.all(rangesBang.map(r => fetchSheetData(vongbangSheetName, r.range)));
+            if (!data) {
+                console.error('No data available');
+                return;
             }
 
-            let vbHTML = '';
-            vbResults.forEach((data, idx) => {
-                if (data) vbHTML += `<div class="round-section"><div class="round-header">📍 ${rangesBang[idx].title}</div>${renderMatchTable(data, 'Kết quả ' + rangesBang[idx].title, 'blue')}</div>`;
-            });
-            vongbangContainer.innerHTML = vbHTML || '<div class="error-msg">Không thể tải dữ liệu vòng bảng. Kiểm tra tên sheet là "vongbang" hoặc "bang".</div>';
-
-            // --- TAB 3: SERI A ---
-            const seriaContainer = document.getElementById('seria-container');
-            const seriARounds = [
-                { sheet: '1.8 A', range: 'A1:G12', title: 'Tứ kết - Seri A' },
-                { sheet: 'bk A', range: 'A2:F7', title: 'Bán kết - Seri A' },
-                { sheet: 'ck A', range: 'A2:E4', title: 'Chung kết - Seri A' }
-            ];
-            
-            let seriaHTML = '';
-            for (let round of seriARounds) {
-                let data = await fetchSheetData(round.sheet, round.range);
-                if (data) {
-                    seriaHTML += `<div class="round-section"><div class="round-header">🔵 ${round.title}</div>${renderMatchTable(data, round.title, 'blue')}</div>`;
-                }
+            switch(tabName) {
+                case 'bxh':
+                    renderBXH(data);
+                    break;
+                case 'vongbang':
+                    renderVongBang(data);
+                    break;
+                case 'seria':
+                    renderSeriA(data);
+                    break;
+                case 'serib':
+                    renderSeriB(data);
+                    break;
             }
-            let sodoAData = await fetchSheetData('sodo A', 'A1:b5');
-            if (sodoAData) seriaHTML += `<div class="round-section">${renderSodoTable(sodoAData, 'blue')}</div>`;
-            seriaContainer.innerHTML = seriaHTML || '<div class="error-msg">Chưa có dữ liệu Seri A</div>';
-
-            // --- TAB 4: SERI B ---
-            const seribContainer = document.getElementById('serib-container');
-            const seriBRounds = [
-                
-                { sheet: '1.8 B', range: 'A1:G12', title: 'Tứ kết - Seri B' },
-                { sheet: 'bk B', range: 'A2:F7', title: 'Bán kết - Seri B' },
-                { sheet: 'ck B', range: 'A2:E4', title: 'Chung kết - Seri B' }
-            ];
-
-            let seribHTML = '';
-            for (let round of seriBRounds) {
-                let data = await fetchSheetData(round.sheet, round.range);
-                if (data) {
-                    seribHTML += `<div class="round-section"><div class="round-header">🔴 ${round.title}</div>${renderMatchTable(data, round.title, 'red')}</div>`;
-                }
-            }
-            let sodoBData = await fetchSheetData('sodo B', 'A1:b5');
-            if (sodoBData) seribHTML += `<div class="round-section">${renderSodoTable(sodoBData, 'red')}</div>`;
-            seribContainer.innerHTML = seribHTML || '<div class="error-msg">Chưa có dữ liệu Seri B</div>';
-
-            // Update time
-            document.getElementById('update-time').innerHTML = `KARAOKE RITA`;
         }
 
-        loadAllData();
-        setInterval(loadAllData, 30000);
+        function renderBXH(data) {
+            const container = document.getElementById('bxh-container');
+            const titles = ['Bảng A', 'Bảng B', 'Bảng C', 'Bảng D'];
+            const dotClasses = ['dot-a', 'dot-b', 'dot-c', 'dot-d'];
+            const keys = ['bxh_A', 'bxh_B', 'bxh_C', 'bxh_D'];
+            
+            let html = '';
+            keys.forEach((key, idx) => {
+                const tableData = data[key];
+                if (tableData && !tableData.error) {
+                    html += renderStandingsTable(tableData, titles[idx], dotClasses[idx], 'blue');
+                } else {
+                    html += `<div class="card"><div class="error-msg">Không tải được ${titles[idx]}</div></div>`;
+                }
+            });
+            container.innerHTML = html;
+        }
+
+        function renderVongBang(data) {
+            const container = document.getElementById('vongbang-container');
+            const titles = ['BẢNG A', 'BẢNG B', 'BẢNG C', 'BẢNG D'];
+            const keys = ['vb_A', 'vb_B', 'vb_C', 'vb_D'];
+            
+            let html = '';
+            keys.forEach((key, idx) => {
+                const tableData = data[key];
+                if (tableData && !tableData.error) {
+                    html += `<div class="round-section"><div class="round-header">📍 ${titles[idx]}</div>${renderMatchTable(tableData, 'Kết quả ' + titles[idx], 'blue')}</div>`;
+                }
+            });
+            container.innerHTML = html || '<div class="error-msg">Không thể tải dữ liệu vòng bảng.</div>';
+        }
+
+        function renderSeriA(data) {
+            const container = document.getElementById('seria-container');
+            const rounds = [
+                { key: 'seria_tk', title: 'Tứ kết - Seri A' },
+                { key: 'seria_bk', title: 'Bán kết - Seri A' },
+                { key: 'seria_ck', title: 'Chung kết - Seri A' }
+            ];
+            
+            let html = '';
+            rounds.forEach(round => {
+                const tableData = data[round.key];
+                if (tableData && !tableData.error) {
+                    html += `<div class="round-section"><div class="round-header">🔵 ${round.title}</div>${renderMatchTable(tableData, round.title, 'blue')}</div>`;
+                }
+            });
+            
+            const sodoData = data['seria_sodo'];
+            if (sodoData && !sodoData.error) {
+                html += `<div class="round-section">${renderSodoTable(sodoData, 'blue')}</div>`;
+            }
+            
+            container.innerHTML = html || '<div class="error-msg">Chưa có dữ liệu Seri A</div>';
+        }
+
+        function renderSeriB(data) {
+            const container = document.getElementById('serib-container');
+            const rounds = [
+                { key: 'serib_tk', title: 'Tứ kết - Seri B' },
+                { key: 'serib_bk', title: 'Bán kết - Seri B' },
+                { key: 'serib_ck', title: 'Chung kết - Seri B' }
+            ];
+            
+            let html = '';
+            rounds.forEach(round => {
+                const tableData = data[round.key];
+                if (tableData && !tableData.error) {
+                    html += `<div class="round-section"><div class="round-header">🔴 ${round.title}</div>${renderMatchTable(tableData, round.title, 'red')}</div>`;
+                }
+            });
+            
+            const sodoData = data['serib_sodo'];
+            if (sodoData && !sodoData.error) {
+                html += `<div class="round-section">${renderSodoTable(sodoData, 'red')}</div>`;
+            }
+            
+            container.innerHTML = html || '<div class="error-msg">Chưa có dữ liệu Seri B</div>';
+        }
+
+        // Refresh current tab
+        async function refreshCurrentTab(showToast = false) {
+            const activeTab = document.querySelector('.tab.active').dataset.tab;
+            await loadTabData(activeTab);
+            if (showToast) {
+                // Toast already shown in manualRefresh
+            }
+        }
+
+        // Start polling
+        function startPolling() {
+            if (pollingInterval) {
+                clearInterval(pollingInterval);
+            }
+            
+            pollingInterval = setInterval(async () => {
+                // Only poll if document is visible
+                if (!document.hidden) {
+                    cachedData = null; // Force refresh
+                    await refreshCurrentTab(false);
+                }
+            }, POLLING_INTERVAL);
+        }
+
+        // Handle visibility change
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                // Tab became visible, refresh immediately
+                refreshCurrentTab(false);
+            }
+        });
+
+        // Initialize
+        async function init() {
+            await loadTabData('bxh');
+            startPolling();
+            updateStatus('Đang theo dõi trực tiếp', false);
+        }
+
+        init();
     </script>
 </body>
 </html>
