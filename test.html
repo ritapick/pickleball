@@ -275,7 +275,86 @@
             font-size: 0.65rem; 
         }
 
-        .update-time { text-align: center; font-size: 0.7rem; color: var(--text-secondary); padding: 16px; font-weight: 500; }
+        /* Update bar styles */
+        .update-bar {
+            background: white;
+            border-bottom: 1px solid var(--border);
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            position: sticky;
+            top: 41px;
+            z-index: 99;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .update-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .refresh-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .refresh-btn:hover {
+            background: var(--primary-dark);
+            transform: scale(1.05);
+        }
+
+        .refresh-btn:active {
+            transform: scale(0.95);
+        }
+
+        .refresh-btn.loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .refresh-icon {
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+
+        .refresh-btn.loading .refresh-icon {
+            animation: spin 0.8s linear infinite;
+        }
+
+        .update-time {
+            text-align: center;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            padding: 16px;
+            font-weight: 500;
+        }
         .update-time span { color: var(--primary); font-weight: 600; }
 
         @media (max-width: 480px) {
@@ -285,6 +364,7 @@
             .card { padding: 12px; border-radius: 12px; }
             table { font-size: 0.75rem; }
             table th, table td { padding: 8px 6px; }
+            .update-bar { top: 37px; padding: 6px 12px; }
         }
 
         .tab-group-label { display: flex; align-items: center; gap: 4px; }
@@ -311,6 +391,32 @@
             align-items: center;
             gap: 8px;
         }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #1f2937;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success { background: #059669; }
+        .toast.error { background: #dc2626; }
     </style>
 </head>
 <body>
@@ -335,6 +441,18 @@
                 <span class="tab-group-label"><span class="group-dot dot-b"></span> Seri B</span>
             </button>
         </div>
+    </div>
+
+    <!-- Update Bar -->
+    <div class="update-bar">
+        <div class="update-info">
+            <div class="live-dot"></div>
+            <span id="update-status">Đang tải...</span>
+        </div>
+        <button class="refresh-btn" id="refresh-btn" onclick="manualRefresh()">
+            <span class="refresh-icon">🔄</span>
+            <span>Cập nhật</span>
+        </button>
     </div>
 
     <div class="content">
@@ -369,16 +487,22 @@
         <div class="update-time" id="update-time"></div>
     </div>
 
+    <!-- Toast notification -->
+    <div class="toast" id="toast"></div>
+
     <script>
-        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzbHRJmnFDN4D2GcRxY8JLyyNgbFwcAAW6TvJNZ-VPDvhFCpgrjNLo8KziN4EB2brX5Wg/exec';
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzLGFpZlg9d5oM-ih-0t9s61_-ZK6sRMw5nhjqQJvbGhAAJ_9791CQv6AgD3KO7eTFfEQ/exec';
         
-        // Cache để lưu data đã fetch
+        // Cache variables
         let cachedData = null;
         let lastFetchTime = 0;
-        const CACHE_DURATION = 10000; // 10 giây
+        const CACHE_DURATION = 5000; // 5 giây (client cache)
         let isLoading = false;
+        let pollingInterval = null;
+        let lastUpdateTime = null;
+        const POLLING_INTERVAL = 10000; // Poll mỗi 10 giây
 
-        // Tab switching với lazy loading
+        // Tab switching
         document.querySelectorAll('.tab').forEach(tab => {
             tab.addEventListener('click', async () => {
                 document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -386,22 +510,61 @@
                 tab.classList.add('active');
                 const tabId = 'tab-' + tab.dataset.tab;
                 document.getElementById(tabId).classList.add('active');
-                
-                // Lazy load: chỉ fetch nếu data chưa có
                 await loadTabData(tab.dataset.tab);
             });
         });
 
-        // Fetch tất cả data trong 1 lần gọi
-        async function fetchAllData() {
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type} show`;
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Update status display
+        function updateStatus(text, isUpdating = false) {
+            const statusEl = document.getElementById('update-status');
+            statusEl.textContent = text;
+            
+            const refreshBtn = document.getElementById('refresh-btn');
+            if (isUpdating) {
+                refreshBtn.classList.add('loading');
+            } else {
+                refreshBtn.classList.remove('loading');
+            }
+        }
+
+        // Format time ago
+        function formatTimeAgo(timestamp) {
+            const seconds = Math.floor((Date.now() - timestamp) / 1000);
+            if (seconds < 5) return 'Vừa xong';
+            if (seconds < 60) return `${seconds} giây trước`;
+            const minutes = Math.floor(seconds / 60);
+            return `${minutes} phút trước`;
+        }
+
+        // Manual refresh
+        async function manualRefresh() {
+            if (isLoading) return;
+            
+            cachedData = null;
+            lastFetchTime = 0;
+            await refreshCurrentTab(true);
+            showToast('✓ Đã cập nhật dữ liệu mới!', 'success');
+        }
+
+        // Fetch all data
+        async function fetchAllData(forceRefresh = false) {
             const now = Date.now();
             
-            // Sử dụng cache nếu còn hạn
-            if (cachedData && (now - lastFetchTime < CACHE_DURATION)) {
+            if (!forceRefresh && cachedData && (now - lastFetchTime < CACHE_DURATION)) {
                 return cachedData;
             }
             
-            // Tránh multiple requests cùng lúc
             if (isLoading) {
                 while (isLoading) {
                     await new Promise(resolve => setTimeout(resolve, 100));
@@ -410,8 +573,10 @@
             }
             
             isLoading = true;
+            updateStatus('Đang cập nhật...', true);
+            
             try {
-                const url = `${APPS_SCRIPT_URL}?action=getAllData`;
+                const url = `${APPS_SCRIPT_URL}?action=getAllData&t=${now}`;
                 const response = await fetch(url);
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 const result = await response.json();
@@ -419,22 +584,36 @@
                 if (result.success && result.data) {
                     cachedData = result.data;
                     lastFetchTime = now;
+                    lastUpdateTime = now;
+                    updateUpdateTime();
                 }
                 return cachedData;
             } catch (error) {
                 console.error('Error fetching data:', error);
-                return cachedData; // Trả về cache cũ nếu có lỗi
+                updateStatus('Lỗi kết nối', false);
+                return cachedData;
             } finally {
                 isLoading = false;
+                updateStatus(`Cập nhật ${formatTimeAgo(lastUpdateTime)}`, false);
             }
         }
+
+        // Update time display
+        function updateUpdateTime() {
+            if (lastUpdateTime) {
+                const time = new Date(lastUpdateTime).toLocaleTimeString('vi-VN');
+                updateStatus(`Cập nhật ${formatTimeAgo(lastUpdateTime)}`, false);
+            }
+        }
+
+        // Update status every second
+        setInterval(updateUpdateTime, 1000);
 
         function isDefaultColor(color) {
             return !color || color === '#ffffff' || color === '#000000' || 
                    color === 'rgb(255, 255, 255)' || color === 'rgb(0, 0, 0)';
         }
 
-        // Hàm kiểm tra cell có giá trị hay không (bao gồm cả số 0)
         function hasValue(value) {
             if (value === null || value === undefined) return false;
             if (typeof value === 'string' && value.trim() === '') return false;
@@ -444,7 +623,6 @@
         function renderStandingsTable(data, title, dotClass, colorTheme) {
             if (!data || !data.rows || data.rows.length === 0 || data.error) return '';
             
-            // Filter bỏ các hàng hoàn toàn trống (giữ lại các hàng có ít nhất 1 giá trị, kể cả 0)
             const filteredRows = data.rows.filter(row => 
                 row.some(cell => hasValue(cell.value))
             );
@@ -494,7 +672,6 @@
         function renderMatchTable(data, title, colorTheme) {
             if (!data || !data.rows || data.rows.length === 0 || data.error) return '';
             
-            // Filter bỏ các hàng hoàn toàn trống
             const filteredRows = data.rows.filter(row => 
                 row.some(cell => hasValue(cell.value))
             );
@@ -528,7 +705,6 @@
         function renderSodoTable(data, colorTheme) {
             if (!data || !data.rows || data.rows.length === 0 || data.error) return '';
             
-            // Filter bỏ các hàng hoàn toàn trống
             const filteredRows = data.rows.filter(row => 
                 row.some(cell => hasValue(cell.value))
             );
@@ -563,7 +739,6 @@
             return html;
         }
 
-        // Load data theo từng tab (lazy loading)
         async function loadTabData(tabName) {
             const data = await fetchAllData();
             
@@ -669,16 +844,43 @@
             container.innerHTML = html || '<div class="error-msg">Chưa có dữ liệu Seri B</div>';
         }
 
-        // Auto refresh mỗi 30 giây
-        async function autoRefresh() {
+        // Refresh current tab
+        async function refreshCurrentTab(showToast = false) {
             const activeTab = document.querySelector('.tab.active').dataset.tab;
             await loadTabData(activeTab);
+            if (showToast) {
+                // Toast already shown in manualRefresh
+            }
         }
 
-        // Khởi động
+        // Start polling
+        function startPolling() {
+            if (pollingInterval) {
+                clearInterval(pollingInterval);
+            }
+            
+            pollingInterval = setInterval(async () => {
+                // Only poll if document is visible
+                if (!document.hidden) {
+                    cachedData = null; // Force refresh
+                    await refreshCurrentTab(false);
+                }
+            }, POLLING_INTERVAL);
+        }
+
+        // Handle visibility change
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                // Tab became visible, refresh immediately
+                refreshCurrentTab(false);
+            }
+        });
+
+        // Initialize
         async function init() {
             await loadTabData('bxh');
-            setInterval(autoRefresh, 30000);
+            startPolling();
+            updateStatus('Đang theo dõi trực tiếp', false);
         }
 
         init();
