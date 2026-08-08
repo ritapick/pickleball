@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DTD PICKLEBALL CUP 5.25</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -24,9 +25,7 @@
             --text-secondary: #64748b;
             --border: #e2e8f0;
         }
-
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--bg);
@@ -34,7 +33,6 @@
             min-height: 100vh;
             overflow-x: hidden;
         }
-
         .header {
             background: linear-gradient(135deg, #3e4f3c 0%, #457d3e 50%, #309124 100%);
             color: white;
@@ -45,7 +43,6 @@
             box-shadow: 0 4px 20px rgba(26, 86, 219, 0.3);
             cursor: pointer;
         }
-
         .header::before {
             content: '';
             position: absolute;
@@ -55,13 +52,10 @@
             animation: shimmer 8s ease-in-out infinite;
             z-index: 0;
         }
-
         @keyframes shimmer {
             0%, 100% { transform: translate(0, 0); }
             50% { transform: translate(20%, 10%); }
         }
-
-        /* === LINK BANNER - MỚI THÊM === */
         .header-link {
             display: block;
             color: white;
@@ -70,18 +64,10 @@
             z-index: 1;
             transition: opacity 0.2s ease;
         }
-
-        .header-link:hover {
-            color: white;
-            text-decoration: none;
-            opacity: 0.92;
-        }
-        /* === END LINK BANNER === */
-
+        .header-link:hover { color: white; text-decoration: none; opacity: 0.92; }
         .header h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px; position: relative; z-index: 1; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
         .header .subtitle { font-size: 0.8rem; opacity: 0.85; margin-top: 4px; font-weight: 500; position: relative; z-index: 1; }
         .header .ball-icon { font-size: 2rem; margin-bottom: 4px; position: relative; z-index: 1; }
-
         .tabs-container {
             background: white;
             position: sticky;
@@ -90,7 +76,6 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.08);
             border-bottom: 1px solid var(--border);
         }
-
         .tabs {
             display: flex;
             overflow-x: auto;
@@ -100,7 +85,6 @@
             gap: 2px;
         }
         .tabs::-webkit-scrollbar { display: none; }
-
         .tab {
             flex: none;
             padding: 12px 14px;
@@ -116,10 +100,8 @@
             border-radius: 8px 8px 0 0;
             margin-bottom: -1px;
         }
-
         .tab:hover { color: var(--primary); background: rgba(26, 86, 219, 0.05); }
         .tab.active { color: var(--primary); background: rgba(26, 86, 219, 0.08); }
-
         .tab.active::after {
             content: '';
             position: absolute;
@@ -128,169 +110,52 @@
             background: var(--primary);
             border-radius: 3px 3px 0 0;
         }
-
-        .content {
-            padding: 16px;
-            padding-bottom: 32px;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
+        .content { padding: 16px; padding-bottom: 32px; max-width: 800px; margin: 0 auto; }
         .tab-content { display: none; animation: fadeIn 0.3s ease; }
         .tab-content.active { display: block; }
-
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
-        .section-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--text);
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
+        .section-title { font-size: 1.1rem; font-weight: 700; color: var(--text); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
         .section-title.seri-a { color: var(--seri-a); }
         .section-title.seri-b { color: var(--seri-b); }
-
-        .badge {
-            background: var(--primary);
-            color: white;
-            font-size: 0.65rem;
-            padding: 3px 8px;
-            border-radius: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
+        .badge { background: var(--primary); color: white; font-size: 0.65rem; padding: 3px 8px; border-radius: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
         .badge.a { background: var(--seri-a); }
         .badge.b { background: var(--seri-b); }
-
-        .card {
-            background: var(--card);
-            border-radius: 16px;
-            padding: 16px;
-            margin-bottom: 16px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-            border: 1px solid var(--border);
-            overflow-x: auto;
-        }
-
-        .card-title {
-            font-size: 0.95rem;
-            font-weight: 700;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+        .card { background: var(--card); border-radius: 16px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); border: 1px solid var(--border); overflow-x: auto; }
+        .card-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
         .card-title.blue { color: var(--primary-dark); }
         .card-title.red { color: var(--seri-b-dark); }
-
-        .card-title .icon {
-            width: 28px; height: 28px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 0.85rem;
-            font-weight: 800;
-        }
+        .card-title .icon { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.85rem; font-weight: 800; }
         .icon.blue { background: linear-gradient(135deg, var(--primary), var(--primary-light)); }
         .icon.red { background: linear-gradient(135deg, var(--seri-b), var(--seri-b-light)); }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.82rem;
-        }
-
-        table th {
-            color: white;
-            padding: 10px 8px;
-            text-align: center;
-            font-weight: 600;
-            font-size: 0.72rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            white-space: nowrap;
-        }
+        table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+        table th { color: white; padding: 10px 8px; text-align: center; font-weight: 600; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
         table th.blue { background: linear-gradient(135deg, #1e3a5f, #1a56db); }
         table th.red { background: linear-gradient(135deg, #7f1d1d, #dc2626); }
-
         table th:first-child { border-radius: 10px 0 0 0; text-align: left; padding-left: 12px; }
         table th:last-child { border-radius: 0 10px 0 0; }
-
-        table td {
-            padding: 10px 8px;
-            text-align: center;
-            border-bottom: 1px solid var(--border);
-            font-weight: 500;
-            transition: background 0.15s ease;
-        }
+        table td { padding: 10px 8px; text-align: center; border-bottom: 1px solid var(--border); font-weight: 500; transition: background 0.15s ease; }
         table td:first-child { text-align: left; padding-left: 12px; font-weight: 600; }
         table tr:last-child td:first-child { border-radius: 0 0 0 10px; }
         table tr:last-child td:last-child { border-radius: 0 0 10px 0; }
         table tr:hover td { background: rgba(26, 86, 219, 0.03); }
         table tr:nth-child(even) td { background: rgba(241, 245, 249, 0.5); }
-
         .points-cell { font-weight: 700; font-size: 0.9rem; }
         .points-cell.blue { color: var(--seri-a); }
         .points-cell.red { color: var(--seri-b); }
-
         .ratio-cell { color: var(--text-secondary); font-weight: 600; }
-
-        .loading {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 20px;
-            gap: 12px;
-        }
-        .spinner {
-            width: 36px; height: 36px;
-            border: 3px solid var(--border);
-            border-top-color: var(--primary);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
+        .loading { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; gap: 12px; }
+        .spinner { width: 36px; height: 36px; border: 3px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
         .loading-text { color: var(--text-secondary); font-size: 0.85rem; font-weight: 500; }
-
-        .error-msg {
-            background: #fef2f2;
-            border: 1px solid #fecaca;
-            color: #dc2626;
-            padding: 16px;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            text-align: center;
-            margin: 16px 0;
-        }
-
+        .error-msg { background: #fef2f2; border: 1px solid #fecaca; color: #dc2626; padding: 16px; border-radius: 12px; font-size: 0.85rem; text-align: center; margin: 16px 0; }
         .sodo-table { width: 100%; font-size: 0.7rem; border-collapse: collapse; }
-        .sodo-table td, .sodo-table th { 
-            padding: 6px 4px; 
-            text-align: center; 
-            border: 1px solid var(--border); 
-            font-weight: 500;
-        }
-        .sodo-table th { 
-            background: #1e3a5f !important; 
-            color: white !important; 
-            font-weight: 700; 
-            font-size: 0.65rem; 
-        }
-
+        .sodo-table td, .sodo-table th { padding: 6px 4px; text-align: center; border: 1px solid var(--border); font-weight: 500; }
+        .sodo-table th { background: #1e3a5f !important; color: white !important; font-weight: 700; font-size: 0.65rem; }
         .update-time { text-align: center; font-size: 0.7rem; color: var(--text-secondary); padding: 16px; font-weight: 500; }
         .update-time span { color: var(--primary); font-weight: 600; }
-
         @media (max-width: 480px) {
             .header h1 { font-size: 1.3rem; }
             .tab { padding: 10px 12px; font-size: 0.7rem; }
@@ -299,7 +164,6 @@
             table { font-size: 0.75rem; }
             table th, table td { padding: 8px 6px; }
         }
-
         .tab-group-label { display: flex; align-items: center; gap: 4px; }
         .group-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
         .dot-a { background: #3b82f6; }
@@ -310,25 +174,12 @@
         .dot-f { background: #ec4899; }
         .dot-g { background: #f97316; }
         .dot-h { background: #06b6d4; }
-
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .grid-2 .card { margin-bottom: 0; }
         @media (max-width: 640px) { .grid-2 { grid-template-columns: 1fr; } }
-
         .round-section { margin-bottom: 24px; padding-bottom: 16px; border-bottom: 2px dashed var(--border); }
         .round-section:last-child { border-bottom: none; }
-        .round-header {
-            font-size: 0.9rem;
-            font-weight: 800;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
+        .round-header { font-size: 0.9rem; font-weight: 800; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
         .cell-custom-bg { background-color: inherit; }
         .cell-custom-color { color: inherit; }
     </style>
@@ -344,23 +195,14 @@
 
     <div class="tabs-container">
         <div class="tabs" id="tabs">
-            <button class="tab active" data-tab="bxh">
-                <span class="tab-group-label">🏆 Bảng Xếp Hạng</span>
-            </button>
-            <button class="tab" data-tab="vongbang">
-                <span class="tab-group-label">🏸 Vòng Bảng</span>
-            </button>
-            <button class="tab" data-tab="seria">
-                <span class="tab-group-label"><span class="group-dot dot-a"></span> Seri A</span>
-            </button>
-            <button class="tab" data-tab="serib">
-                <span class="tab-group-label"><span class="group-dot dot-b"></span> Seri B</span>
-            </button>
+            <button class="tab active" data-tab="bxh"><span class="tab-group-label">🏆 Bảng Xếp Hạng</span></button>
+            <button class="tab" data-tab="vongbang"><span class="tab-group-label">🏸 Vòng Bảng</span></button>
+            <button class="tab" data-tab="seria"><span class="tab-group-label"><span class="group-dot dot-a"></span> Seri A</span></button>
+            <button class="tab" data-tab="serib"><span class="tab-group-label"><span class="group-dot dot-b"></span> Seri B</span></button>
         </div>
     </div>
 
     <div class="content">
-        <!-- TAB 1: BXH -->
         <div class="tab-content active" id="tab-bxh">
             <div class="section-title">Bảng thi đấu <span class="badge">8 Bảng</span></div>
             <div class="grid-2" id="bxh-container">
@@ -368,7 +210,6 @@
             </div>
         </div>
 
-        <!-- TAB 2: VÒNG BẢNG -->
         <div class="tab-content" id="tab-vongbang">
             <div class="section-title">Kết quả thi đấu vòng bảng <span class="badge">Chi tiết</span></div>
             <div id="vongbang-container">
@@ -376,7 +217,6 @@
             </div>
         </div>
 
-        <!-- TAB 3: SERI A -->
         <div class="tab-content" id="tab-seria">
             <div class="section-title seri-a">🔵 Nhánh thi đấu Seri A <span class="badge a">Knock-out</span></div>
             <div id="seria-container">
@@ -384,7 +224,6 @@
             </div>
         </div>
 
-        <!-- TAB 4: SERI B -->
         <div class="tab-content" id="tab-serib">
             <div class="section-title seri-b">🔴 Nhánh thi đấu Seri B <span class="badge b">Knock-out</span></div>
             <div id="serib-container">
@@ -396,9 +235,15 @@
     </div>
 
     <script>
-        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzKsonoFp3lh8iBa77RrfSFNhL0HpWvCDppA7GkA8sEH1bFvZr0B2rdh-IKqRMIgFLk/exec';
+        // ================== CẤU HÌNH ==================
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwk3OTkvGP1Qur2rTNN8VpRIiM7AYRKt_4EoG7ZxmCowa72LiJnsLzB_e2iMh-eTXzE/exec';
+        const REFRESH_INTERVAL = 10000; // 60 giây
+        
+        // Lưu trữ dữ liệu toàn cục - fetch 1 lần, render nhiều lần
+        let APP_DATA = null;
+        let IS_LOADING = false;
 
-        // Tab switching
+        // ================== TAB SWITCHING ==================
         document.querySelectorAll('.tab').forEach(tab => {
             tab.addEventListener('click', () => {
                 document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -408,30 +253,67 @@
             });
         });
 
-        // Fetch data from Apps Script with formatting
-        async function fetchSheetData(sheetName, range) {
-            const url = `${APPS_SCRIPT_URL}?sheet=${encodeURIComponent(sheetName)}&range=${encodeURIComponent(range)}`;
+        // ================== FETCH TẤT CẢ DATA (1 REQUEST DUY NHẤT) ==================
+        async function fetchAllData() {
+            if (IS_LOADING) return;
+            IS_LOADING = true;
+            
             try {
+                const url = `${APPS_SCRIPT_URL}?action=all&_=${Date.now()}`; // Cache buster cho client
                 const response = await fetch(url);
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                
                 const data = await response.json();
-                if (data.error) {
-                    console.warn('Sheet error on ' + sheetName + ':', data.error);
-                    return null;
-                }
-                return data;
+                if (data.error) throw new Error(data.error);
+                
+                APP_DATA = data;
+                renderAllTabs();
             } catch (e) {
-                console.error('Error fetching ' + sheetName + ' ' + range + ':', e);
-                return null;
+                console.error('Lỗi tải dữ liệu:', e);
+                document.getElementById('bxh-container').innerHTML = 
+                    `<div class="error-msg">⚠️ Không thể kết nối máy chủ. Đang thử lại sau 60s...<br><small>${e.message}</small></div>`;
+            } finally {
+                IS_LOADING = false;
             }
         }
 
-        // Check if color is default (white bg or black text)
-        function isDefaultColor(color) {
-            return !color || color === '#ffffff' || color === '#000000' || color === 'rgb(255, 255, 255)' || color === 'rgb(0, 0, 0)';
+        // ================== RENDER ALL ==================
+        function renderAllTabs() {
+            if (!APP_DATA) return;
+            renderBXH();
+            renderVongBang();
+            renderSeriA();
+            renderSeriB();
+            
+            const ts = APP_DATA.timestamp ? new Date(APP_DATA.timestamp).toLocaleString('vi-VN') : '';
+            document.getElementById('update-time').innerHTML = `KARAOKE RITA • Cập nhật: <span>${ts}</span>`;
         }
 
-        // Render BXH (8 bảng A-H)
+        // ================== HELPER: Kiểm tra màu mặc định ==================
+        function isDefaultColor(color) {
+            return !color || color === '#ffffff' || color === '#000000' || 
+                   color === 'rgb(255, 255, 255)' || color === 'rgb(0, 0, 0)';
+        }
+
+        // ================== RENDER BXH (8 bảng A-H) ==================
+        function renderBXH() {
+            const container = document.getElementById('bxh-container');
+            const names = ['A','B','C','D','E','F','G','H'];
+            const titles = ['Bảng A','Bảng B','Bảng C','Bảng D','Bảng E','Bảng F','Bảng G','Bảng H'];
+            const dotClasses = ['dot-a','dot-b','dot-c','dot-d','dot-e','dot-f','dot-g','dot-h'];
+            
+            let html = '';
+            names.forEach((name, idx) => {
+                const data = APP_DATA.bxh[name];
+                if (data && data.rows && data.rows.length > 0) {
+                    html += renderStandingsTable(data, titles[idx], dotClasses[idx], 'blue');
+                } else {
+                    html += `<div class="card"><div class="error-msg">Không có dữ liệu ${titles[idx]}</div></div>`;
+                }
+            });
+            container.innerHTML = html;
+        }
+
         function renderStandingsTable(data, title, dotClass, colorTheme) {
             if (!data || !data.rows || data.rows.length === 0) return '';
             
@@ -478,7 +360,85 @@
             return html;
         }
 
-        // Render các trận đấu knock-out
+        // ================== RENDER VÒNG BẢNG ==================
+        function renderVongBang() {
+            const container = document.getElementById('vongbang-container');
+            const titles = ['BẢNG A','BẢNG B','BẢNG C','BẢNG D','BẢNG E','BẢNG F','BẢNG G','BẢNG H'];
+            
+            if (!APP_DATA.vongbang || !APP_DATA.vongbang.ranges || APP_DATA.vongbang.ranges.length === 0) {
+                container.innerHTML = '<div class="error-msg">Không thể tải dữ liệu vòng bảng.</div>';
+                return;
+            }
+            
+            let html = '';
+            APP_DATA.vongbang.ranges.forEach((data, idx) => {
+                if (data && data.rows && data.rows.length > 0) {
+                    html += `<div class="round-section">
+                        <div class="round-header">📍 ${titles[idx]}</div>
+                        ${renderMatchTable(data, 'Kết quả ' + titles[idx], 'blue')}
+                    </div>`;
+                }
+            });
+            container.innerHTML = html || '<div class="error-msg">Không có dữ liệu vòng bảng.</div>';
+        }
+
+        // ================== RENDER SERI A ==================
+        function renderSeriA() {
+            const container = document.getElementById('seria-container');
+            const titles = {
+                r16: 'Vòng 1/16 - Seri A',
+                qf:  'Tứ kết - Seri A',
+                sf:  'Bán kết - Seri A',
+                f:   'Chung kết - Seri A'
+            };
+            const keys = ['r16','qf','sf','f','sodo'];
+            
+            let html = '';
+            keys.forEach(k => {
+                const data = APP_DATA.seria[k];
+                if (!data || !data.rows || data.rows.length === 0) return;
+                
+                if (k === 'sodo') {
+                    html += `<div class="round-section">${renderSodoTable(data, 'blue')}</div>`;
+                } else {
+                    html += `<div class="round-section">
+                        <div class="round-header">🔵 ${titles[k]}</div>
+                        ${renderMatchTable(data, titles[k], 'blue')}
+                    </div>`;
+                }
+            });
+            container.innerHTML = html || '<div class="error-msg">Chưa có dữ liệu Seri A</div>';
+        }
+
+        // ================== RENDER SERI B ==================
+        function renderSeriB() {
+            const container = document.getElementById('serib-container');
+            const titles = {
+                r16: 'Vòng 1/16 - Seri B',
+                qf:  'Tứ kết - Seri B',
+                sf:  'Bán kết - Seri B',
+                f:   'Chung kết - Seri B'
+            };
+            const keys = ['r16','qf','sf','f','sodo'];
+            
+            let html = '';
+            keys.forEach(k => {
+                const data = APP_DATA.serib[k];
+                if (!data || !data.rows || data.rows.length === 0) return;
+                
+                if (k === 'sodo') {
+                    html += `<div class="round-section">${renderSodoTable(data, 'red')}</div>`;
+                } else {
+                    html += `<div class="round-section">
+                        <div class="round-header">🔴 ${titles[k]}</div>
+                        ${renderMatchTable(data, titles[k], 'red')}
+                    </div>`;
+                }
+            });
+            container.innerHTML = html || '<div class="error-msg">Chưa có dữ liệu Seri B</div>';
+        }
+
+        // ================== RENDER MATCH TABLE (Knock-out) ==================
         function renderMatchTable(data, title, colorTheme) {
             if (!data || !data.rows || data.rows.length === 0) return '';
             
@@ -509,7 +469,7 @@
             return html;
         }
 
-        // Render Sơ đồ (with exact formatting from sheet)
+        // ================== RENDER SƠ ĐỒ ==================
         function renderSodoTable(data, colorTheme) {
             if (!data || !data.rows || data.rows.length === 0) return '';
             
@@ -544,90 +504,9 @@
             return html;
         }
 
-        async function loadAllData() {
-            // --- TAB 1: BẢNG XẾP HẠNG ---
-            const sheetNames = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
-            const titles = ['Bảng A', 'Bảng B', 'Bảng C', 'Bảng D', 'Bảng E', 'Bảng F', 'Bảng G', 'Bảng H'];
-            const dotClasses = ['dot-a', 'dot-b', 'dot-c', 'dot-d', 'dot-e', 'dot-f', 'dot-g', 'dot-h'];
-            const bxhContainer = document.getElementById('bxh-container');
-            let bxhHTML = '';
-
-            const bxhResults = await Promise.all(sheetNames.map(n => fetchSheetData(n, 'F1:H5')));
-            bxhResults.forEach((data, idx) => {
-                if (data) bxhHTML += renderStandingsTable(data, titles[idx], dotClasses[idx], 'blue');
-                else bxhHTML += `<div class="card"><div class="error-msg">Không tải được ${titles[idx]}</div></div>`;
-            });
-            bxhContainer.innerHTML = bxhHTML;
-
-            // --- TAB 2: VÒNG BẢNG ---
-            const rangesBang = [
-                { range: 'A2:F5', title: 'BẢNG A' }, { range: 'A8:F11', title: 'BẢNG B' },
-                { range: 'A14:F17', title: 'BẢNG C' }, { range: 'A20:F23', title: 'BẢNG D' },
-                { range: 'A26:F29', title: 'BẢNG E' }, { range: 'A32:F35', title: 'BẢNG F' },
-                { range: 'A38:F41', title: 'BẢNG G' }, { range: 'A44:F47', title: 'BẢNG H' }
-            ];
-            const vongbangContainer = document.getElementById('vongbang-container');
-            vongbangContainer.innerHTML = '<div class="loading"><div class="spinner"></div><div class="loading-text">Đang tải vòng bảng...</div></div>';
-            
-            let vongbangSheetName = 'vongbang';
-            let vbResults = await Promise.all(rangesBang.map(r => fetchSheetData(vongbangSheetName, r.range)));
-            if (vbResults.every(r => r === null)) {
-                vongbangSheetName = 'bang';
-                vbResults = await Promise.all(rangesBang.map(r => fetchSheetData(vongbangSheetName, r.range)));
-            }
-
-            let vbHTML = '';
-            vbResults.forEach((data, idx) => {
-                if (data) vbHTML += `<div class="round-section"><div class="round-header">📍 ${rangesBang[idx].title}</div>${renderMatchTable(data, 'Kết quả ' + rangesBang[idx].title, 'blue')}</div>`;
-            });
-            vongbangContainer.innerHTML = vbHTML || '<div class="error-msg">Không thể tải dữ liệu vòng bảng. Kiểm tra tên sheet là "vongbang" hoặc "bang".</div>';
-
-            // --- TAB 3: SERI A ---
-            const seriaContainer = document.getElementById('seria-container');
-            const seriARounds = [
-                { sheet: '1.16 A', range: 'A1:G24', title: 'Vòng 1/16 - Seri A' },
-                { sheet: '1.8 A', range: 'A1:G12', title: 'Tứ kết - Seri A' },
-                { sheet: 'bk A', range: 'A2:F7', title: 'Bán kết - Seri A' },
-                { sheet: 'ck A', range: 'A2:E4', title: 'Chung kết - Seri A' }
-            ];
-            
-            let seriaHTML = '';
-            for (let round of seriARounds) {
-                let data = await fetchSheetData(round.sheet, round.range);
-                if (data) {
-                    seriaHTML += `<div class="round-section"><div class="round-header">🔵 ${round.title}</div>${renderMatchTable(data, round.title, 'blue')}</div>`;
-                }
-            }
-            let sodoAData = await fetchSheetData('sodo A', 'A1:b5');
-            if (sodoAData) seriaHTML += `<div class="round-section">${renderSodoTable(sodoAData, 'blue')}</div>`;
-            seriaContainer.innerHTML = seriaHTML || '<div class="error-msg">Chưa có dữ liệu Seri A</div>';
-
-            // --- TAB 4: SERI B ---
-            const seribContainer = document.getElementById('serib-container');
-            const seriBRounds = [
-                { sheet: '1.16 B', range: 'A1:G24', title: 'Vòng 1/16 - Seri B' },
-                { sheet: '1.8 B', range: 'A1:G12', title: 'Tứ kết - Seri B' },
-                { sheet: 'bk B', range: 'A2:F7', title: 'Bán kết - Seri B' },
-                { sheet: 'ck B', range: 'A2:E4', title: 'Chung kết - Seri B' }
-            ];
-
-            let seribHTML = '';
-            for (let round of seriBRounds) {
-                let data = await fetchSheetData(round.sheet, round.range);
-                if (data) {
-                    seribHTML += `<div class="round-section"><div class="round-header">🔴 ${round.title}</div>${renderMatchTable(data, round.title, 'red')}</div>`;
-                }
-            }
-            let sodoBData = await fetchSheetData('sodo B', 'A1:b5');
-            if (sodoBData) seribHTML += `<div class="round-section">${renderSodoTable(sodoBData, 'red')}</div>`;
-            seribContainer.innerHTML = seribHTML || '<div class="error-msg">Chưa có dữ liệu Seri B</div>';
-
-            // Update time
-            document.getElementById('update-time').innerHTML = `KARAOKE RITA`;
-        }
-
-        loadAllData();
-        setInterval(loadAllData, 60000);
+        // ================== KHỞI CHẠY ==================
+        fetchAllData();
+        setInterval(fetchAllData, REFRESH_INTERVAL);
     </script>
 </body>
 </html>
