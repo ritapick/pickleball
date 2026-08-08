@@ -1,1177 +1,483 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PICKLEBALL CUP</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #1a56db;
-            --primary-light: #3b82f6;
-            --primary-dark: #1e40af;
-            --accent: #f59e0b;
-            --accent-light: #fbbf24;
-            --bg: #e7f7e6;
-            --card: #ffffff;
-            --text: #222f3d;
-            --text-secondary: #64748b;
-            --border: #e2e8f0;
-            --green-dark: #3e4f3c;
-            --green-mid: #457d3e;
-            --green-light: #309124;
-            --connector-color: #94a3b8;
-            --winner-bg: #fff9db;
-            --winner-border: #f59e0b;
-            --champion-bg: linear-gradient(135deg, #fce4ec, #f8bbd0);
-            --champion-border: #ec4899;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        .header {
-            background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 50%, var(--green-light) 100%);
-            color: white;
-            padding: 20px 16px 16px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-        }
-
-        .header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 60%);
-            animation: shimmer 8s ease-in-out infinite;
-        }
-
-        @keyframes shimmer {
-            0%, 100% { transform: translate(0, 0); }
-            50% { transform: translate(20%, 10%); }
-        }
-
-        .header h1 {
-            font-size: 1.5rem;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            position: relative;
-            z-index: 1;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-
-        .header .subtitle {
-            font-size: 0.8rem;
-            opacity: 0.85;
-            margin-top: 4px;
-            font-weight: 500;
-            position: relative;
-            z-index: 1;
-        }
-
-        .header .ball-icon {
-            font-size: 2rem;
-            margin-bottom: 4px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .tabs-container {
-            background: white;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-            border-bottom: 1px solid var(--border);
-        }
-
-        .tabs {
-            display: flex;
-            overflow-x: auto;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-            padding: 0 8px;
-            gap: 2px;
-        }
-
-        .tabs::-webkit-scrollbar {
-            display: none;
-        }
-
-        .tab {
-            flex: none;
-            padding: 12px 14px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--text-secondary);
-            background: none;
-            border: none;
-            cursor: pointer;
-            white-space: nowrap;
-            position: relative;
-            transition: all 0.2s ease;
-            border-radius: 8px 8px 0 0;
-            margin-bottom: -1px;
-        }
-
-        .tab:hover {
-            color: var(--primary);
-            background: rgba(26, 86, 219, 0.05);
-        }
-
-        .tab.active {
-            color: var(--primary);
-            background: rgba(26, 86, 219, 0.08);
-        }
-
-        .tab.active::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: var(--primary);
-            border-radius: 3px 3px 0 0;
-        }
-
-        .content {
-            padding: 16px;
-            padding-bottom: 32px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .tab-content {
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .section-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--text);
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .section-title .badge {
-            background: var(--primary);
-            color: white;
-            font-size: 0.65rem;
-            padding: 3px 8px;
-            border-radius: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .card {
-            background: var(--card);
-            border-radius: 16px;
-            padding: 16px;
-            margin-bottom: 16px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-            border: 1px solid var(--border);
-        }
-
-        .card-title {
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: var(--primary-dark);
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .card-title .icon {
-            width: 28px;
-            height: 28px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 0.85rem;
-            font-weight: 800;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.82rem;
-        }
-
-        table th {
-            background: linear-gradient(135deg, #1e3a5f, #1a56db);
-            color: white;
-            padding: 10px 8px;
-            text-align: center;
-            font-weight: 600;
-            font-size: 0.72rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            white-space: nowrap;
-        }
-
-        table th:first-child {
-            border-radius: 10px 0 0 0;
-            text-align: left;
-            padding-left: 12px;
-        }
-
-        table th:last-child {
-            border-radius: 0 10px 0 0;
-        }
-
-        table td {
-            padding: 10px 8px;
-            text-align: center;
-            border-bottom: 1px solid var(--border);
-            font-weight: 500;
-        }
-
-        table td:first-child {
-            text-align: left;
-            padding-left: 12px;
-            font-weight: 600;
-        }
-
-        table tr:hover td {
-            background: rgba(26, 86, 219, 0.03);
-        }
-
-        table tr:nth-child(even) td {
-            background: rgba(241, 245, 249, 0.5);
-        }
-
-        .points-cell {
-            font-weight: 700;
-            color: var(--primary);
-            font-size: 0.9rem;
-        }
-
-        .ratio-cell {
-            color: var(--text-secondary);
-            font-weight: 600;
-        }
-
-        .loading {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 20px;
-            gap: 12px;
-        }
-
-        .spinner {
-            width: 36px;
-            height: 36px;
-            border: 3px solid var(--border);
-            border-top-color: var(--primary);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .loading-text {
-            color: var(--text-secondary);
-            font-size: 0.85rem;
-            font-weight: 500;
-        }
-
-        .error-msg {
-            background: #fef2f2;
-            border: 1px solid #fecaca;
-            color: #dc2626;
-            padding: 16px;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            text-align: center;
-            margin: 16px 0;
-        }
-
-        .update-time {
-            text-align: center;
-            font-size: 0.7rem;
-            color: var(--text-secondary);
-            padding: 16px;
-            font-weight: 500;
-        }
-
-        .update-time span {
-            color: var(--primary);
-            font-weight: 600;
-        }
-
-        @media (max-width: 480px) {
-            .header h1 { font-size: 1.3rem; }
-            .tab { padding: 10px 12px; font-size: 0.7rem; }
-            .content { padding: 12px; }
-            .card { padding: 12px; border-radius: 12px; }
-            table { font-size: 0.75rem; }
-            table th, table td { padding: 8px 6px; }
-        }
-
-        .tab-group-label {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .group-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            display: inline-block;
-        }
-
-        .dot-a { background: #3b82f6; }
-        .dot-b { background: #ef4444; }
-        .dot-c { background: #10b981; }
-        .dot-d { background: #f59e0b; }
-        .dot-bang { background: #8b5cf6; }
-        .dot-tuk { background: #06b6d4; }
-        .dot-bk { background: #ec4899; }
-        .dot-ck { background: #f97316; }
-        .dot-sodo { background: #6366f1; }
-
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
-        .grid-2 .card { margin-bottom: 0; }
-
-        @media (max-width: 640px) {
-            .grid-2 { grid-template-columns: 1fr; }
-        }
-
-        .final-card {
-            background: linear-gradient(135deg, #fef3c7, #fde68a);
-            border: 2px solid var(--accent);
-            border-radius: 16px;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .final-card .trophy { font-size: 2rem; margin-bottom: 8px; }
-        .final-card .match-label {
-            font-size: 0.85rem;
-            font-weight: 800;
-            color: #92400e;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 12px;
-        }
-
-        .final-card .match-row {
-            background: rgba(255,255,255,0.6);
-            border-radius: 8px;
-            padding: 10px 12px;
-            margin-bottom: 4px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .final-card .match-team { font-size: 0.95rem; font-weight: 600; flex: 1; }
-        .final-card .match-score {
-            font-weight: 800;
-            font-size: 1rem;
-            color: var(--primary);
-            background: rgba(26, 86, 219, 0.15);
-            padding: 6px 14px;
-            border-radius: 6px;
-            min-width: 40px;
-            text-align: center;
-        }
-
-        /* ========== BRACKET STYLES ========== */
-        .bracket-wrapper {
-            overflow-x: auto;
-            padding: 20px 10px;
-            background: #f8fafc;
-            border-radius: 16px;
-            border: 1px solid var(--border);
-        }
-
-        .bracket {
-            display: flex;
-            align-items: center;
-            min-width: 850px;
-            position: relative;
-        }
-
-        /* Round columns */
-        .bracket-round {
-            display: flex;
-            flex-direction: column;
-            flex-shrink: 0;
-            width: 210px;
-            position: relative;
-        }
-
-        .bracket-round-label {
-            text-align: center;
-            font-size: 0.78rem;
-            font-weight: 800;
-            color: #dc2626;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            padding: 8px 0;
-            background: linear-gradient(135deg, #fef2f2, #fce7f3);
-            border: 1px solid #fbcfe8;
-            border-radius: 8px;
-            margin-bottom: 16px;
-        }
-
-        .bracket-round-label.ck-label {
-            background: linear-gradient(135deg, #fef3c7, #fde68a);
-            border-color: #fbbf24;
-            color: #92400e;
-        }
-
-        /* Match pair containers - each pair of 2 matches that feed into 1 next-round match */
-        .match-pair {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            flex: 1;
-            position: relative;
-        }
-
-        .match-pair.single {
-            flex: 2;
-        }
-
-        /* Individual match box */
-        .match-box {
-            background: white;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            overflow: hidden;
-            margin: 4px 0;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-            position: relative;
-            z-index: 2;
-        }
-
-        .match-box.champion-box {
-            border: 2px solid var(--champion-border);
-            background: var(--champion-bg);
-        }
-
-        .match-player {
-            display: flex;
-            align-items: center;
-            padding: 7px 10px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            gap: 8px;
-            position: relative;
-        }
-
-        .match-player + .match-player {
-            border-top: 1px solid #f1f5f9;
-        }
-
-        .match-player .p-name {
-            flex: 1;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .match-player .p-score {
-            font-weight: 800;
-            font-size: 0.8rem;
-            color: var(--primary);
-            background: rgba(26, 86, 219, 0.08);
-            padding: 2px 8px;
-            border-radius: 4px;
-            min-width: 26px;
-            text-align: center;
-        }
-
-        .match-player.winner {
-            background: var(--winner-bg);
-        }
-
-        .match-player.winner .p-score {
-            background: rgba(245, 158, 11, 0.2);
-            color: #92400e;
-        }
-
-        .match-player.champion {
-            background: linear-gradient(135deg, #fce4ec, #f8bbd0);
-            font-weight: 800;
-            color: #9d174d;
-        }
-
-        .match-player.champion .p-score {
-            background: rgba(236, 72, 153, 0.2);
-            color: #9d174d;
-        }
-
-        .match-player.empty {
-            background: #f8fafc;
-            color: #cbd5e1;
-            font-style: italic;
-        }
-
-        .match-player.empty .p-score {
-            background: #e2e8f0;
-            color: #94a3b8;
-        }
-
-        /* ========== CONNECTOR LINES (SVG) ========== */
-        .bracket-svg-container {
-            flex-shrink: 0;
-            width: 40px;
-            position: relative;
-        }
-
-        .bracket-svg-container svg {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-
-        /* Champion section */
-        .champion-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            flex-shrink: 0;
-            width: 120px;
-            margin-left: 20px;
-            padding-top: 10px;
-        }
-
-        .champion-badge {
-            background: linear-gradient(135deg, #fef3c7, #fbbf24);
-            border: 2px solid #f59e0b;
-            border-radius: 12px;
-            padding: 10px 16px;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
-            animation: glow 2s ease-in-out infinite;
-        }
-
-        @keyframes glow {
-            0%, 100% { box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3); }
-            50% { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.6); }
-        }
-
-        .champion-badge .crown {
-            font-size: 1.8rem;
-            display: block;
-            margin-bottom: 4px;
-        }
-
-        .champion-badge .champ-name {
-            font-size: 0.8rem;
-            font-weight: 800;
-            color: #92400e;
-            display: block;
-        }
-
-        .champion-badge .champ-label {
-            font-size: 0.6rem;
-            font-weight: 600;
-            color: #b45309;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            display: block;
-            margin-top: 2px;
-        }
-
-        /* View toggle */
-        .view-toggle {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 12px;
-        }
-
-        .view-btn {
-            padding: 6px 14px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            background: white;
-            cursor: pointer;
-            transition: all 0.2s;
-            color: var(--text-secondary);
-        }
-
-        .view-btn.active {
-            border-color: var(--primary);
-            background: rgba(26, 86, 219, 0.08);
-            color: var(--primary);
-        }
-
-        .view-btn:hover {
-            border-color: var(--primary-light);
-        }
-
-        .bracket-view, .table-view {
-            display: none;
-        }
-
-        .bracket-view.active, .table-view.active {
-            display: block;
-        }
-
-        .sodo-table-container {
-            overflow-x: auto;
-        }
-
-        .sodo-table-container table {
-            font-size: 0.7rem;
-        }
-
-        .sodo-table-container td, .sodo-table-container th {
-            padding: 5px 4px;
-            text-align: center;
-            border: 1px solid var(--border);
-            font-weight: 500;
-            white-space: nowrap;
-        }
-
-        .sodo-table-container th {
-            background: #1e3a5f !important;
-            color: white !important;
-            font-weight: 700;
-            font-size: 0.65rem;
-        }
-
-        @media (max-width: 768px) {
-            .bracket { min-width: 700px; }
-            .bracket-round { width: 175px; }
-            .match-player { padding: 6px 8px; font-size: 0.7rem; }
-        }
-
-        @media (max-width: 480px) {
-            .bracket { min-width: 600px; }
-            .bracket-round { width: 150px; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>🏆PICKLEBALL CUP</title>
+
+<!-- Font: Oswald for sports look -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --primary-color: #00f2ff; /* Cyan Neon */
+    --secondary-color: #ccff00; /* Lime Green */
+    --bg-dark: #0a0a0a;
+    --glass-bg: rgba(20, 20, 25, 0.85);
+    --text-gradient: linear-gradient(90deg, #ffffff, #00f2ff);
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Oswald', sans-serif;
+    background-color: var(--bg-dark);
+    background-image: url('https://image.qwenlm.ai/public_source/4a049a49-0398-4b5b-93ea-9691e7b8a93e/16bfa2e7b-4d27-460a-835b-ffc3d74c517a.png'); /* Generated Sports BG */
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+  }
+
+  /* Overlay to darken background for readability */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(circle at center, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.8) 100%);
+    z-index: -1;
+  }
+
+  /* TOP BAR: Weather & Time */
+  .top-bar {
+    width: 100%;
+    max-width: 480px;
+    padding: 15px 20px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, transparent 100%);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .weather-widget {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #ddd;
+    text-shadow: 0 1px 2px black;
+  }
+
+  .time-widget {
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--primary-color);
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px rgba(0, 242, 255, 0.5);
+  }
+
+  /* MAIN CONTAINER */
+  .main-wrapper {
+    width: 100%;
+    max-width: 480px;
+    padding: 20px;
+    box-sizing: border-box;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* ===== SPONSORS SECTION (NEW) ===== */
+  .sponsors-section {
+    margin-bottom: 40px;
+    animation: slideDown 0.6s ease-out;
+    padding: 15px;
+    border-radius: 15px;
+    background: var(--glass-bg);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .sponsors-title {
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--secondary-color);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 15px;
+    text-shadow: 0 0 8px rgba(204, 255, 0, 0.4);
+    position: relative;
+  }
+
+  .sponsors-title::before,
+  .sponsors-title::after {
+    content: '';
+    display: inline-block;
+    width: 25px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--secondary-color), transparent);
+    vertical-align: middle;
+    margin: 0 10px;
+  }
+
+  .sponsors-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    justify-items: center;
+    align-items: center;
+  }
+
+  .sponsor-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    max-width: 90px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #1f1f1f, #0f0f0f);
+    border: 2px solid rgba(255,255,255,0.1);
+    padding: 8px;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .sponsor-item::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(from 0deg, transparent, var(--primary-color), transparent 30%);
+    opacity: 0;
+    animation: rotate 4s linear infinite;
+    transition: opacity 0.3s;
+  }
+
+  .sponsor-item::after {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #1f1f1f, #0f0f0f);
+    z-index: 1;
+  }
+
+  .sponsor-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    position: relative;
+    z-index: 2;
+    filter: brightness(1) contrast(1);
+    transition: transform 0.3s, filter 0.3s;
+  }
+
+  .sponsor-item:hover {
+    transform: translateY(-5px) scale(1.08);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 20px rgba(0, 242, 255, 0.5);
+  }
+
+  .sponsor-item:hover::before {
+    opacity: 0.6;
+  }
+
+  .sponsor-item:hover img {
+    transform: scale(1.1);
+    filter: brightness(1.2) drop-shadow(0 0 8px rgba(0, 242, 255, 0.6));
+  }
+
+  @keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  /* ===== TITLE SECTION ===== */
+  .title-box {
+    text-align: center;
+    margin-bottom: 50px;
+    animation: slideDown 0.8s ease-out;
+  }
+
+  .main-title {
+    font-size: 32px;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin: 0;
+    background: var(--text-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+    line-height: 1.1;
+  }
+
+  .sub-title {
+    font-size: 20px;
+    color: var(--secondary-color);
+    font-weight: 600;
+    margin-top: 5px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  .date-badge {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 5px 15px;
+    border: 1px solid var(--primary-color);
+    border-radius: 20px;
+    font-size: 14px;
+    color: white;
+    background: rgba(0, 242, 255, 0.1);
+    backdrop-filter: blur(5px);
+  }
+
+  /* IMAGE GRID */
+  .card-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+  }
+
+  .card-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none; /* No underline */
+    group: hover;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .card-item:hover {
+    transform: translateY(-10px);
+  }
+
+  .img-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 15px;
+    overflow: hidden;
+    border: 2px solid rgba(255,255,255,0.1);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    background: #1a1a1a;
+  }
+
+  .card-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: opacity 0.3s;
+  }
+
+  .card-item:hover .img-wrapper {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 20px rgba(0, 242, 255, 0.3);
+  }
+
+  .card-label {
+    margin-top: 15px;
+    font-size: 18px;
+    font-weight: 600;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 4px black;
+    position: relative;
+  }
+
+  .card-label::after {
+    content: '';
+    display: block;
+    width: 0%;
+    height: 2px;
+    background: var(--secondary-color);
+    margin: 5px auto 0;
+    transition: width 0.3s;
+  }
+
+  .card-item:hover .card-label::after {
+    width: 100%;
+  }
+
+  /* FOOTER LINK */
+  .footer-link {
+    margin-top: 50px;
+    text-align: center;
+    animation: fadeInUp 1s ease-out;
+  }
+
+  .btn-facebook {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: linear-gradient(45deg, #1877f2, #005bea);
+    color: white;
+    padding: 15px 30px;
+    border-radius: 50px;
+    font-weight: bold;
+    font-size: 16px;
+    text-decoration: none;
+    box-shadow: 0 4px 15px rgba(24, 119, 242, 0.4);
+    transition: all 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .btn-facebook:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(24, 119, 242, 0.6);
+    background: linear-gradient(45deg, #005bea, #1877f2);
+  }
+
+  /* Animations */
+  @keyframes slideDown {
+    from { transform: translateY(-50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  @keyframes fadeInUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 350px) {
+    .main-title { font-size: 26px; }
+    .card-label { font-size: 16px; }
+    .sponsor-item { max-width: 75px; }
+    .sponsors-title { font-size: 12px; letter-spacing: 2px; }
+  }
+</style>
 </head>
 <body>
-    <div class="header">
-        <div class="ball-icon">🌕</div>
-        <h1>PICKLEBALL CUP</h1>
-        <div class="subtitle">Giải đấu PICKLEBALL đôi Hỗn hợp</div>
+
+<!-- TOP BAR: Weather & Time -->
+<div class="top-bar">
+  <div class="weather-widget" id="weather-display">
+    <span id="weather-icon">☁️</span>
+    <span id="weather-temp">--°C</span>
+    <span style="font-size:12px; opacity:0.8;">Đức Trọng</span>
+  </div>
+  <div class="time-widget" id="clock-display">
+    00:00
+  </div>
+</div>
+
+<div class="main-wrapper">
+
+  <!-- ===== SPONSORS LOGO SECTION (NEW) ===== -->
+  <div class="sponsors-section">
+    <div class="sponsors-title">Nhà Tài Trợ</div>
+    <div class="sponsors-grid">
+      <a href="https://www.logo1.com" target="_blank" rel="noopener" class="sponsor-item" title="Nhà tài trợ 1">
+        <img src="logo1.jpg" alt="Nhà tài trợ 1" onerror="this.src='https://placehold.co/120x120/1a1a1a/00f2ff?text=Logo+1'">
+      </a>
+      <a href="https://www.logo2.com" target="_blank" rel="noopener" class="sponsor-item" title="Nhà tài trợ 2">
+        <img src="logo2.jpg" alt="Nhà tài trợ 2" onerror="this.src='https://placehold.co/120x120/1a1a1a/00f2ff?text=Logo+2'">
+      </a>
+      <a href="https://www.logo3.com" target="_blank" rel="noopener" class="sponsor-item" title="Nhà tài trợ 3">
+        <img src="logo3.jpg" alt="Nhà tài trợ 3" onerror="this.src='https://placehold.co/120x120/1a1a1a/00f2ff?text=Logo+3'">
+      </a>
     </div>
+  </div>
 
-    <div class="tabs-container">
-        <div class="tabs" id="tabs">
-            <button class="tab active" data-tab="bangnhom"><span class="tab-group-label"><span class="group-dot dot-a"></span> BẢNG XẾP HẠNG</span></button>
-            <button class="tab" data-tab="vongbang"><span class="tab-group-label"><span class="group-dot dot-bang"></span> Vòng bảng</span></button>
-            <button class="tab" data-tab="tuket"><span class="tab-group-label"><span class="group-dot dot-tuk"></span> Tứ kết</span></button>
-            <button class="tab" data-tab="banket"><span class="tab-group-label"><span class="group-dot dot-bk"></span> Bán kết</span></button>
-            <button class="tab" data-tab="chungket"><span class="tab-group-label"><span class="group-dot dot-ck"></span> Chung kết</span></button>
-            <button class="tab" data-tab="sodo"><span class="tab-group-label"><span class="group-dot dot-sodo"></span> Sơ đồ</span></button>
-        </div>
-    </div>
+  <!-- TITLE -->
+  <div class="title-box">
+    <h1 class="main-title">GIẢI<br>PICKLEBALL</h1>
+    <div class="sub-title">DTD TOURNAMENT</div>
+    <div class="date-badge">12/08/2026</div>
+  </div>
 
-    <div class="content">
-        <div class="tab-content active" id="tab-bangnhom">
-            <div class="section-title">Bảng thi đấu <span class="badge">Vòng loại</span></div>
-            <div class="grid-2" id="bangnhom-container"><div class="loading"><div class="spinner"></div><div class="loading-text">Đang tải dữ liệu...</div></div></div>
-        </div>
+  <!-- 2 IMAGES SIDE BY SIDE -->
+  <div class="card-container">
 
-        <div class="tab-content" id="tab-vongbang">
-            <div class="section-title">Thi đấu vòng bảng <span class="badge">Chi tiết</span></div>
-            <div id="vongbang-container"><div class="loading"><div class="spinner"></div><div class="loading-text">Đang tải dữ liệu...</div></div></div>
-        </div>
+    <!-- Item 1: 48.png -->
+    <a href="https://ritapick.github.io/pickleball/pick4.7_ab.html" class="card-item">
+      <div class="img-wrapper">
+        <img src="48.png" alt="Giải đấu 4.2" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=4.2'">
+      </div>
+      <div class="card-label">ĐÔI HỖN HỢP 4.75</div>
+    </a>
 
-        <div class="tab-content" id="tab-tuket">
-            <div class="section-title">Vòng tứ kết <span class="badge">1/8</span></div>
-            <div id="tuket-container"><div class="loading"><div class="spinner"></div><div class="loading-text">Đang tải dữ liệu...</div></div></div>
-        </div>
+    <!-- Item 2: 52.png -->
+    <a href="https://ritapick.github.io/pickleball/pick5.2_8g.html" class="card-item">
+      <div class="img-wrapper">
+        <img src="52.PNG" alt="Giải đấu 5.2" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=5.2'">
+      </div>
+      <div class="card-label">ĐÔI HỖN HỢP 5.25</div>
+    </a>
 
-        <div class="tab-content" id="tab-banket">
-            <div class="section-title">Vòng bán kết <span class="badge">1/4</span></div>
-            <div id="banket-container"><div class="loading"><div class="spinner"></div><div class="loading-text">Đang tải dữ liệu...</div></div></div>
-        </div>
+  </div>
 
-        <div class="tab-content" id="tab-chungket">
-            <div class="section-title">Vòng chung kết <span class="badge">Final</span></div>
-            <div id="chungket-container"><div class="loading"><div class="spinner"></div><div class="loading-text">Đang tải dữ liệu...</div></div></div>
-        </div>
+  
 
-        <div class="tab-content" id="tab-sodo">
-            <div class="section-title">Sơ đồ vòng loại trực tiếp <span class="badge">Bracket</span></div>
-            <div class="view-toggle">
-                <button class="view-btn active" onclick="switchView('bracket')" id="btn-bracket">🏆 Sơ đồ nhánh</button>
-                <button class="view-btn" onclick="switchView('table')" id="btn-table">📋 Bảng</button>
-            </div>
-            <div class="bracket-view active" id="bracket-view">
-                <div id="sodo-bracket-container"><div class="loading"><div class="spinner"></div><div class="loading-text">Đang tải dữ liệu...</div></div></div>
-            </div>
-            <div class="table-view" id="table-view">
-                <div id="sodo-table-container"></div>
-            </div>
-        </div>
+<script>
+  // 1. Clock Functionality
+  function updateClock() {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    document.getElementById('clock-display').textContent = `${hours}:${minutes}`;
+  }
+  setInterval(updateClock, 1000);
+  updateClock();
 
-        <div class="update-time" id="update-time"></div>
-    </div>
+  // 2. Weather Simulation for Duc Trong, Lam Dong
+  // Note: Real-time weather requires an API Key (OpenWeatherMap etc). 
+  // Since this is a static frontend demo without backend proxy, we simulate realistic data for Duc Trong.
+  // Duc Trong is typically mild/cool.
+  
+  function getSimulatedWeather() {
+    const hour = new Date().getHours();
+    let temp = 22; // Base temp
+    let condition = "Mát mẻ";
+    let icon = "☁️";
 
-    <script>
-        const SPREADSHEET_ID = '1jcCx9TFq80uFW0tSQJDL1kmTRrYierOARbvevhbxuXg';
-        const BASE_URL = 'https://docs.google.com/spreadsheets/d/' + SPREADSHEET_ID + '/gviz/tq';
+    // Simple logic: Warmer during day (11am - 2pm), cooler at night
+    if (hour >= 11 && hour <= 14) {
+      temp = 26;
+      condition = "Nắng nhẹ";
+      icon = "⛅";
+    } else if (hour >= 15 && hour <= 18) {
+      temp = 24;
+      condition = "Có mây";
+      icon = "🌤️";
+    } else if (hour >= 19 || hour <= 6) {
+      temp = 19;
+      condition = "Se lạnh";
+      icon = "🌙";
+    }
 
-        document.querySelectorAll('.tab').forEach(function(tab) {
-            tab.addEventListener('click', function() {
-                document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
-                document.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('active'); });
-                tab.classList.add('active');
-                document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
-            });
-        });
+    // Add slight randomness to make it feel alive on reload
+    const randomVar = Math.floor(Math.random() * 3) - 1; 
+    temp += randomVar;
 
-        function switchView(view) {
-            document.getElementById('btn-bracket').classList.toggle('active', view === 'bracket');
-            document.getElementById('btn-table').classList.toggle('active', view === 'table');
-            document.getElementById('bracket-view').classList.toggle('active', view === 'bracket');
-            document.getElementById('table-view').classList.toggle('active', view === 'table');
-        }
+    return { temp, icon };
+  }
 
-        async function fetchSheetData(sheetName, range) {
-            var url = BASE_URL + '?sheet=' + encodeURIComponent(sheetName) + '&range=' + encodeURIComponent(range) + '&tqx=out:json';
-            try {
-                var response = await fetch(url);
-                var text = await response.text();
-                var jsonMatch = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\);?/);
-                if (!jsonMatch) throw new Error('Parse error');
-                var data = JSON.parse(jsonMatch[1]);
-                return data.table;
-            } catch (e) {
-                console.error('Error fetching ' + sheetName + ' ' + range + ':', e);
-                return null;
-            }
-        }
+  function updateWeather() {
+    const weatherData = getSimulatedWeather();
+    document.getElementById('weather-temp').textContent = `${weatherData.temp}°C`;
+    document.getElementById('weather-icon').textContent = weatherData.icon;
+  }
 
-        function parseTable(tableData) {
-            if (!tableData || !tableData.rows || !tableData.cols) return { headers: [], rows: [] };
-            var headers = tableData.cols.map(function(c) { return c.label || ''; });
-            var rows = tableData.rows.map(function(row) {
-                return row.c.map(function(cell) {
-                    if (!cell) return '';
-                    if (cell.f) return cell.f;
-                    if (cell.v !== null && cell.v !== undefined) return cell.v;
-                    return '';
-                });
-            });
-            return { headers: headers, rows: rows };
-        }
+  // Initialize weather
+  updateWeather();
 
-        function renderStandingsTable(data, title, dotClass) {
-            if (!data || data.rows.length === 0) return '';
-            var parsed = parseTable(data);
-            var headers = parsed.headers;
-            var rows = parsed.rows;
-            var filteredRows = rows.filter(function(r) { return r.some(function(c) { return c !== ''; }); });
-            if (filteredRows.length === 0) return '';
-            var html = '<div class="card"><div class="card-title"><span class="icon"><span class="group-dot ' + dotClass + '"></span></span>' + title + '</div><table><thead><tr>';
-            filteredRows[0].forEach(function(cell, i) {
-                var h = headers[i] || (i === 0 ? 'Đội' : (i === 1 ? 'Điểm' : 'Hệ số'));
-                html += '<th>' + h + '</th>';
-            });
-            html += '</tr></thead><tbody>';
-            filteredRows.forEach(function(row, idx) {
-                html += '<tr>';
-                row.forEach(function(cell, i) {
-                    if (i === 1) html += '<td class="points-cell">' + cell + '</td>';
-                    else if (i === 2) html += '<td class="ratio-cell">' + cell + '</td>';
-                    else html += '<td>' + cell + '</td>';
-                });
-                html += '</tr>';
-            });
-            html += '</tbody></table></div>';
-            return html;
-        }
+</script>
 
-        function renderMatchTable(data, title) {
-            if (!data || data.rows.length === 0) return '';
-            var parsed = parseTable(data);
-            var headers = parsed.headers;
-            var rows = parsed.rows;
-            var filteredRows = rows.filter(function(r) { return r.some(function(c) { return c !== ''; }); });
-            if (filteredRows.length === 0) return '';
-            var html = '<div class="card"><div class="card-title"><span class="icon">🏆</span>' + title + '</div><table><thead><tr>';
-            headers.forEach(function(h) { html += '<th>' + (h || '-') + '</th>'; });
-            html += '</tr></thead><tbody>';
-            filteredRows.forEach(function(row) {
-                html += '<tr>';
-                row.forEach(function(cell) { html += '<td>' + cell + '</td>'; });
-                html += '</tr>';
-            });
-            html += '</tbody></table></div>';
-            return html;
-        }
-
-        function renderSodoTable(data) {
-            if (!data || data.rows.length === 0) return '';
-            var parsed = parseTable(data);
-            var headers = parsed.headers;
-            var rows = parsed.rows;
-            var filteredRows = rows.filter(function(r) { return r.some(function(c) { return c !== ''; }); });
-            if (filteredRows.length === 0) return '';
-            var html = '<div class="card sodo-table-container"><div class="card-title"><span class="icon"></span>Sơ đồ thi đấu (dạng bảng)</div><table><thead><tr>';
-            headers.forEach(function(h) { html += '<th>' + (h || '') + '</th>'; });
-            html += '</tr></thead><tbody>';
-            filteredRows.forEach(function(row) {
-                html += '<tr>';
-                row.forEach(function(cell) { html += '<td>' + cell + '</td>'; });
-                html += '</tr>';
-            });
-            html += '</tbody></table></div>';
-            return html;
-        }
-
-        /* ========== BRACKET PARSING & RENDERING ========== */
-
-        function parseBracketData(rows) {
-            var round1Matches = [];
-            var round2Matches = [];
-            var round3Matches = [];
-
-            var i = 0;
-            while (i < rows.length) {
-                var row = rows[i];
-                if (!row || row.length < 2) { i++; continue; }
-
-                var teamA = row[0] || '';
-                var scoreA = row[1] || '';
-                if (teamA === '' && scoreA === '') { i++; continue; }
-
-                var nextRow = i + 1 < rows.length ? rows[i + 1] : null;
-                var teamB = nextRow ? (nextRow[0] || '') : '';
-                var scoreB = nextRow ? (nextRow[1] || '') : '';
-
-                round1Matches.push({
-                    teamA: teamA, scoreA: scoreA,
-                    teamB: teamB, scoreB: scoreB
-                });
-
-                if (nextRow) {
-                    var w2 = nextRow[2] || '', ws2 = nextRow[3] || '';
-                    var l2 = row[2] || '', ls2 = row[3] || '';
-                    if (w2 || ws2) {
-                        round2Matches.push({ teamA: l2, scoreA: ls2, teamB: w2, scoreB: ws2 });
-                    }
-
-                    var w3 = row[4] || '', ws3 = row[5] || '';
-                    var l3 = nextRow[4] || '', ls3 = nextRow[5] || '';
-                    if (w3 || ws3) {
-                        round3Matches.push({ teamA: l3, scoreA: ls3, teamB: w3, scoreB: ws3 });
-                    }
-                }
-                i += 2;
-            }
-
-            return { round1: round1Matches, round2: round2Matches, round3: round3Matches };
-        }
-
-        function isWinner(teamName, match) {
-            if (!teamName || teamName === '') return false;
-            var sA = parseFloat(match.scoreA) || 0;
-            var sB = parseFloat(match.scoreB) || 0;
-            if (sA === 0 && sB === 0) return false;
-            if (sA > sB) return teamName === match.teamA;
-            if (sB > sA) return teamName === match.teamB;
-            return false;
-        }
-
-        function getChampionName(round3) {
-            if (round3.length > 0) {
-                var m = round3[0];
-                var sA = parseFloat(m.scoreA) || 0;
-                var sB = parseFloat(m.scoreB) || 0;
-                if (sA > sB) return m.teamA;
-                if (sB > sA) return m.teamB;
-            }
-            return '';
-        }
-
-        function matchHTML(match, roundNum) {
-            var sA = parseFloat(match.scoreA) || 0;
-            var sB = parseFloat(match.scoreB) || 0;
-            var hasScores = sA > 0 || sB > 0;
-            var tA = match.teamA || '';
-            var tB = match.teamB || '';
-            var eA = tA === '' ? ' empty' : '';
-            var eB = tB === '' ? ' empty' : '';
-            var wA = hasScores && isWinner(tA, match) ? ' winner' : '';
-            var wB = hasScores && isWinner(tB, match) ? ' winner' : '';
-            var dSA = match.scoreA !== '' ? match.scoreA : '-';
-            var dSB = match.scoreB !== '' ? match.scoreB : '-';
-
-            return '<div class="match-box">' +
-                '<div class="match-player' + eA + wA + '"><span class="p-name">' + (tA || 'TBD') + '</span><span class="p-score">' + (tA === '' ? '-' : dSA) + '</span></div>' +
-                '<div class="match-player' + eB + wB + '"><span class="p-name">' + (tB || 'TBD') + '</span><span class="p-score">' + (tB === '' ? '-' : dSB) + '</span></div>' +
-                '</div>';
-        }
-
-        /*
-         * Render bracket with SVG connector lines.
-         *
-         * Layout structure:
-         *   [Round 1: 4 matches in 2 pairs] --[SVG connectors]-- [Round 2: 2 matches in 1 pair] --[SVG connectors]-- [Round 3: 1 match] -- [Champion]
-         *
-         * Each "pair" in round 1 has 2 match boxes stacked vertically.
-         * SVG draws a "[" shape from the right side of each match box to the center,
-         * then connects to the left side of the round 2 match box.
-         */
-
-        function renderBracketHTML(data) {
-            var round1 = data.round1;
-            var round2 = data.round2;
-            var round3 = data.round3;
-            var championName = getChampionName(round3);
-
-            var html = '<div class="bracket-wrapper"><div class="bracket">';
-
-            // ---- ROUND 1 ----
-            html += '<div class="bracket-round">';
-            html += '<div class="bracket-round-label">TỨ KẾT</div>';
-
-            // Pair 1: matches 0,1 → feeds into round2[0]
-            html += '<div class="match-pair">';
-            html += matchHTML(round1[0] || {teamA:'',scoreA:'',teamB:'',scoreB:''}, 1);
-            html += matchHTML(round1[1] || {teamA:'',scoreA:'',teamB:'',scoreB:''}, 1);
-            html += '</div>';
-
-            // Pair 2: matches 2,3 → feeds into round2[1]
-            html += '<div class="match-pair">';
-            html += matchHTML(round1[2] || {teamA:'',scoreA:'',teamB:'',scoreB:''}, 1);
-            html += matchHTML(round1[3] || {teamA:'',scoreA:'',teamB:'',scoreB:''}, 1);
-            html += '</div>';
-
-            html += '</div>'; // end round1
-
-            // ---- SVG CONNECTORS: Round1 → Round2 ----
-            html += '<div class="bracket-svg-container">';
-            html += '<svg viewBox="0 0 40 300" preserveAspectRatio="none" style="height:100%;">';
-            // Pair 1 bracket: from match 0 & 1 to center
-            // Top line from match0 right-middle going right, then down to center
-            html += '<line x1="0" y1="37.5" x2="15" y2="37.5" stroke="#94a3b8" stroke-width="2"/>';
-            html += '<line x1="15" y1="37.5" x2="15" y2="75" stroke="#94a3b8" stroke-width="2"/>';
-            html += '<line x1="15" y1="75" x2="40" y2="75" stroke="#94a3b8" stroke-width="2"/>';
-            // Bottom line from match1 right-middle going right, then up to center
-            html += '<line x1="0" y1="112.5" x2="15" y2="112.5" stroke="#94a3b8" stroke-width="2"/>';
-            html += '<line x1="15" y1="112.5" x2="15" y2="75" stroke="#94a3b8" stroke-width="2"/>';
-            // Pair 2 bracket
-            html += '<line x1="0" y1="187.5" x2="15" y2="187.5" stroke="#94a3b8" stroke-width="2"/>';
-            html += '<line x1="15" y1="187.5" x2="15" y2="225" stroke="#94a3b8" stroke-width="2"/>';
-            html += '<line x1="15" y1="225" x2="40" y2="225" stroke="#94a3b8" stroke-width="2"/>';
-            html += '<line x1="0" y1="262.5" x2="15" y2="262.5" stroke="#94a3b8" stroke-width="2"/>';
-            html += '<line x1="15" y1="262.5" x2="15" y2="225" stroke="#94a3b8" stroke-width="2"/>';
-            html += '</svg>';
-            html += '</div>';
-
-            // ---- ROUND 2 ----
-            html += '<div class="bracket-round">';
-            html += '<div class="bracket-round-label">BÁN KẾT</div>';
-
-            // Pair: matches 0,1 → feeds into round3[0]
-            html += '<div class="match-pair single">';
-            html += matchHTML(round2[0] || {teamA:'',scoreA:'',teamB:'',scoreB:''}, 2);
-            html += matchHTML(round2[1] || {teamA:'',scoreA:'',teamB:'',scoreB:''}, 2);
-            html += '</div>';
-
-            html += '</div>'; // end round2
-
-            // ---- SVG CONNECTORS: Round2 → Round3 ----
-            html += '<div class="bracket-svg-container">';
-            html += '<svg viewBox="0 0 40 150" preserveAspectRatio="none" style="height:100%;">';
-            // Pair 1 bracket
-            html += '<line x1="0" y1="37.5" x2="15" y2="37.5" stroke="#94a3b8" stroke-width="2"/>';
-            html += '<line x1="15" y1="37.5" x2="15" y2="75" stroke="#94a3b8" stroke-width="2"/>';
-            html += '<line x1="15" y1="75" x2="40" y2="75" stroke="#94a3b8" stroke-width="2"/>';
-            html += '<line x1="0" y1="112.5" x2="15" y2="112.5" stroke="#94a3b8" stroke-width="2"/>';
-            html += '<line x1="15" y1="112.5" x2="15" y2="75" stroke="#94a3b8" stroke-width="2"/>';
-            html += '</svg>';
-            html += '</div>';
-
-            // ---- ROUND 3 (CHUNG KẾT) ----
-            html += '<div class="bracket-round">';
-            html += '<div class="bracket-round-label ck-label">CHUNG KẾT</div>';
-
-            html += '<div class="match-pair single" style="flex:1;">';
-            if (round3.length > 0) {
-                var m = round3[0];
-                var sA = parseFloat(m.scoreA) || 0;
-                var sB = parseFloat(m.scoreB) || 0;
-                var hasScores = sA > 0 || sB > 0;
-                var tA = m.teamA || '';
-                var tB = m.teamB || '';
-                var wA = hasScores && isWinner(tA, m) ? ' winner' : '';
-                var wB = hasScores && isWinner(tB, m) ? ' winner' : '';
-                var cA = tA === championName && hasScores ? ' champion' : '';
-                var cB = tB === championName && hasScores ? ' champion' : '';
-                var dSA = m.scoreA !== '' ? m.scoreA : '-';
-                var dSB = m.scoreB !== '' ? m.scoreB : '-';
-
-                html += '<div class="match-box champion-box">';
-                html += '<div class="match-player' + (tA === '' ? ' empty' : '') + wA + cA + '"><span class="p-name">' + (tA || 'TBD') + '</span><span class="p-score">' + (tA === '' ? '-' : dSA) + '</span></div>';
-                html += '<div class="match-player' + (tB === '' ? ' empty' : '') + wB + cB + '"><span class="p-name">' + (tB || 'TBD') + '</span><span class="p-score">' + (tB === '' ? '-' : dSB) + '</span></div>';
-                html += '</div>';
-            } else {
-                html += '<div class="match-box"><div class="match-player empty"><span class="p-name">TBD</span><span class="p-score">-</span></div><div class="match-player empty"><span class="p-name">TBD</span><span class="p-score">-</span></div></div>';
-            }
-            html += '</div>';
-
-            html += '</div>'; // end round3
-
-            // ---- CHAMPION SECTION ----
-            html += '<div class="champion-section">';
-            if (championName) {
-                html += '<div class="champion-badge">';
-                html += '<span class="crown">👑</span>';
-                html += '<span class="champ-name">' + championName + '</span>';
-                html += '<span class="champ-label">Vô địch</span>';
-                html += '</div>';
-            } else {
-                html += '<div class="champion-badge" style="opacity:0.4;">';
-                html += '<span class="crown"></span>';
-                html += '<span class="champ-name">?</span>';
-                html += '<span class="champ-label">Vô địch</span>';
-                html += '</div>';
-            }
-            html += '</div>';
-
-            html += '</div></div>'; // end bracket, wrapper
-
-            return html;
-        }
-
-        async function loadAllData() {
-            // Bảng A-D
-            var sheetNames = ['A', 'B', 'C', 'D'];
-            var titles = ['Bảng A', 'Bảng B', 'Bảng C', 'Bảng D'];
-            var dotClasses = ['dot-a', 'dot-b', 'dot-c', 'dot-d'];
-            var bangnhomContainer = document.getElementById('bangnhom-container');
-            var bangnhomHTML = '';
-
-            var results = await Promise.all(sheetNames.map(function(name) { return fetchSheetData(name, 'F1:H5'); }));
-            results.forEach(function(data, idx) {
-                if (data) bangnhomHTML += renderStandingsTable(data, titles[idx], dotClasses[idx]);
-                else bangnhomHTML += '<div class="card"><div class="card-title"><span class="icon"><span class="group-dot ' + dotClasses[idx] + '"></span></span>' + titles[idx] + '</div><div class="error-msg">Không thể tải dữ liệu</div></div>';
-            });
-            bangnhomContainer.innerHTML = bangnhomHTML;
-
-            // Vòng bảng
-            var rangesBang = [
-                { range: 'A1:h8', title: 'BẢNG A' }, { range: 'A10:h17', title: 'BẢNG B' },
-                { range: 'A19:h26', title: 'BẢNG C' }, { range: 'A28:h35', title: 'BẢNG D' }
-            ];
-            var vongbangContainer = document.getElementById('vongbang-container');
-            var vongbangHTML = '';
-            var bangResults = await Promise.all(rangesBang.map(function(r) { return fetchSheetData('bang', r.range); }));
-            bangResults.forEach(function(data, idx) { if (data) vongbangHTML += renderMatchTable(data, rangesBang[idx].title); });
-            vongbangContainer.innerHTML = vongbangHTML || '<div class="error-msg">Không thể tải dữ liệu vòng bảng</div>';
-
-            // Tứ kết
-            var rangesTuKet = [
-                { range: 'A2:g3', title: 'Tứ kết 1' }, { range: 'A5:g6', title: 'Tứ kết 2' },
-                { range: 'A8:g9', title: 'Tứ kết 3' }, { range: 'A11:g12', title: 'Tứ kết 4' }
-            ];
-            var tuketContainer = document.getElementById('tuket-container');
-            var tuketHTML = '';
-            var tuketResults = await Promise.all(rangesTuKet.map(function(r) { return fetchSheetData('1.8', r.range); }));
-            tuketResults.forEach(function(data, idx) { if (data) tuketHTML += renderMatchTable(data, rangesTuKet[idx].title); });
-            tuketContainer.innerHTML = tuketHTML || '<div class="error-msg">Không thể tải dữ liệu tứ kết</div>';
-
-            // Bán kết
-            var rangesBanKet = [
-                { range: 'A3:f4', title: 'Bán kết 1' }, { range: 'A6:f7', title: 'Bán kết 2' }
-            ];
-            var banketContainer = document.getElementById('banket-container');
-            var banketHTML = '';
-            var banketResults = await Promise.all(rangesBanKet.map(function(r) { return fetchSheetData('bk', r.range); }));
-            banketResults.forEach(function(data, idx) { if (data) banketHTML += renderMatchTable(data, rangesBanKet[idx].title); });
-            banketContainer.innerHTML = banketHTML || '<div class="error-msg">Không thể tải dữ liệu bán kết</div>';
-
-            // Chung kết
-            var ckContainer = document.getElementById('chungket-container');
-            var ckData = await fetchSheetData('ck', 'A3:e4');
-            if (ckData) {
-                var ckHTML = renderMatchTable(ckData, 'Chung Kết');
-                ckContainer.innerHTML = ckHTML || '<div class="error-msg">Chưa có dữ liệu chung kết</div>';
-            } else {
-                ckContainer.innerHTML = '<div class="error-msg">Không thể tải dữ liệu chung kết</div>';
-            }
-
-            // SODO
-            var sodoContainer = document.getElementById('sodo-bracket-container');
-            var sodoTableContainer = document.getElementById('sodo-table-container');
-            var sodoData = await fetchSheetData('sodo', 'A1:H30');
-
-            if (sodoData) {
-                var parsed = parseTable(sodoData);
-                var filteredRows = parsed.rows.filter(function(r) { return r.some(function(c) { return c !== ''; }); });
-
-                if (filteredRows.length > 0) {
-                    var bracketData = parseBracketData(filteredRows);
-                    sodoContainer.innerHTML = renderBracketHTML(bracketData);
-                } else {
-                    sodoContainer.innerHTML = '<div class="error-msg">Chưa có dữ liệu sơ đồ</div>';
-                }
-                sodoTableContainer.innerHTML = renderSodoTable(sodoData);
-            } else {
-                sodoContainer.innerHTML = '<div class="error-msg">Không thể tải dữ liệu sơ đồ</div>';
-                sodoTableContainer.innerHTML = '<div class="error-msg">Không thể tải dữ liệu sơ đồ</div>';
-            }
-
-            var now = new Date();
-            document.getElementById('update-time').innerHTML = 'KARAOKE RITA <span>' + '</span> - <span>' + now.toLocaleDateString('vi-VN') + '</span>';
-        }
-
-        loadAllData();
-        setInterval(loadAllData, 60000);
-    </script>
 </body>
 </html>
-
