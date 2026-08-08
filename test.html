@@ -5,15 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>🏆PICKLEBALL CUP</title>
 
-<!-- Font: Oswald for sports look -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
   :root {
-    --primary-color: #00f2ff; /* Cyan Neon */
-    --secondary-color: #ccff00; /* Lime Green */
+    --primary-color: #00f2ff;
+    --secondary-color: #ccff00;
     --bg-dark: #0a0a0a;
     --glass-bg: rgba(20, 20, 25, 0.85);
     --text-gradient: linear-gradient(90deg, #ffffff, #00f2ff);
@@ -44,7 +43,6 @@
     z-index: -1;
   }
 
-  /* TOP BAR */
   .top-bar {
     width: 100%;
     max-width: 480px;
@@ -87,7 +85,6 @@
     justify-content: center;
   }
 
-  /* ===== SPONSORS SECTION ===== */
   .sponsors-section {
     margin-bottom: 40px;
     animation: slideDown 0.6s ease-out;
@@ -123,28 +120,32 @@
     margin: 0 10px;
   }
 
-  /* 🔹 Grid: 3 logo/hàng, kích thước nhỏ, căn giữa hàng cuối nếu lẻ */
   .sponsors-grid {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 20px;
-    max-width: 280px; /* = 3*80px + 2*20px → chỉ vừa đúng 3 logo mỗi hàng */
-    margin: 0 auto;  /* căn giữa grid trong section */
+    max-width: 280px;
+    margin: 0 auto;
     padding: 5px 0;
   }
 
+  /* ✅ FIX: Thêm box-sizing: border-box để width: 80px bao gồm cả padding + border */
   .sponsor-item {
-    width: 80px;        /* 🔹 Nhỏ hơn 90px cũ */
+    width: 80px;
     height: 80px;
     aspect-ratio: 1 / 1;
     border-radius: 12px;
     background: linear-gradient(145deg, #1f1f1f, #0f0f0f);
     border: 2px solid rgba(255,255,255,0.1);
-    padding: 8px;
+    padding: 6px; /* giảm nhẹ padding để logo bên trong to hơn một chút */
+    box-sizing: border-box; /* 🔑 KEY FIX */
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     position: relative;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .sponsor-item::before {
@@ -197,7 +198,6 @@
     to { transform: rotate(360deg); }
   }
 
-  /* ===== TITLE SECTION ===== */
   .title-box {
     text-align: center;
     margin-bottom: 50px;
@@ -341,7 +341,6 @@
     to { transform: translateY(0); opacity: 1; }
   }
 
-  /* Responsive */
   @media (max-width: 350px) {
     .main-title { font-size: 26px; }
     .card-label { font-size: 16px; }
@@ -351,7 +350,7 @@
     }
     .sponsors-grid { 
       gap: 15px;
-      max-width: 240px; /* 3*70 + 2*15 */
+      max-width: 240px;
     }
     .sponsors-title { font-size: 12px; letter-spacing: 2px; }
   }
