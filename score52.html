@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý giải đấu Pickleball trình 5.25</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh; color: #fff;
+        }
+        .header {
+            background: linear-gradient(90deg, #e94560 0%, #f5a623 100%);
+            padding: 20px 30px; text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .header h1 { font-size: 28px; text-transform: uppercase; letter-spacing: 2px; }
+        .header .subtitle { font-size: 14px; opacity: 0.9; margin-top: 5px; }
+        .container { max-width: 98%; margin: 20px auto; padding: 0 10px; }
+        .tabs {
+            display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 0;
+            padding: 10px 10px 0; background: rgba(255,255,255,0.05);
+            border-radius: 12px 12px 0 0; border-bottom: 2px solid #e94560;
+        }
+        .tab {
+            padding: 12px 24px; background: rgba(255,255,255,0.1);
+            border: none; border-radius: 8px 8px 0 0; color: #ccc;
+            cursor: pointer; font-size: 14px; font-weight: 600;
+            transition: all 0.3s;
+        }
+        .tab:hover { background: rgba(233,69,96,0.3); color: #fff; }
+        .tab.active {
+            background: linear-gradient(135deg, #e94560, #f5a623);
+            color: #fff; box-shadow: 0 -2px 10px rgba(233,69,96,0.3);
+        }
+        .toolbar {
+            display: flex; gap: 10px; padding: 15px 20px;
+            background: rgba(255,255,255,0.05); flex-wrap: wrap; align-items: center;
+        }
+        .toolbar button {
+            padding: 10px 20px; border: none; border-radius: 8px;
+            cursor: pointer; font-size: 14px; font-weight: 600;
+            display: flex; align-items: center; gap: 5px;
+        }
+        .btn-add { background: linear-gradient(135deg, #27ae60, #2ecc71); color: #fff; }
+        .btn-refresh { background: linear-gradient(135deg, #3498db, #2980b9); color: #fff; }
+        .btn-save-all { background: linear-gradient(135deg, #e94560, #f5a623); color: #fff; }
+        .btn-open-sheet { background: linear-gradient(135deg, #9b59b6, #8e44ad); color: #fff; }
+        .search-box {
+            flex: 1; min-width: 200px; padding: 10px 15px;
+            border: 2px solid rgba(255,255,255,0.1); border-radius: 8px;
+            background: rgba(255,255,255,0.05); color: #fff; font-size: 14px;
+        }
+        .search-box::placeholder { color: rgba(255,255,255,0.5); }
+        .table-wrapper {
+            overflow-x: auto; background: rgba(255,255,255,0.03);
+            border-radius: 0 0 12px 12px; max-height: calc(100vh - 250px); overflow-y: auto;
+        }
+        table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        thead { position: sticky; top: 0; z-index: 10; }
+        thead th {
+            background: linear-gradient(135deg, #2c3e50, #34495e); color: #fff;
+            padding: 12px 15px; text-align: left; font-weight: 600;
+            white-space: nowrap; border: 1px solid rgba(255,255,255,0.1);
+        }
+        tbody tr { transition: background 0.2s; }
+        tbody tr:hover { background: rgba(233,69,96,0.1); }
+        tbody tr:nth-child(even) { background: rgba(255,255,255,0.02); }
+        tbody td { padding: 4px; border: 1px solid rgba(255,255,255,0.05); }
+        tbody td input {
+            width: 100%; padding: 8px 10px; border: none;
+            background: rgba(255,255,255,0.08); color: #fff;
+            font-size: 14px; border-radius: 4px; font-family: inherit;
+        }
+        tbody td input:focus {
+            background: rgba(233,69,96,0.15);
+            box-shadow: inset 0 0 0 2px #e94560; outline: none;
+        }
+        tbody td input.modified {
+            background: rgba(245,166,35,0.2); border-left: 3px solid #f5a623;
+        }
+        .action-cell { width: 80px; text-align: center; }
+        .btn-delete {
+            padding: 6px 12px; border: none; border-radius: 6px;
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: #fff; cursor: pointer; font-size: 12px;
+        }
+        .row-number { width: 50px; text-align: center; color: #888; background: rgba(0,0,0,0.2); }
+        .loading {
+            text-align: center; padding: 50px; font-size: 18px; color: #f5a623;
+        }
+        .loading .spinner {
+            display: inline-block; width: 40px; height: 40px;
+            border: 4px solid rgba(245,166,35,0.3); border-top-color: #f5a623;
+            border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 15px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .notification {
+            position: fixed; top: 20px; right: 20px; padding: 15px 25px;
+            border-radius: 10px; color: #fff; font-weight: 600; z-index: 9999;
+            animation: slideIn 0.3s ease; box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        .notification.success { background: linear-gradient(135deg, #27ae60, #2ecc71); }
+        .notification.error { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+        .notification.info { background: linear-gradient(135deg, #3498db, #2980b9); }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        .modified-count {
+            color: #f5a623; font-size: 13px; padding: 5px 12px;
+            background: rgba(245,166,35,0.15); border-radius: 20px;
+        }
+        .setup-banner {
+            background: linear-gradient(90deg, #f39c12, #e67e22);
+            padding: 15px 20px; margin: 10px; border-radius: 8px;
+            display: none; align-items: center; gap: 10px;
+        }
+        .setup-banner.show { display: flex; }
+        .setup-banner input {
+            flex: 1; padding: 8px; border-radius: 4px; border: none;
+        }
+        .setup-banner button {
+            padding: 8px 15px; background: #fff; border: none;
+            border-radius: 4px; cursor: pointer; font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🏓 Quản lý giải đấu Pickleball</h1>
+        <div class="subtitle">Trình 5.25 - Hệ thống quản lý thi đấu</div>
+    </div>
+
+    <div class="setup-banner" id="setupBanner">
+        ⚙️ <strong>API Backend URL:</strong>
+        <input type="text" id="apiUrlInput" placeholder="https://script.google.com/macros/s/AKfycbwX450_nIQaNTT1NP6jYZdtM3FPaiVTTG5avhqdBsHh2H4yjS-1dpdaCrZhs_VShqUB/exec">
+        <button onclick="saveApiUrl()">💾 Lưu</button>
+        <button onclick="closeSetupBanner()">✖</button>
+    </div>
+
+    <div class="container">
+        <div class="tabs" id="tabs"></div>
+        <div class="toolbar">
+            <button class="btn-add" onclick="addRow()">➕ Thêm dòng</button>
+            <button class="btn-refresh" onclick="refreshData()">🔄 Làm mới</button>
+            <button class="btn-save-all" onclick="saveAll()">💾 Lưu thay đổi</button>
+            <button class="btn-open-sheet" onclick="openSheet()">📊 Mở Sheet gốc</button>
+            <span class="modified-count" id="modifiedCount" style="display:none;">
+                ✏️ <span id="modCount">0</span> ô đã sửa
+            </span>
+            <input type="text" class="search-box" id="searchBox" 
+                   placeholder="🔍 Tìm kiếm..." oninput="filterTable()">
+        </div>
+        <div class="table-wrapper" id="tableWrapper">
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <div>Đang tải dữ liệu...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== CẤU HÌNH - THAY ĐỔI 2 GIÁ TRỊ NÀY =====
+        const SHEET_ID = '13UqfGXGELaCg3qJcPCZ-4_rwsLNgEJklpqvGZVPgk9o';
+        const SHEET_URL = 'https://docs.google.com/spreadsheets/d/13UqfGXGELaCg3qJcPCZ-4_rwsLNgEJklpqvGZVPgk9o/edit';
+        let API_URL = localStorage.getItem('pb_api_url') || '';
+        // ================================================
+
+        let currentSheet = '';
+        let sheetNames = [];
+        let tableData = [];
+        let modifiedCells = {};
+
+        window.onload = function() {
+            if (!API_URL) {
+                document.getElementById('setupBanner').classList.add('show');
+            }
+            loadSheetNames();
+        };
+
+        function saveApiUrl() {
+            const url = document.getElementById('apiUrlInput').value.trim();
+            if (url) {
+                API_URL = url;
+                localStorage.setItem('pb_api_url', url);
+                closeSetupBanner();
+                showNotification('Đã lưu API URL', 'success');
+                loadSheetNames();
+            }
+        }
+
+        function closeSetupBanner() {
+            document.getElementById('setupBanner').classList.remove('show');
+        }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = 'notification ' + type;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 3000);
+        }
+
+        function loadSheetNames() {
+            // Sử dụng Google Visualization API để đọc sheet public
+            const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
+            fetch(url)
+                .then(r => r.text())
+                .then(text => {
+                    // Parse JSON (Google trả về có prefix)
+                    const json = JSON.parse(text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1));
+                    // Lấy danh sách sheet từ metadata - cách khác: fetch sheet metadata
+                    // Đơn giản: thử fetch từng sheet name phổ biến
+                    fetchSheetMetadata();
+                })
+                .catch(err => {
+                    showNotification('Không đọc được sheet. Hãy public sheet!', 'error');
+                });
+        }
+
+        function fetchSheetMetadata() {
+            // Google Sheets không có API list sheets public trực tiếp
+            // Ta phải dùng workaround: fetch HTML hoặc dùng Apps Script
+            // Ở đây ta thử fetch các sheet phổ biến
+            const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
+            fetch(url)
+                .then(r => r.text())
+                .then(text => {
+                    const startIdx = text.indexOf('{');
+                    const endIdx = text.lastIndexOf('}');
+                    if (startIdx >= 0 && endIdx >= 0) {
+                        const json = JSON.parse(text.substring(startIdx, endIdx + 1));
+                        // Google Visualization API không trả về sheet names
+                        // Cần dùng Apps Script để lấy sheet names
+                        if (API_URL) {
+                            fetch(API_URL + '?action=getSheetNames')
+                                .then(r => r.json())
+                                .then(names => {
+                                    sheetNames = names;
+                                    renderTabs();
+                                    if (names.length > 0) selectSheet(names[0]);
+                                })
+                                .catch(err => fallbackSheetNames());
+                        } else {
+                            fallbackSheetNames();
+                        }
+                    }
+                })
+                .catch(err => fallbackSheetNames());
+        }
+
+        function fallbackSheetNames() {
+            // Nếu không có API, dùng sheet mặc định (sheet đầu tiên)
+            sheetNames = ['Sheet1'];
+            renderTabs();
+            selectSheet('Sheet1');
+        }
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('tabs');
+            tabsContainer.innerHTML = '';
+            sheetNames.forEach((name, index) => {
+                const tab = document.createElement('button');
+                tab.className = 'tab' + (index === 0 ? ' active' : '');
+                tab.textContent = name;
+                tab.onclick = () => selectSheet(name);
+                tab.dataset.sheet = name;
+                tabsContainer.appendChild(tab);
+            });
+        }
+
+        function selectSheet(name) {
+            currentSheet = name;
+            modifiedCells = {};
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.sheet === name);
+            });
+            document.getElementById('modifiedCount').style.display = 'none';
+            loadSheetData(name);
+        }
+
+        function loadSheetData(sheetName) {
+            document.getElementById('tableWrapper').innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <div>Đang tải "${sheetName}"...</div>
+                </div>
+            `;
+
+            const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
+            fetch(url)
+                .then(r => r.text())
+                .then(text => {
+                    const startIdx = text.indexOf('{');
+                    const endIdx = text.lastIndexOf('}');
+                    if (startIdx < 0 || endIdx < 0) throw new Error('Invalid response');
+                    const json = JSON.parse(text.substring(startIdx, endIdx + 1));
+                    
+                    // Convert Google Visualization format to 2D array
+                    const cols = json.table.cols.map(c => c.label || '');
+                    const rows = json.table.rows.map(r => 
+                        r.c.map(cell => cell ? (cell.v !== undefined ? cell.v : '') : '')
+                    );
+                    tableData = [cols, ...rows];
+                    renderTable(tableData);
+                })
+                .catch(err => {
+                    document.getElementById('tableWrapper').innerHTML = 
+                        '<div class="loading">⚠️ Không thể tải sheet. Hãy đảm bảo sheet đã được share "Anyone with link"</div>';
+                });
+        }
+
+        function renderTable(data) {
+            if (!data || data.length === 0) {
+                document.getElementById('tableWrapper').innerHTML = 
+                    '<div class="loading">📭 Sheet trống</div>';
+                return;
+            }
+            const headers = data[0];
+            const rows = data.slice(1);
+            let html = '<table id="dataTable"><thead><tr><th class="row-number">#</th>';
+            headers.forEach(h => html += '<th>' + escapeHtml(String(h)) + '</th>');
+            html += '<th class="action-cell">Xóa</th></tr></thead><tbody>';
+            rows.forEach((row, rowIndex) => {
+                html += '<tr><td class="row-number">' + (rowIndex + 2) + '</td>';
+                row.forEach((cell, colIndex) => {
+                    const cellKey = (rowIndex + 2) + '-' + (colIndex + 1);
+                    const cellValue = cell !== null && cell !== undefined ? cell : '';
+                    html += `<td><input type="text" value="${escapeHtml(String(cellValue))}" 
+                        data-row="${rowIndex + 2}" data-col="${colIndex + 1}" 
+                        data-key="${cellKey}" 
+                        onfocus="onCellFocus(this)" oninput="onCellInput(this)" 
+                        onblur="onCellBlur(this)" onkeydown="onCellKeydown(event, this)"></td>`;
+                });
+                html += `<td class="action-cell"><button class="btn-delete" 
+                    onclick="deleteRow(${rowIndex + 2})">🗑️</button></td></tr>`;
+            });
+            html += '</tbody></table>';
+            document.getElementById('tableWrapper').innerHTML = html;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML.replace(/"/g, '&quot;');
+        }
+
+        function onCellFocus(input) { input.dataset.originalValue = input.value; }
+
+        function onCellInput(input) {
+            const key = input.dataset.key;
+            if (input.value !== input.dataset.originalValue) {
+                input.classList.add('modified');
+                modifiedCells[key] = {
+                    row: parseInt(input.dataset.row),
+                    col: parseInt(input.dataset.col),
+                    value: input.value
+                };
+            } else {
+                input.classList.remove('modified');
+                delete modifiedCells[key];
+            }
+            updateModifiedCount();
+        }
+
+        function onCellBlur(input) {
+            if (input.classList.contains('modified') && API_URL) {
+                saveCell(input);
+            }
+        }
+
+        function onCellKeydown(event, input) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                const nextRow = parseInt(input.dataset.row) + 1;
+                const nextInput = document.querySelector(
+                    `input[data-row="${nextRow}"][data-col="${input.dataset.col}"]`);
+                if (nextInput) { nextInput.focus(); nextInput.select(); }
+            } else if (event.key === 'Escape') {
+                input.value = input.dataset.originalValue;
+                input.classList.remove('modified');
+                delete modifiedCells[input.dataset.key];
+                updateModifiedCount();
+            }
+        }
+
+        function saveCell(input) {
+            if (!API_URL) {
+                showNotification('⚠️ Cần cấu hình API URL để lưu', 'error');
+                return;
+            }
+            const row = input.dataset.row;
+            const col = input.dataset.col;
+            const value = input.value;
+            fetch(API_URL, {
+                method: 'POST',
+                mode: 'cors',
+                headers: { 'Content-Type': 'text/plain' },
+                body: JSON.stringify({
+                    action: 'updateCell',
+                    sheetName: currentSheet,
+                    row: parseInt(row),
+                    col: parseInt(col),
+                    value: value
+                })
+            })
+            .then(r => r.json())
+            .then(res => {
+                if (res.success) {
+                    input.classList.remove('modified');
+                    input.dataset.originalValue = value;
+                    delete modifiedCells[input.dataset.key];
+                    updateModifiedCount();
+                    showNotification('✅ Đã lưu', 'success');
+                }
+            })
+            .catch(err => showNotification('Lỗi lưu: ' + err.message, 'error'));
+        }
+
+        function updateModifiedCount() {
+            const count = Object.keys(modifiedCells).length;
+            const countEl = document.getElementById('modifiedCount');
+            if (count > 0) {
+                countEl.style.display = 'inline-flex';
+                document.getElementById('modCount').textContent = count;
+            } else {
+                countEl.style.display = 'none';
+            }
+        }
+
+        function addRow() {
+            if (!API_URL) {
+                showNotification('⚠️ Cần cấu hình API URL', 'error');
+                return;
+            }
+            const numCols = tableData[0]?.length || 5;
+            fetch(API_URL, {
+                method: 'POST', mode: 'cors',
+                headers: { 'Content-Type': 'text/plain' },
+                body: JSON.stringify({
+                    action: 'addRow', sheetName: currentSheet,
+                    rowData: new Array(numCols).fill('')
+                })
+            })
+            .then(r => r.json())
+            .then(res => {
+                if (res.success) {
+                    showNotification('✅ Đã thêm dòng', 'success');
+                    loadSheetData(currentSheet);
+                }
+            });
+        }
+
+        function deleteRow(rowIndex) {
+            if (!confirm('Xóa dòng ' + rowIndex + '?')) return;
+            if (!API_URL) { showNotification('⚠️ Cần API URL', 'error'); return; }
+            fetch(API_URL, {
+                method: 'POST', mode: 'cors',
+                headers: { 'Content-Type': 'text/plain' },
+                body: JSON.stringify({
+                    action: 'deleteRow', sheetName: currentSheet, rowIndex: rowIndex
+                })
+            })
+            .then(r => r.json())
+            .then(res => {
+                if (res.success) {
+                    showNotification('✅ Đã xóa', 'success');
+                    loadSheetData(currentSheet);
+                }
+            });
+        }
+
+        function saveAll() {
+            const count = Object.keys(modifiedCells).length;
+            if (count === 0) { showNotification('Không có thay đổi', 'info'); return; }
+            Object.keys(modifiedCells).forEach(key => {
+                const input = document.querySelector(`input[data-key="${key}"]`);
+                if (input) saveCell(input);
+            });
+        }
+
+        function refreshData() {
+            loadSheetData(currentSheet);
+            showNotification('🔄 Đã làm mới', 'info');
+        }
+
+        function openSheet() {
+            window.open(SHEET_URL, '_blank');
+        }
+
+        function filterTable() {
+            const term = document.getElementById('searchBox').value.toLowerCase();
+            document.querySelectorAll('#dataTable tbody tr').forEach(row => {
+                const inputs = row.querySelectorAll('input');
+                const match = Array.from(inputs).some(i => 
+                    i.value.toLowerCase().includes(term));
+                row.style.display = match || term === '' ? '' : 'none';
+            });
+        }
+    </script>
+</body>
+</html>
