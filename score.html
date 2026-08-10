@@ -92,15 +92,23 @@
         .images-container {
             display: flex;
             justify-content: center;
-            gap: 30px;
-            flex-wrap: wrap;
+            gap: 20px;
+            flex-wrap: nowrap;
             margin-top: 20px;
+        }
+
+        .image-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            max-width: 300px;
         }
 
         .image-card {
             display: block;
-            width: 250px;
-            height: 250px;
+            width: 100%;
+            aspect-ratio: 1 / 1;
             border-radius: 15px;
             overflow: hidden;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
@@ -126,25 +134,27 @@
             transform: scale(1.05);
         }
 
-        .image-card::after {
-            content: '▶ Click để xem';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(transparent, rgba(0,0,0,0.8));
-            color: white;
-            padding: 30px 10px 10px;
-            font-size: 0.85rem;
-            font-weight: 600;
+        .image-label {
+            margin-top: 12px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1a5c2e;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
+            letter-spacing: 1.5px;
+            background: linear-gradient(135deg, #ffdd00, #ffd700);
+            padding: 8px 16px;
+            border-radius: 20px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+            border: 2px solid #1a5c2e;
+            white-space: nowrap;
+            transition: all 0.3s ease;
         }
 
-        .image-card:hover::after {
-            opacity: 1;
+        .image-wrapper:hover .image-label {
+            background: #1a5c2e;
+            color: #ffdd00;
+            transform: scale(1.05);
         }
 
         .pickleball-decoration {
@@ -181,6 +191,7 @@
             margin-bottom: 10px;
         }
 
+        /* Responsive cho mobile */
         @media (max-width: 600px) {
             .sub-title {
                 font-size: 2rem;
@@ -188,12 +199,31 @@
             .main-title {
                 font-size: 1.3rem;
             }
-            .image-card {
-                width: 200px;
-                height: 200px;
-            }
             .container {
-                padding: 30px 20px;
+                padding: 30px 15px;
+            }
+            .images-container {
+                gap: 12px;
+            }
+            .image-label {
+                font-size: 0.75rem;
+                padding: 6px 10px;
+                letter-spacing: 1px;
+            }
+            .image-card {
+                border-width: 3px;
+                border-radius: 10px;
+            }
+            .image-wrapper {
+                max-width: none;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .image-label {
+                font-size: 0.65rem;
+                padding: 5px 8px;
+                letter-spacing: 0.5px;
             }
         }
     </style>
@@ -212,14 +242,19 @@
         <p class="date">📅 Ngày 12/08/2026</p>
 
         <div class="images-container">
-            <a href="https://docs.google.com/spreadsheets/d/1niiTZS5IcM_tG6Z36ifAOpvfz_TQghP0cSua330eRCU/edit?gid=1139851199#gid=1139851199" target="_blank" class="image-card">
-                <img src="48.png" alt="Bảng 1">
-                <div class="images-container">ĐÔI HỖN HỢP 4.75</div>
-            </a>
-            <a href="https://docs.google.com/spreadsheets/d/13UqfGXGELaCg3qJcPCZ-4_rwsLNgEJklpqvGZVPgk9o/edit?gid=453451072#gid=453451072" target="_blank" class="image-card">
-                <img src="52.PNG" alt="Bảng 2">
-                <div class="images-container">ĐÔI HỖN HỢP 5.25</div>
-            </a>
+            <div class="image-wrapper">
+                <a href="https://docs.google.com/spreadsheets/d/1niiTZS5IcM_tG6Z36ifAOpvfz_TQghP0cSua330eRCU/edit?gid=1139851199#gid=1139851199" target="_blank" class="image-card">
+                    <img src="48.png" alt="Đôi hỗn hợp 4.75">
+                </a>
+                <div class="image-label">ĐÔI HỖN HỢP 4.75</div>
+            </div>
+            
+            <div class="image-wrapper">
+                <a href="https://docs.google.com/spreadsheets/d/13UqfGXGELaCg3qJcPCZ-4_rwsLNgEJklpqvGZVPgk9o/edit?gid=453451072#gid=453451072" target="_blank" class="image-card">
+                    <img src="52.PNG" alt="Đôi hỗn hợp 5.25">
+                </a>
+                <div class="image-label">ĐÔI HỖN HỢP 5.25</div>
+            </div>
         </div>
     </div>
 </body>
