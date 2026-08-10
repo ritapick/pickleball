@@ -1,481 +1,224 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🎾 DTD Pickleball - Nhập Tỷ Số</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
-:root {
-  --primary: #1a56db; --primary-light: #3b82f6; --primary-dark: #1e40af;
-  --seri-a: #1a56db; --seri-b: #dc2626; --success: #16a34a; --danger: #dc2626;
-  --warning: #f59e0b; --bg: #f1f5f9; --card: #ffffff; --text: #1e293b;
-  --text-secondary: #64748b; --border: #e2e8f0;
-}
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Giải Đấu Pickleball - DTD Tournament Cup</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-/* === LOGIN === */
-.login-screen {
-  display: flex; align-items: center; justify-content: center;
-  min-height: 100vh; padding: 20px;
-  background: linear-gradient(135deg, #3e4f3c 0%, #457d3e 50%, #309124 100%);
-}
-.login-box {
-  background: white; border-radius: 20px; padding: 32px; width: 100%; max-width: 400px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.3); text-align: center;
-}
-.login-box h1 { font-size: 1.5rem; margin-bottom: 8px; }
-.login-box p { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 24px; }
-.login-box input {
-  width: 100%; padding: 12px 16px; border: 2px solid var(--border);
-  border-radius: 12px; font-size: 1rem; margin-bottom: 16px; outline: none;
-  transition: border-color 0.2s;
-}
-.login-box input:focus { border-color: var(--primary); }
-.login-box button {
-  width: 100%; padding: 14px; background: linear-gradient(135deg, #457d3e, #309124);
-  color: white; border: none; border-radius: 12px; font-size: 1rem;
-  font-weight: 700; cursor: pointer; transition: transform 0.1s;
-}
-.login-box button:hover { transform: translateY(-2px); }
-.login-error { color: var(--danger); font-size: 0.85rem; margin-bottom: 12px; display: none; }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #1a5c2e 0%, #0d3318 50%, #1a5c2e 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
 
-/* === MAIN UI === */
-.app { display: none; }
-.app.active { display: block; }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(255, 221, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 221, 0, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
 
-.header {
-  background: linear-gradient(135deg, #3e4f3c 0%, #457d3e 50%, #309124 100%);
-  color: white; padding: 20px; text-align: center; position: sticky; top: 0; z-index: 100;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-}
-.header h1 { font-size: 1.3rem; font-weight: 800; }
-.header .sub { font-size: 0.8rem; opacity: 0.85; margin-top: 4px; }
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 50px 40px;
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.3),
+                0 0 0 4px #ffdd00,
+                0 0 0 8px #1a5c2e;
+            max-width: 700px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
 
-.tabs {
-  background: white; display: flex; padding: 8px; gap: 4px;
-  overflow-x: auto; position: sticky; top: 72px; z-index: 99;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
-.tab-btn {
-  flex: none; padding: 10px 16px; border: none; background: transparent;
-  font-weight: 600; font-size: 0.85rem; color: var(--text-secondary);
-  cursor: pointer; border-radius: 8px; white-space: nowrap; transition: all 0.2s;
-}
-.tab-btn:hover { background: rgba(26,86,219,0.08); color: var(--primary); }
-.tab-btn.active { background: var(--primary); color: white; }
+        .main-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1a5c2e;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
 
-.content { max-width: 900px; margin: 0 auto; padding: 16px; }
-.tab-panel { display: none; animation: fadeIn 0.3s ease; }
-.tab-panel.active { display: block; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .sub-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #1a5c2e, #2d8a47, #ffdd00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
 
-.group-section { margin-bottom: 24px; }
-.group-title {
-  font-size: 1rem; font-weight: 800; color: var(--primary);
-  margin-bottom: 12px; padding-left: 12px; border-left: 4px solid var(--primary);
-  display: flex; align-items: center; gap: 8px;
-}
-.group-title.seri-b { color: var(--seri-b); border-left-color: var(--seri-b); }
+        .date {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 40px;
+            padding: 8px 20px;
+            background: linear-gradient(90deg, transparent, rgba(26, 92, 46, 0.1), transparent);
+            border-radius: 30px;
+            display: inline-block;
+        }
 
-.match-card {
-  background: white; border-radius: 14px; padding: 14px; margin-bottom: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid var(--border);
-  display: grid; grid-template-columns: 1fr auto 1fr; gap: 12px; align-items: center;
-  transition: box-shadow 0.2s;
-}
-.match-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
-.match-card.saved { border-color: var(--success); background: #f0fdf4; }
+        .images-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
 
-.team { text-align: center; }
-.team-name { font-weight: 700; font-size: 0.95rem; margin-bottom: 8px; color: var(--text); }
-.score-input {
-  width: 70px; padding: 10px; text-align: center; font-size: 1.3rem;
-  font-weight: 800; border: 2px solid var(--border); border-radius: 10px;
-  outline: none; transition: border-color 0.2s;
-}
-.score-input:focus { border-color: var(--primary); }
-.score-input.win { background: #dcfce7; border-color: var(--success); color: var(--success); }
-.score-input.lose { background: #fee2e2; border-color: var(--danger); color: var(--danger); }
+        .image-card {
+            display: block;
+            width: 250px;
+            height: 250px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            border: 4px solid #1a5c2e;
+        }
 
-.vs { font-weight: 800; color: var(--text-secondary); font-size: 0.85rem; text-transform: uppercase; }
-.match-meta {
-  grid-column: 1 / -1; display: flex; justify-content: space-between;
-  font-size: 0.75rem; color: var(--text-secondary); margin-top: 4px;
-}
-.btn-save {
-  grid-column: 1 / -1; padding: 10px; background: linear-gradient(135deg, var(--primary), var(--primary-light));
-  color: white; border: none; border-radius: 10px; font-weight: 700;
-  cursor: pointer; font-size: 0.85rem; transition: transform 0.1s;
-}
-.btn-save:hover { transform: translateY(-1px); }
-.btn-save:disabled { background: #94a3b8; cursor: not-allowed; transform: none; }
+        .image-card:hover {
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 15px 40px rgba(26, 92, 46, 0.4);
+            border-color: #ffdd00;
+        }
 
-.loading { text-align: center; padding: 40px; color: var(--text-secondary); }
-.spinner { width: 36px; height: 36px; border: 3px solid var(--border);
-  border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite;
-  margin: 0 auto 12px; }
-@keyframes spin { to { transform: rotate(360deg); } }
+        .image-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
 
-.toast {
-  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
-  background: var(--text); color: white; padding: 12px 24px; border-radius: 12px;
-  font-size: 0.9rem; font-weight: 600; z-index: 1000; opacity: 0;
-  transition: opacity 0.3s, transform 0.3s; pointer-events: none;
-}
-.toast.show { opacity: 1; transform: translateX(-50%) translateY(-8px); }
-.toast.success { background: var(--success); }
-.toast.error { background: var(--danger); }
+        .image-card:hover img {
+            transform: scale(1.05);
+        }
 
-.toolbar {
-  background: white; padding: 12px; border-radius: 12px; margin-bottom: 16px;
-  display: flex; gap: 8px; flex-wrap: wrap; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
-.toolbar button {
-  padding: 8px 14px; border: 1px solid var(--border); background: white;
-  border-radius: 8px; font-weight: 600; font-size: 0.8rem; cursor: pointer;
-  transition: all 0.2s;
-}
-.toolbar button:hover { background: var(--bg); }
-.toolbar button.primary { background: var(--primary); color: white; border-color: var(--primary); }
+        .image-card::after {
+            content: '▶ Click để xem';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            color: white;
+            padding: 30px 10px 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
 
-@media (max-width: 600px) {
-  .match-card { grid-template-columns: 1fr; gap: 8px; }
-  .vs { order: 0; }
-  .team { text-align: left; display: flex; align-items: center; gap: 12px; }
-  .score-input { width: 80px; }
-  .header { top: 0; }
-  .tabs { top: 72px; }
-}
-</style>
+        .image-card:hover::after {
+            opacity: 1;
+        }
+
+        .pickleball-decoration {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #ffee58, #ffdd00, #c6a700);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2), inset -2px -2px 5px rgba(0,0,0,0.1);
+            z-index: 0;
+            opacity: 0.6;
+        }
+
+        .ball-1 { top: 10%; left: 5%; animation: bounce 3s ease-in-out infinite; }
+        .ball-2 { top: 60%; right: 8%; animation: bounce 4s ease-in-out infinite 1s; }
+        .ball-3 { bottom: 15%; left: 10%; animation: bounce 3.5s ease-in-out infinite 0.5s; }
+        .ball-4 { top: 25%; right: 3%; animation: bounce 4.5s ease-in-out infinite 2s; }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .divider {
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #1a5c2e, #ffdd00, #1a5c2e);
+            margin: 15px auto 25px;
+            border-radius: 2px;
+        }
+
+        .sport-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .sub-title {
+                font-size: 2rem;
+            }
+            .main-title {
+                font-size: 1.3rem;
+            }
+            .image-card {
+                width: 200px;
+                height: 200px;
+            }
+            .container {
+                padding: 30px 20px;
+            }
+        }
+    </style>
 </head>
 <body>
+    <div class="pickleball-decoration ball-1"></div>
+    <div class="pickleball-decoration ball-2"></div>
+    <div class="pickleball-decoration ball-3"></div>
+    <div class="pickleball-decoration ball-4"></div>
 
-<!-- LOGIN -->
-<div id="loginScreen" class="login-screen">
-  <div class="login-box">
-    <div style="font-size: 3rem;">🎾</div>
-    <h1>DTD Pickleball</h1>
-    <p>Trang nhập tỷ số trận đấu</p>
-    <div id="loginError" class="login-error">Mật khẩu không đúng!</div>
-    <input type="password" id="pwdInput" placeholder="Nhập mật khẩu..." autocomplete="off">
-    <button onclick="doLogin()">🔓 Đăng nhập</button>
-  </div>
-</div>
+    <div class="container">
+        <div class="sport-icon">🏓</div>
+        <h1 class="main-title">Quản Lý Giải Đấu Pickleball</h1>
+        <div class="divider"></div>
+        <h2 class="sub-title">DTD Tournament Cup</h2>
+        <p class="date">📅 Ngày 12/08/2026</p>
 
-<!-- APP -->
-<div id="app" class="app">
-  <div class="header">
-    <h1>🎾 DTD PICKLEBALL - NHẬP TỶ SỐ</h1>
-    <div class="sub" id="statusLine">Đang tải dữ liệu...</div>
-  </div>
-
-  <div class="tabs">
-    <button class="tab-btn active" data-panel="vongbang">🏸 Vòng Bảng</button>
-    <button class="tab-btn" data-panel="seria">🔵 Seri A</button>
-    <button class="tab-btn" data-panel="serib">🔴 Seri B</button>
-    <button class="tab-btn" data-panel="bxh">🏆 BXH</button>
-  </div>
-
-  <div class="content">
-    <div class="toolbar">
-      <button class="primary" onclick="reloadAll()">🔄 Làm mới</button>
-      <button onclick="markAllAsSaved()">✅ Đã lưu tất cả</button>
-      <span style="margin-left:auto; font-size:0.8rem; color:var(--text-secondary); align-self:center;" id="lastUpdate"></span>
+        <div class="images-container">
+            <a href="https://docs.google.com/spreadsheets/d/1niiTZS5IcM_tG6Z36ifAOpvfz_TQghP0cSua330eRCU/edit?gid=1139851199#gid=1139851199" target="_blank" class="image-card">
+                <img src="48.png" alt="Bảng 1">
+            </a>
+            <a href="https://docs.google.com/spreadsheets/d/13UqfGXGELaCg3qJcPCZ-4_rwsLNgEJklpqvGZVPgk9o/edit?gid=453451072#gid=453451072" target="_blank" class="image-card">
+                <img src="52.png" alt="Bảng 2">
+            </a>
+        </div>
     </div>
-
-    <div id="panel-vongbang" class="tab-panel active"></div>
-    <div id="panel-seria" class="tab-panel"></div>
-    <div id="panel-serib" class="tab-panel"></div>
-    <div id="panel-bxh" class="tab-panel"></div>
-  </div>
-</div>
-
-<div id="toast" class="toast"></div>
-
-<script>
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwhOtT6IIvfjdZmGRs6t8AIIulKKeFE40UrwKA1uekzcxpyOl_s9u2IITRV5HEM_Brc/exec';
-let MATCHES = { vongbang: [], seria: [], serib: [] };
-let IS_AUTHENTICATED = false;
-
-// ============ LOGIN ============
-document.getElementById('pwdInput').addEventListener('keypress', e => {
-  if (e.key === 'Enter') doLogin();
-});
-
-async function doLogin() {
-  const pwd = document.getElementById('pwdInput').value;
-  const err = document.getElementById('loginError');
-  err.style.display = 'none';
-
-  try {
-    const res = await fetch(APPS_SCRIPT_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'text/plain' }, // để tránh CORS preflight
-      body: JSON.stringify({ action: 'login', data: { password: pwd } })
-    });
-    // no-cors → opaque response → giả định thành công nếu không throw
-    // Để an toàn, thử fetch bằng GET trước để xác nhận URL đúng
-    document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('app').classList.add('active');
-    IS_AUTHENTICATED = true;
-    await reloadAll();
-  } catch (e) {
-    err.style.display = 'block';
-    err.textContent = 'Lỗi kết nối: ' + e.message;
-  }
-}
-
-// ============ FETCH DATA ============
-async function apiCall(action, data = {}) {
-  try {
-    const res = await fetch(APPS_SCRIPT_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify({ action, data })
-    });
-    return { success: true, data: {} }; // no-cors không đọc được body
-  } catch (e) {
-    return { success: false, error: e.message };
-  }
-}
-
-async function reloadAll() {
-  document.getElementById('statusLine').textContent = 'Đang tải...';
-  
-  // Dùng Apps Script Runner nếu nhúng trong GAS
-  if (window.google && google.script && google.script.run) {
-    google.script.run
-      .withSuccessHandler(data => {
-        MATCHES = data;
-        renderAll();
-        document.getElementById('statusLine').textContent =
-          `Tổng: ${data.vongbang.length + data.seria.length + data.serib.length} trận`;
-      })
-      .withFailureHandler(err => {
-        document.getElementById('statusLine').textContent = 'Lỗi: ' + err.message;
-        showToast('Lỗi tải dữ liệu', 'error');
-      })
-      .getAllMatches();
-  } else {
-    // Fallback: gọi qua POST (no-cors, không đọc được response)
-    await apiCall('getMatches');
-    document.getElementById('statusLine').textContent = 'Dữ liệu đã được gửi qua server';
-  }
-  document.getElementById('lastUpdate').textContent = 'Cập nhật: ' + new Date().toLocaleTimeString('vi-VN');
-}
-
-// ============ RENDER ============
-function renderAll() {
-  renderGrouped('panel-vongbang', MATCHES.vongbang, 'group', 'Vòng Bảng');
-  renderKnockout('panel-seria', MATCHES.seria, 'seri-a');
-  renderKnockout('panel-serib', MATCHES.serib, 'seri-b');
-  renderBXH();
-}
-
-function renderGrouped(containerId, matches, groupKey, title) {
-  const container = document.getElementById(containerId);
-  if (!matches || matches.length === 0) {
-    container.innerHTML = `<div class="loading">Không có trận đấu nào.</div>`;
-    return;
-  }
-
-  const grouped = {};
-  matches.forEach(m => {
-    const g = m[groupKey] || 'Khác';
-    if (!grouped[g]) grouped[g] = [];
-    grouped[g].push(m);
-  });
-
-  let html = '';
-  Object.keys(grouped).sort().forEach(g => {
-    html += `<div class="group-section">
-      <div class="group-title">📍 ${title} - Bảng ${g}</div>
-      ${grouped[g].map(renderMatchCard).join('')}
-    </div>`;
-  });
-  container.innerHTML = html;
-}
-
-function renderKnockout(containerId, matches, theme) {
-  const container = document.getElementById(containerId);
-  if (!matches || matches.length === 0) {
-    container.innerHTML = `<div class="loading">Không có trận đấu nào.</div>`;
-    return;
-  }
-
-  const rounds = {};
-  matches.forEach(m => {
-    const r = m.round || 'Chưa xác định';
-    if (!rounds[r]) rounds[r] = [];
-    rounds[r].push(m);
-  });
-
-  const order = ['Vòng 1/16', 'Tứ kết', 'Bán kết', 'Chung kết'];
-  let html = '';
-  order.forEach(r => {
-    if (!rounds[r]) return;
-    const label = theme === 'seri-b' ? `🔴 ${r} - Seri B` : `🔵 ${r} - Seri A`;
-    html += `<div class="group-section">
-      <div class="group-title ${theme === 'seri-b' ? 'seri-b' : ''}">${label}</div>
-      ${rounds[r].map(renderMatchCard).join('')}
-    </div>`;
-  });
-  container.innerHTML = html;
-}
-
-function renderMatchCard(m) {
-  const s1 = m.score1 ?? '';
-  const s2 = m.score2 ?? '';
-  const n1 = parseInt(s1, 10);
-  const n2 = parseInt(s2, 10);
-  const c1 = (!isNaN(n1) && !isNaN(n2)) ? (n1 > n2 ? 'win' : n1 < n2 ? 'lose' : '') : '';
-  const c2 = (!isNaN(n1) && !isNaN(n2)) ? (n2 > n1 ? 'win' : n2 < n1 ? 'lose' : '') : '';
-
-  return `
-    <div class="match-card" id="card-${m.id}">
-      <div class="team">
-        <div class="team-name">${m.team1 || 'TBD'}</div>
-        <input type="number" class="score-input ${c1}" id="s1-${m.id}"
-               value="${s1}" min="0" max="99" data-id="${m.id}">
-      </div>
-      <div class="vs">VS</div>
-      <div class="team">
-        <div class="team-name">${m.team2 || 'TBD'}</div>
-        <input type="number" class="score-input ${c2}" id="s2-${m.id}"
-               value="${s2}" min="0" max="99" data-id="${m.id}">
-      </div>
-      <div class="match-meta">
-        <span>⏱ ${m.time || '-'}</span>
-        <span>🏟 ${m.court || '-'}</span>
-        <span>#${m.matchNo || m.id}</span>
-      </div>
-      <button class="btn-save" onclick="saveScore('${m.id}', this)">💾 Lưu tỷ số</button>
-    </div>
-  `;
-}
-
-async function saveScore(id, btn) {
-  const s1 = document.getElementById(`s1-${id}`).value;
-  const s2 = document.getElementById(`s2-${id}`).value;
-
-  if (s1 === '' && s2 === '') {
-    showToast('Vui lòng nhập tỷ số!', 'error');
-    return;
-  }
-
-  btn.disabled = true;
-  btn.textContent = '⏳ Đang lưu...';
-
-  if (window.google && google.script && google.script.run) {
-    google.script.run
-      .withSuccessHandler(() => {
-        document.getElementById(`card-${id}`).classList.add('saved');
-        btn.textContent = '✅ Đã lưu';
-        showToast('Đã lưu tỷ số thành công!', 'success');
-        // Refresh sau 1s để cập nhật highlight win/lose
-        setTimeout(() => {
-          reloadAll();
-        }, 1200);
-      })
-      .withFailureHandler(err => {
-        btn.disabled = false;
-        btn.textContent = '💾 Lưu tỷ số';
-        showToast('Lỗi: ' + err.message, 'error');
-      })
-      .updateMatchScore({ id, score1: s1, score2: s2 });
-  } else {
-    await apiCall('updateScore', { id, score1: s1, score2: s2 });
-    btn.disabled = false;
-    btn.textContent = '✅ Đã gửi';
-    showToast('Đã gửi (no-cors mode)', 'success');
-  }
-}
-
-// ============ BXH ============
-function renderBXH() {
-  const container = document.getElementById('panel-bxh');
-  if (window.google && google.script && google.script.run) {
-    container.innerHTML = `<div class="loading"><div class="spinner"></div>Đang tải BXH...</div>`;
-    google.script.run
-      .withSuccessHandler(bxh => {
-        container.innerHTML = formatBXH(bxh);
-      })
-      .calculateStandings();
-  } else {
-    container.innerHTML = `<div class="loading">BXH được tự động tính từ vòng bảng.</div>`;
-  }
-}
-
-function formatBXH(bxh) {
-  if (!bxh || typeof bxh !== 'object') return '<div class="loading">Chưa có dữ liệu BXH.</div>';
-  let html = '';
-  Object.keys(bxh).sort().forEach(g => {
-    html += `<div class="group-section">
-      <div class="group-title">🏆 Bảng ${g}</div>
-      <div style="background:white;border-radius:12px;overflow:hidden;">
-        <table style="width:100%;border-collapse:collapse;font-size:0.85rem;">
-          <thead>
-            <tr style="background:var(--primary);color:white;">
-              <th style="padding:10px;text-align:left;">Đội</th>
-              <th style="padding:10px;">Trận</th>
-              <th style="padding:10px;">Thắng</th>
-              <th style="padding:10px;">Thua</th>
-              <th style="padding:10px;">Tỷ số</th>
-              <th style="padding:10px;">Điểm</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${bxh[g].map((t, i) => `
-              <tr style="background:${i % 2 ? '#f8fafc' : 'white'}; border-bottom:1px solid var(--border);">
-                <td style="padding:10px;font-weight:600;">${t.team}</td>
-                <td style="padding:10px;text-align:center;">${t.won + t.lost}</td>
-                <td style="padding:10px;text-align:center;color:var(--success);font-weight:700;">${t.won}</td>
-                <td style="padding:10px;text-align:center;color:var(--danger);">${t.lost}</td>
-                <td style="padding:10px;text-align:center;">${t.ratio}</td>
-                <td style="padding:10px;text-align:center;font-weight:800;color:var(--primary);font-size:1rem;">${t.points}</td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-      </div>
-    </div>`;
-  });
-  return html;
-}
-
-// ============ UTILS ============
-function showToast(msg, type = 'success') {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'toast show ' + type;
-  setTimeout(() => { t.className = 'toast'; }, 2500);
-}
-
-function markAllAsSaved() {
-  document.querySelectorAll('.match-card').forEach(c => c.classList.remove('saved'));
-  showToast('Đã reset trạng thái lưu', 'success');
-}
-
-// ============ TAB SWITCH ============
-document.querySelectorAll('.tab-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-    btn.classList.add('active');
-    document.getElementById('panel-' + btn.dataset.panel).classList.add('active');
-  });
-});
-
-// Auto-refresh mỗi 30s khi tab active
-setInterval(() => {
-  if (IS_AUTHENTICATED && !document.hidden) {
-    reloadAll();
-  }
-}, 30000);
-</script>
 </body>
 </html>
