@@ -1,576 +1,572 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DTD PICKLEBALL CUP 5.25</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #1a56db;
-            --primary-light: #3b82f6;
-            --primary-dark: #1e40af;
-            --seri-a: #1a56db;
-            --seri-a-light: #3b82f6;
-            --seri-a-dark: #1e3a5f;
-            --seri-b: #dc2626;
-            --seri-b-light: #ef4444;
-            --seri-b-dark: #7f1d1d;
-            --accent: #f59e0b;
-            --bg: #e7f7e6;
-            --card: #ffffff;
-            --text: #222f3d;
-            --text-secondary: #64748b;
-            --border: #e2e8f0;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-        .header {
-            background: linear-gradient(135deg, #3e4f3c 0%, #457d3e 50%, #309124 100%);
-            color: white;
-            padding: 20px 16px 16px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(26, 86, 219, 0.3);
-            cursor: pointer;
-        }
-        .header::before {
-            content: '';
-            position: absolute;
-            top: -50%; left: -50%;
-            width: 200%; height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 60%);
-            animation: shimmer 8s ease-in-out infinite;
-            z-index: 0;
-        }
-        @keyframes shimmer {
-            0%, 100% { transform: translate(0, 0); }
-            50% { transform: translate(20%, 10%); }
-        }
-        .header-link {
-            display: block;
-            color: white;
-            text-decoration: none;
-            position: relative;
-            z-index: 1;
-            transition: opacity 0.2s ease;
-        }
-        .header-link:hover { color: white; text-decoration: none; opacity: 0.92; }
-        .header h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px; position: relative; z-index: 1; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
-        .header .subtitle { font-size: 0.8rem; opacity: 0.85; margin-top: 4px; font-weight: 500; position: relative; z-index: 1; }
-        .header .ball-icon { font-size: 2rem; margin-bottom: 4px; position: relative; z-index: 1; }
-        .tabs-container {
-            background: white;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-            border-bottom: 1px solid var(--border);
-        }
-        .tabs {
-            display: flex;
-            overflow-x: auto;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-            padding: 0 8px;
-            gap: 2px;
-        }
-        .tabs::-webkit-scrollbar { display: none; }
-        .tab {
-            flex: none;
-            padding: 12px 14px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--text-secondary);
-            background: none;
-            border: none;
-            cursor: pointer;
-            white-space: nowrap;
-            position: relative;
-            transition: all 0.2s ease;
-            border-radius: 8px 8px 0 0;
-            margin-bottom: -1px;
-        }
-        .tab:hover { color: var(--primary); background: rgba(26, 86, 219, 0.05); }
-        .tab.active { color: var(--primary); background: rgba(26, 86, 219, 0.08); }
-        .tab.active::after {
-            content: '';
-            position: absolute;
-            bottom: 0; left: 0; right: 0;
-            height: 3px;
-            background: var(--primary);
-            border-radius: 3px 3px 0 0;
-        }
-        .content { padding: 16px; padding-bottom: 32px; max-width: 800px; margin: 0 auto; }
-        .tab-content { display: none; animation: fadeIn 0.3s ease; }
-        .tab-content.active { display: block; }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .section-title { font-size: 1.1rem; font-weight: 700; color: var(--text); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-        .section-title.seri-a { color: var(--seri-a); }
-        .section-title.seri-b { color: var(--seri-b); }
-        .badge { background: var(--primary); color: white; font-size: 0.65rem; padding: 3px 8px; border-radius: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-        .badge.a { background: var(--seri-a); }
-        .badge.b { background: var(--seri-b); }
-        .card { background: var(--card); border-radius: 16px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); border: 1px solid var(--border); overflow-x: auto; }
-        .card-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-        .card-title.blue { color: var(--primary-dark); }
-        .card-title.red { color: var(--seri-b-dark); }
-        .card-title .icon { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.85rem; font-weight: 800; }
-        .icon.blue { background: linear-gradient(135deg, var(--primary), var(--primary-light)); }
-        .icon.red { background: linear-gradient(135deg, var(--seri-b), var(--seri-b-light)); }
-        table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
-        table th { color: white; padding: 10px 8px; text-align: center; font-weight: 600; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
-        table th.blue { background: linear-gradient(135deg, #1e3a5f, #1a56db); }
-        table th.red { background: linear-gradient(135deg, #7f1d1d, #dc2626); }
-        table th:first-child { border-radius: 10px 0 0 0; text-align: left; padding-left: 12px; }
-        table th:last-child { border-radius: 0 10px 0 0; }
-        table td { padding: 10px 8px; text-align: center; border-bottom: 1px solid var(--border); font-weight: 500; transition: background 0.15s ease; }
-        table td:first-child { text-align: left; padding-left: 12px; font-weight: 600; }
-        table tr:last-child td:first-child { border-radius: 0 0 0 10px; }
-        table tr:last-child td:last-child { border-radius: 0 0 10px 0; }
-        table tr:hover td { background: rgba(26, 86, 219, 0.03); }
-        table tr:nth-child(even) td { background: rgba(241, 245, 249, 0.5); }
-        .points-cell { font-weight: 700; font-size: 0.9rem; }
-        .points-cell.blue { color: var(--seri-a); }
-        .points-cell.red { color: var(--seri-b); }
-        .ratio-cell { color: var(--text-secondary); font-weight: 600; }
-        .loading { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; gap: 12px; }
-        .spinner { width: 36px; height: 36px; border: 3px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .loading-text { color: var(--text-secondary); font-size: 0.85rem; font-weight: 500; }
-        .error-msg { background: #fef2f2; border: 1px solid #fecaca; color: #dc2626; padding: 16px; border-radius: 12px; font-size: 0.85rem; text-align: center; margin: 16px 0; }
-        .sodo-table { width: 100%; font-size: 0.7rem; border-collapse: collapse; }
-        .sodo-table td, .sodo-table th { padding: 6px 4px; text-align: center; border: 1px solid var(--border); font-weight: 500; }
-        .sodo-table th { background: #1e3a5f !important; color: white !important; font-weight: 700; font-size: 0.65rem; }
-        .update-time { text-align: center; font-size: 0.7rem; color: var(--text-secondary); padding: 16px; font-weight: 500; }
-        .update-time span { color: var(--primary); font-weight: 600; }
-        @media (max-width: 480px) {
-            .header h1 { font-size: 1.3rem; }
-            .tab { padding: 10px 12px; font-size: 0.7rem; }
-            .content { padding: 12px; }
-            .card { padding: 12px; border-radius: 12px; }
-            table { font-size: 0.75rem; }
-            table th, table td { padding: 8px 6px; }
-        }
-        .tab-group-label { display: flex; align-items: center; gap: 4px; }
-        .group-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
-        .dot-a { background: #3b82f6; }
-        .dot-b { background: #ef4444; }
-        .dot-c { background: #10b981; }
-        .dot-d { background: #f59e0b; }
-        .dot-e { background: #8b5cf6; }
-        .dot-f { background: #ec4899; }
-        .dot-g { background: #f97316; }
-        .dot-h { background: #06b6d4; }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .grid-2 .card { margin-bottom: 0; }
-        @media (max-width: 640px) { .grid-2 { grid-template-columns: 1fr; } }
-        .round-section { margin-bottom: 24px; padding-bottom: 16px; border-bottom: 2px dashed var(--border); }
-        .round-section:last-child { border-bottom: none; }
-        .round-header { font-size: 0.9rem; font-weight: 800; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>🏆DTD PICKLEBALL CUP</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --primary-color: #00f2ff;
+    --secondary-color: #ccff00;
+    --bg-dark: #0a0a0a;
+    --glass-bg: rgba(20, 20, 25, 0.85);
+    --text-gradient: linear-gradient(90deg, #ffffff, #00f2ff);
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Oswald', sans-serif;
+    background-color: var(--bg-dark);
+    background-image: url('https://image.qwenlm.ai/public_source/4a049a49-0398-4b5b-93ea-9691e7b8a93e/16bfa2e7b-4d27-460a-835b-ffc3d74c517a.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(circle at center, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.8) 100%);
+    z-index: -1;
+  }
+
+  .top-bar {
+    width: 100%;
+    max-width: 480px;
+    padding: 15px 20px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, transparent 100%);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .weather-widget {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #ddd;
+    text-shadow: 0 1px 2px black;
+  }
+
+  .time-widget {
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--primary-color);
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px rgba(0, 242, 255, 0.5);
+  }
+
+  .main-wrapper {
+    width: 100%;
+    max-width: 480px;
+    padding: 20px;
+    box-sizing: border-box;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .sponsors-section {
+    margin-bottom: 40px;
+    animation: slideDown 0.6s ease-out;
+    padding: 15px;
+    border-radius: 15px;
+    background: var(--glass-bg);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .sponsors-title {
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--secondary-color);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 15px;
+    text-shadow: 0 0 8px rgba(204, 255, 0, 0.4);
+    position: relative;
+  }
+
+  .sponsors-title::before,
+  .sponsors-title::after {
+    content: '';
+    display: inline-block;
+    width: 25px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--secondary-color), transparent);
+    vertical-align: middle;
+    margin: 0 10px;
+  }
+
+  .sponsors-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    max-width: 280px;
+    margin: 0 auto;
+    padding: 5px 0;
+  }
+
+  .sponsor-item {
+    width: 80px;
+    height: 80px;
+    aspect-ratio: 1 / 1;
+    border-radius: 12px;
+    background: linear-gradient(145deg, #1f1f1f, #0f0f0f);
+    border: 2px solid rgba(255,255,255,0.1);
+    padding: 6px;
+    box-sizing: border-box;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .sponsor-item::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(from 0deg, transparent, var(--primary-color), transparent 30%);
+    opacity: 0;
+    animation: rotate 4s linear infinite;
+    transition: opacity 0.3s;
+  }
+
+  .sponsor-item::after {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    border-radius: 10px;
+    background: linear-gradient(145deg, #1f1f1f, #0f0f0f);
+    z-index: 1;
+  }
+
+  .sponsor-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    position: relative;
+    z-index: 2;
+    filter: brightness(1) contrast(1);
+    transition: transform 0.3s, filter 0.3s;
+  }
+
+  .sponsor-item:hover {
+    transform: translateY(-5px) scale(1.08);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 20px rgba(0, 242, 255, 0.5);
+  }
+
+  .sponsor-item:hover::before { opacity: 0.6; }
+
+  .sponsor-item:hover img {
+    transform: scale(1.1);
+    filter: brightness(1.2) drop-shadow(0 0 8px rgba(0, 242, 255, 0.6));
+  }
+
+  @keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .title-box {
+    text-align: center;
+    margin-bottom: 50px;
+    animation: slideDown 0.8s ease-out;
+  }
+
+  .main-title {
+    font-size: 32px;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin: 0;
+    background: var(--text-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+    line-height: 1.1;
+  }
+
+  .sub-title {
+    font-size: 20px;
+    color: var(--secondary-color);
+    font-weight: 600;
+    margin-top: 5px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  .date-badge {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 5px 15px;
+    border: 1px solid var(--primary-color);
+    border-radius: 20px;
+    font-size: 14px;
+    color: white;
+    background: rgba(0, 242, 255, 0.1);
+    backdrop-filter: blur(5px);
+  }
+
+  .card-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+  }
+
+  .card-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .card-item:hover { transform: translateY(-10px); }
+
+  .img-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 15px;
+    overflow: hidden;
+    border: 2px solid rgba(255,255,255,0.1);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    background: #1a1a1a;
+  }
+
+  .card-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: opacity 0.3s;
+  }
+
+  .card-item:hover .img-wrapper {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 20px rgba(0, 242, 255, 0.3);
+  }
+
+  .card-label {
+    margin-top: 15px;
+    font-size: 18px;
+    font-weight: 600;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 4px black;
+    position: relative;
+    text-align: center;
+  }
+
+  .card-label::after {
+    content: '';
+    display: block;
+    width: 0%;
+    height: 2px;
+    background: var(--secondary-color);
+    margin: 5px auto 0;
+    transition: width 0.3s;
+  }
+
+  .card-item:hover .card-label::after { width: 100%; }
+
+  .footer-link {
+    margin-top: 50px;
+    text-align: center;
+    animation: fadeInUp 1s ease-out;
+  }
+
+  .btn-facebook {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: linear-gradient(45deg, #1877f2, #005bea);
+    color: white;
+    padding: 15px 30px;
+    border-radius: 50px;
+    font-weight: bold;
+    font-size: 16px;
+    text-decoration: none;
+    box-shadow: 0 4px 15px rgba(24, 119, 242, 0.4);
+    transition: all 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .btn-facebook:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(24, 119, 242, 0.6);
+    background: linear-gradient(45deg, #005bea, #1877f2);
+  }
+
+  /* ===== NEW SECTION: Vị trí sân thi đấu & Hình ảnh giải đấu ===== */
+  .info-cards-wrapper {
+    margin-top: 50px;
+    width: 100%;
+  }
+
+  .info-cards-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    width: 100%;
+    animation: fadeInUp 1s ease-out;
+  }
+
+  .info-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    padding: 20px 15px;
+    border-radius: 15px;
+    background: var(--glass-bg);
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+    min-height: 140px;
+    justify-content: center;
+  }
+
+  .info-card::before {
+    content: '';
+    position: absolute;
+    top: -2px; left: -2px; right: -2px; bottom: -2px;
+    background: linear-gradient(45deg, var(--primary-color), transparent, var(--secondary-color));
+    border-radius: 15px;
+    opacity: 0;
+    z-index: -1;
+    transition: opacity 0.3s;
+  }
+
+  .info-card:hover {
+    transform: translateY(-8px) scale(1.03);
+    border-color: var(--primary-color);
+    box-shadow: 0 15px 35px rgba(0, 242, 255, 0.3), 0 0 25px rgba(0, 242, 255, 0.2);
+  }
+
+  .info-card:hover::before {
+    opacity: 0.3;
+  }
+
+  .info-card-icon {
+    font-size: 38px;
+    margin-bottom: 12px;
+    filter: drop-shadow(0 0 8px rgba(0, 242, 255, 0.6));
+    transition: transform 0.4s ease;
+  }
+
+  .info-card:hover .info-card-icon {
+    transform: scale(1.2) rotate(-5deg);
+  }
+
+  .info-card-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: center;
+    text-shadow: 0 2px 4px black;
+    line-height: 1.3;
+  }
+
+  .info-card-cta {
+    margin-top: 10px;
+    font-size: 11px;
+    color: var(--secondary-color);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0.8;
+    transition: opacity 0.3s;
+  }
+
+  .info-card:hover .info-card-cta {
+    opacity: 1;
+    color: var(--primary-color);
+  }
+
+  .footer-credit {
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 1px;
+  }
+
+  @keyframes slideDown {
+    from { transform: translateY(-50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  @keyframes fadeInUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  @media (max-width: 350px) {
+    .main-title { font-size: 26px; }
+    .card-label { font-size: 16px; }
+    .sponsor-item { 
+      width: 70px; 
+      height: 70px;
+    }
+    .sponsors-grid { 
+      gap: 15px;
+      max-width: 240px;
+    }
+    .sponsors-title { font-size: 12px; letter-spacing: 2px; }
+    .info-card { padding: 15px 10px; min-height: 120px; }
+    .info-card-icon { font-size: 32px; }
+    .info-card-title { font-size: 12px; }
+    .info-cards-container { gap: 10px; }
+  }
+</style>
 </head>
 <body>
-    <div class="header">
-        <a href="https://ritapick.github.io/pickleball/" class="header-link">
-            <div class="ball-icon">🎾</div>
-            <h1>DTD PICKLEBALL TOURNAMENT</h1>
-            <div class="subtitle">Giải đấu PICKLEBALL - Trình 5.25</div>
-        </a>
+
+<div class="top-bar">
+  <div class="weather-widget" id="weather-display">
+    <span id="weather-icon">☁️</span>
+    <span id="weather-temp">--°C</span>
+    <span style="font-size:12px; opacity:0.8;">Đức Trọng</span>
+  </div>
+  <div class="time-widget" id="clock-display">00:00</div>
+</div>
+
+<div class="main-wrapper">
+
+  <div class="sponsors-section">
+    <div class="sponsors-title">Nhà Tài Trợ</div>
+    <div class="sponsors-grid">
+      <a href="https://www.facebook.com/nhathuocducnghia" target="_blank" rel="noopener" class="sponsor-item" title="Nhà tài trợ 1">
+        <img src="logo1.jpeg" alt="Nhà tài trợ 1" onerror="this.src='https://placehold.co/120x120/1a1a1a/00f2ff?text=Logo+1'">
+      </a>
+      <a href="https://www.facebook.com/dtdlamdong" target="_blank" rel="noopener" class="sponsor-item" title="Nhà tài trợ 2">
+        <img src="logo2.jpeg" alt="Nhà tài trợ 2" onerror="this.src='https://placehold.co/120x120/1a1a1a/00f2ff?text=Logo+2'">
+      </a>
+      <a href="https://www.facebook.com/batdongsanngocthientam" target="_blank" rel="noopener" class="sponsor-item" title="Nhà tài trợ 3">
+        <img src="logo3.jpeg" alt="Nhà tài trợ 3" onerror="this.src='https://placehold.co/120x120/1a1a1a/00f2ff?text=Logo+3'">
+      </a>
+      <a href="https://www.google.com/search?client=firefox-b-e&q=n%E1%BB%99i+th%E1%BA%A5t+minh+qu%C3%A2n" target="_blank" rel="noopener" class="sponsor-item" title="Nhà tài trợ 4">
+        <img src="logo4.jpeg" alt="Nhà tài trợ 4" onerror="this.src='https://placehold.co/120x120/1a1a1a/00f2ff?text=Logo+4'">
+      </a>
+      <a href="https://www.facebook.com/RITA.LamDong/" target="_blank" rel="noopener" class="sponsor-item" title="Nhà tài trợ 5">
+        <img src="logo5.jpeg" alt="Nhà tài trợ 5" onerror="this.src='https://placehold.co/120x120/1a1a1a/00f2ff?text=Logo+5'">
+      </a>
+      <a href="https://tamphuclamdong.com" target="_blank" rel="noopener" class="sponsor-item" title="Nhà tài trợ 6">
+        <img src="logo6.jpeg" alt="Nhà tài trợ 6" onerror="this.src='https://placehold.co/120x120/1a1a1a/00f2ff?text=Logo+6'">
+      </a>
+    </div>
+  </div>
+
+  <div class="title-box">
+    <h1 class="main-title">GIẢI<br>PICKLEBALL</h1>
+    <div class="sub-title">DTD TOURNAMENT</div>
+    <div class="date-badge">12/08/2026</div>
+  </div>
+
+  <div class="card-container">
+    <a href="https://ritapick.github.io/pickleball/pick4.7_ab.html" class="card-item">
+      <div class="img-wrapper">
+        <img src="48.png" alt="Giải đấu 4.2" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=4.2'">
+      </div>
+      <div class="card-label">ĐÔI HỖN HỢP 4.75</div>
+    </a>
+
+    <a href="https://ritapick.github.io/pickleball/pick5.2_8g.html" class="card-item">
+      <div class="img-wrapper">
+        <img src="52.PNG" alt="Giải đấu 5.2" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=5.2'">
+      </div>
+      <div class="card-label">ĐÔI HỖN HỢP 5.25</div>
+    </a>
+  </div>
+
+  <!-- ===== NEW SECTION: Vị trí sân thi đấu & Hình ảnh giải đấu ===== -->
+  <div class="info-cards-wrapper">
+    <div class="info-cards-container">
+      <a href="https://www.google.com/maps/place/Lego+8+-+Pickleball+%E2%80%A2+Coffee+%E2%80%A2+Gym/@11.7238852,108.3641467,17z/data=!4m6!3m5!1s0x317147002de8b2e1:0x7e9da88acc608d54!8m2!3d11.72388!4d108.3667216!16s%2Fg%2F11wvybln4s?entry=ttu&g_ep=EgoyMDI2MDgwNS4xIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener" class="info-card" title="Xem vị trí sân trên Google Maps">
+        <div class="info-card-icon">📍</div>
+        <div class="info-card-title">Vị trí<br>sân thi đấu</div>
+        <div class="info-card-cta">Xem bản đồ ›</div>
+      </a>
+
+      <a href="https://ritapick.github.io/pickleball/time.html" target="_blank" rel="noopener" class="info-card" title="Xem hình ảnh giải đấu">
+        <div class="info-card-icon">📸</div>
+        <div class="info-card-title">Hình ảnh<br>giải đấu</div>
+        <div class="info-card-cta">Xem album ›</div>
+      </a>
     </div>
 
-    <div class="tabs-container">
-        <div class="tabs" id="tabs">
-            <button class="tab active" data-tab="bxh"><span class="tab-group-label">🏆 Bảng Xếp Hạng</span></button>
-            <button class="tab" data-tab="vongbang"><span class="tab-group-label">🏸 Vòng Bảng</span></button>
-            <button class="tab" data-tab="seria"><span class="tab-group-label"><span class="group-dot dot-a"></span> Seri A</span></button>
-            <button class="tab" data-tab="serib"><span class="tab-group-label"><span class="group-dot dot-b"></span> Seri B</span></button>
-        </div>
-    </div>
+    <div class="footer-credit">© 2026 DTD PICKLEBALL CUP</div>
+  </div>
 
-    <div class="content">
-        <div class="tab-content active" id="tab-bxh">
-            <div class="section-title">Bảng thi đấu <span class="badge">8 Bảng</span></div>
-            <div class="grid-2" id="bxh-container">
-                <div class="loading"><div class="spinner"></div><div class="loading-text">Đang tải dữ liệu...</div></div>
-            </div>
-        </div>
+<script>
+  function updateClock() {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    document.getElementById('clock-display').textContent = `${hours}:${minutes}`;
+  }
+  setInterval(updateClock, 1000);
+  updateClock();
 
-        <div class="tab-content" id="tab-vongbang">
-            <div class="section-title">Kết quả thi đấu vòng bảng <span class="badge">Chi tiết</span></div>
-            <div id="vongbang-container">
-                <div class="loading"><div class="spinner"></div><div class="loading-text">Đang tải dữ liệu...</div></div>
-            </div>
-        </div>
+  function getSimulatedWeather() {
+    const hour = new Date().getHours();
+    let temp = 22;
+    let icon = "☁️";
+    if (hour >= 11 && hour <= 14) { temp = 26; icon = "⛅"; }
+    else if (hour >= 15 && hour <= 18) { temp = 24; icon = "🌤️"; }
+    else if (hour >= 19 || hour <= 6) { temp = 19; icon = "🌙"; }
+    temp += Math.floor(Math.random() * 3) - 1;
+    return { temp, icon };
+  }
 
-        <div class="tab-content" id="tab-seria">
-            <div class="section-title seri-a">🔵 Nhánh thi đấu Seri A <span class="badge a">Knock-out</span></div>
-            <div id="seria-container">
-                <div class="loading"><div class="spinner"></div><div class="loading-text">Đang tải nhánh Seri A...</div></div>
-            </div>
-        </div>
+  function updateWeather() {
+    const weatherData = getSimulatedWeather();
+    document.getElementById('weather-temp').textContent = `${weatherData.temp}°C`;
+    document.getElementById('weather-icon').textContent = weatherData.icon;
+  }
+  updateWeather();
+</script>
 
-        <div class="tab-content" id="tab-serib">
-            <div class="section-title seri-b">🔴 Nhánh thi đấu Seri B <span class="badge b">Knock-out</span></div>
-            <div id="serib-container">
-                <div class="loading"><div class="spinner"></div><div class="loading-text">Đang tải nhánh Seri B...</div></div>
-            </div>
-        </div>
-
-        <div class="update-time" id="update-time"></div>
-    </div>
-
-    <script>
-        // ================== CẤU HÌNH ==================
-        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwk3OTkvGP1Qur2rTNN8VpRIiM7AYRKt_4EoG7ZxmCowa72LiJnsLzB_e2iMh-eTXzE/exec'; // Thay bằng URL của bạn
-        const ACTIVE_REFRESH = 15000;  // 15 giây khi tab active
-        const IDLE_REFRESH = 60000;    // 60 giây khi tab inactive
-        
-        // ================== STATE ==================
-        let APP_DATA = null;
-        let CURRENT_HASH = '';
-        let IS_LOADING = false;
-        let ACTIVE_TAB = 'bxh';
-        let REFRESH_TIMER = null;
-        let IS_PAGE_VISIBLE = !document.hidden;
-        
-        // ================== VISIBILITY API ==================
-        document.addEventListener('visibilitychange', () => {
-            IS_PAGE_VISIBLE = !document.hidden;
-            clearInterval(REFRESH_TIMER);
-            const interval = IS_PAGE_VISIBLE ? ACTIVE_REFRESH : IDLE_REFRESH;
-            REFRESH_TIMER = setInterval(fetchData, interval);
-        });
-
-        // ================== TAB SWITCHING ==================
-        document.querySelectorAll('.tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                const tabId = tab.dataset.tab;
-                if (tabId === ACTIVE_TAB) return;
-                
-                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-                tab.classList.add('active');
-                document.getElementById('tab-' + tabId).classList.add('active');
-                
-                ACTIVE_TAB = tabId;
-                
-                requestAnimationFrame(() => {
-                    renderCurrentTab();
-                });
-            });
-        });
-
-        // ================== FETCH DATA ==================
-        async function fetchData() {
-            if (IS_LOADING) return;
-            IS_LOADING = true;
-            
-            try {
-                const url = `${APPS_SCRIPT_URL}?action=all&hash=${CURRENT_HASH}&_=${Date.now()}`;
-                const response = await fetch(url, { cache: 'no-cache' });
-                
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                
-                const data = await response.json();
-                if (data.error) throw new Error(data.error);
-                
-                // Nếu data không thay đổi -> skip render
-                if (data.changed === false && data.hash === CURRENT_HASH) {
-                    updateTimestamp(data.timestamp);
-                    return;
-                }
-                
-                // Data có thay đổi
-                CURRENT_HASH = data.hash || '';
-                APP_DATA = { ...APP_DATA, ...data };
-                
-                requestAnimationFrame(() => {
-                    renderCurrentTab();
-                    updateTimestamp(APP_DATA.timestamp);
-                });
-                
-            } catch (e) {
-                console.error('Lỗi tải dữ liệu:', e);
-                if (!APP_DATA) {
-                    showLoadingError(e.message);
-                }
-            } finally {
-                IS_LOADING = false;
-            }
-        }
-
-        // ================== RENDER FUNCTIONS ==================
-        function renderCurrentTab() {
-            if (!APP_DATA) return;
-            
-            switch(ACTIVE_TAB) {
-                case 'bxh': renderBXH(); break;
-                case 'vongbang': renderVongBang(); break;
-                case 'seria': renderSeriA(); break;
-                case 'serib': renderSeriB(); break;
-            }
-        }
-
-        function updateTimestamp(timestamp) {
-            if (!timestamp) return;
-            const ts = new Date(timestamp).toLocaleString('vi-VN');
-            document.getElementById('update-time').innerHTML = 
-                `DTD PICKLEBALL • Cập nhật: <span>${ts}</span>`;
-        }
-
-        function showLoadingError(message) {
-            const containers = ['bxh-container', 'vongbang-container', 'seria-container', 'serib-container'];
-            containers.forEach(id => {
-                const el = document.getElementById(id);
-                if (el && el.querySelector('.loading')) {
-                    el.innerHTML = `<div class="error-msg">⚠️ Không thể kết nối máy chủ.<br><small>${message}</small></div>`;
-                }
-            });
-        }
-
-        const DEFAULT_COLORS = new Set(['#ffffff', '#000000', 'rgb(255, 255, 255)', 'rgb(0, 0, 0)', '#fff', '#000']);
-        function isDefaultColor(color) {
-            return !color || DEFAULT_COLORS.has(color.toLowerCase());
-        }
-
-        function renderBXH() {
-            const container = document.getElementById('bxh-container');
-            const names = ['A','B','C','D','E','F','G','H'];
-            const titles = ['Bảng A','Bảng B','Bảng C','Bảng D','Bảng E','Bảng F','Bảng G','Bảng H'];
-            const dotClasses = ['dot-a','dot-b','dot-c','dot-d','dot-e','dot-f','dot-g','dot-h'];
-            
-            const fragment = document.createDocumentFragment();
-            
-            names.forEach((name, idx) => {
-                const data = APP_DATA.bxh?.[name];
-                if (data?.rows?.length > 0) {
-                    const html = renderStandingsTable(data, titles[idx], dotClasses[idx], 'blue');
-                    const div = document.createElement('div');
-                    div.innerHTML = html;
-                    fragment.appendChild(div.firstElementChild);
-                }
-            });
-            
-            container.innerHTML = '';
-            container.appendChild(fragment);
-        }
-
-        function renderStandingsTable(data, title, dotClass, colorTheme) {
-            if (!data?.rows?.length) return '';
-            
-            const filteredRows = data.rows.filter(row => 
-                row.some(cell => cell.value && cell.value.toString().trim() !== '')
-            );
-            if (filteredRows.length === 0) return '';
-
-            const firstRow = filteredRows[0];
-            const isHeaderRow = firstRow.some(cell => {
-                const val = cell.value.toString().toLowerCase();
-                return val.includes('đội') || val.includes('điểm') || val.includes('hệ số') || val.includes('trận');
-            });
-
-            let html = `<div class="card"><div class="card-title ${colorTheme}"><span class="icon ${colorTheme}"><span class="group-dot ${dotClass}"></span></span>${title}</div><table><thead><tr>`;
-
-            if (isHeaderRow) {
-                html += firstRow.map(cell => 
-                    `<th class="${colorTheme === 'red' ? 'red' : 'blue'}">${cell.value || '-'}</th>`
-                ).join('');
-                html += '</tr></thead><tbody>';
-                filteredRows.shift();
-            } else {
-                html += ['Đội', 'Điểm', 'Hệ số'].map(h => 
-                    `<th class="${colorTheme === 'red' ? 'red' : 'blue'}">${h}</th>`
-                ).join('');
-                html += '</tr></thead><tbody>';
-            }
-
-            html += filteredRows.map(row => {
-                const cells = row.map((cell, i) => {
-                    const bgStyle = !isDefaultColor(cell.bg) ? `background-color:${cell.bg};` : '';
-                    const colorStyle = !isDefaultColor(cell.color) ? `color:${cell.color};` : '';
-                    const style = bgStyle + colorStyle;
-                    
-                    let cellClass = '';
-                    if (i === 1 && !style) cellClass = `points-cell ${colorTheme}`;
-                    else if (i === 2 && !style) cellClass = 'ratio-cell';
-                    
-                    return `<td class="${cellClass}" style="${style}">${cell.value || ''}</td>`;
-                }).join('');
-                return `<tr>${cells}</tr>`;
-            }).join('');
-            
-            html += '</tbody></table></div>';
-            return html;
-        }
-
-        function renderVongBang() {
-            const container = document.getElementById('vongbang-container');
-            const titles = ['BẢNG A','BẢNG B','BẢNG C','BẢNG D','BẢNG E','BẢNG F','BẢNG G','BẢNG H'];
-            
-            if (!APP_DATA.vongbang?.ranges?.length) {
-                container.innerHTML = '<div class="error-msg">Không thể tải dữ liệu vòng bảng.</div>';
-                return;
-            }
-            
-            const fragment = document.createDocumentFragment();
-            
-            APP_DATA.vongbang.ranges.forEach((data, idx) => {
-                if (data?.rows?.length > 0) {
-                    const section = document.createElement('div');
-                    section.className = 'round-section';
-                    section.innerHTML = `
-                        <div class="round-header">📍 ${titles[idx]}</div>
-                        ${renderMatchTable(data, 'Kết quả ' + titles[idx], 'blue')}
-                    `;
-                    fragment.appendChild(section);
-                }
-            });
-            
-            container.innerHTML = '';
-            if (fragment.children.length === 0) {
-                container.innerHTML = '<div class="error-msg">Không có dữ liệu vòng bảng.</div>';
-            } else {
-                container.appendChild(fragment);
-            }
-        }
-
-        function renderSeriA() {
-            const container = document.getElementById('seria-container');
-            const titles = { r16: 'Vòng 1/16 - Seri A', qf: 'Tứ kết - Seri A', sf: 'Bán kết - Seri A', f: 'Chung kết - Seri A' };
-            const keys = ['r16','qf','sf','f','sodo'];
-            
-            const fragment = document.createDocumentFragment();
-            
-            keys.forEach(k => {
-                const data = APP_DATA.seria?.[k];
-                if (!data?.rows?.length) return;
-                
-                const section = document.createElement('div');
-                section.className = 'round-section';
-                
-                if (k === 'sodo') {
-                    section.innerHTML = renderSodoTable(data, 'blue');
-                } else {
-                    section.innerHTML = `
-                        <div class="round-header">🔵 ${titles[k]}</div>
-                        ${renderMatchTable(data, titles[k], 'blue')}
-                    `;
-                }
-                fragment.appendChild(section);
-            });
-            
-            container.innerHTML = '';
-            container.appendChild(fragment.children.length ? fragment : (() => {
-                const d = document.createElement('div');
-                d.className = 'error-msg';
-                d.textContent = 'Chưa có dữ liệu Seri A';
-                return d;
-            })());
-        }
-
-        function renderSeriB() {
-            const container = document.getElementById('serib-container');
-            const titles = { r16: 'Vòng 1/16 - Seri B', qf: 'Tứ kết - Seri B', sf: 'Bán kết - Seri B', f: 'Chung kết - Seri B' };
-            const keys = ['r16','qf','sf','f','sodo'];
-            
-            const fragment = document.createDocumentFragment();
-            
-            keys.forEach(k => {
-                const data = APP_DATA.serib?.[k];
-                if (!data?.rows?.length) return;
-                
-                const section = document.createElement('div');
-                section.className = 'round-section';
-                
-                if (k === 'sodo') {
-                    section.innerHTML = renderSodoTable(data, 'red');
-                } else {
-                    section.innerHTML = `
-                        <div class="round-header">🔴 ${titles[k]}</div>
-                        ${renderMatchTable(data, titles[k], 'red')}
-                    `;
-                }
-                fragment.appendChild(section);
-            });
-            
-            container.innerHTML = '';
-            container.appendChild(fragment.children.length ? fragment : (() => {
-                const d = document.createElement('div');
-                d.className = 'error-msg';
-                d.textContent = 'Chưa có dữ liệu Seri B';
-                return d;
-            })());
-        }
-
-        function renderMatchTable(data, title, colorTheme) {
-            if (!data?.rows?.length) return '';
-            
-            const filteredRows = data.rows.filter(row => 
-                row.some(cell => cell.value && cell.value.toString().trim() !== '')
-            );
-            if (filteredRows.length === 0) return '';
-
-            const thClass = colorTheme === 'red' ? 'red' : 'blue';
-            const firstRow = filteredRows[0];
-            const headerCells = firstRow.map(cell => 
-                `<th class="${thClass}">${cell.value || '-'}</th>`
-            ).join('');
-            
-            const bodyRows = filteredRows.slice(1).map(row => {
-                const cells = row.map(cell => {
-                    const bgStyle = !isDefaultColor(cell.bg) ? `background-color:${cell.bg};` : '';
-                    const colorStyle = !isDefaultColor(cell.color) ? `color:${cell.color};` : '';
-                    return `<td style="${bgStyle}${colorStyle}">${cell.value || ''}</td>`;
-                }).join('');
-                return `<tr>${cells}</tr>`;
-            }).join('');
-            
-            return `<div class="card"><div class="card-title ${colorTheme}"><span class="icon ${colorTheme}">🏆</span>${title}</div><table><thead><tr>${headerCells}</tr></thead><tbody>${bodyRows}</tbody></table></div>`;
-        }
-
-        function renderSodoTable(data, colorTheme) {
-            if (!data?.rows?.length) return '';
-            
-            const filteredRows = data.rows.filter(row => 
-                row.some(cell => cell.value && cell.value.toString().trim() !== '')
-            );
-            if (filteredRows.length === 0) return '';
-
-            const firstRow = filteredRows[0];
-            const headerCells = firstRow.map(cell => {
-                const bgStyle = !isDefaultColor(cell.bg) ? `background-color:${cell.bg};` : '';
-                const colorStyle = !isDefaultColor(cell.color) ? `color:${cell.color};` : '';
-                return `<th style="${bgStyle}${colorStyle}">${cell.value || ''}</th>`;
-            }).join('');
-            
-            const bodyRows = filteredRows.slice(1).map(row => {
-                const cells = row.map(cell => {
-                    const bgStyle = !isDefaultColor(cell.bg) ? `background-color:${cell.bg};` : '';
-                    const colorStyle = !isDefaultColor(cell.color) ? `color:${cell.color};` : '';
-                    return `<td style="${bgStyle}${colorStyle}">${cell.value || ''}</td>`;
-                }).join('');
-                return `<tr>${cells}</tr>`;
-            }).join('');
-            
-            return `<div class="card" style="padding:8px;overflow-x:auto;"><div class="card-title ${colorTheme}"><span class="icon ${colorTheme}">📋</span>BẢNG THÀNH TÍCH</div><table class="sodo-table"><thead><tr>${headerCells}</tr></thead><tbody>${bodyRows}</tbody></table></div>`;
-        }
-
-        // ================== KHỞI CHẠY ==================
-        fetchData();
-        REFRESH_TIMER = setInterval(fetchData, ACTIVE_REFRESH);
-    </script>
 </body>
 </html>
