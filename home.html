@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>🏆PICKLEBALL CUP</title>
+<title>🏆DTD PICKLEBALL CUP</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -130,7 +130,6 @@
     padding: 5px 0;
   }
 
-  /* ✅ FIX: Thêm box-sizing: border-box để width: 80px bao gồm cả padding + border */
   .sponsor-item {
     width: 80px;
     height: 80px;
@@ -138,8 +137,8 @@
     border-radius: 12px;
     background: linear-gradient(145deg, #1f1f1f, #0f0f0f);
     border: 2px solid rgba(255,255,255,0.1);
-    padding: 6px; /* giảm nhẹ padding để logo bên trong to hơn một chút */
-    box-sizing: border-box; /* 🔑 KEY FIX */
+    padding: 6px;
+    box-sizing: border-box;
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     position: relative;
     overflow: hidden;
@@ -287,6 +286,7 @@
     letter-spacing: 1px;
     text-shadow: 0 2px 4px black;
     position: relative;
+    text-align: center;
   }
 
   .card-label::after {
@@ -331,6 +331,107 @@
     background: linear-gradient(45deg, #005bea, #1877f2);
   }
 
+  /* ===== NEW SECTION: Vị trí sân thi đấu & Hình ảnh giải đấu ===== */
+  .info-cards-wrapper {
+    margin-top: 50px;
+    width: 100%;
+  }
+
+  .info-cards-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    width: 100%;
+    animation: fadeInUp 1s ease-out;
+  }
+
+  .info-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    padding: 20px 15px;
+    border-radius: 15px;
+    background: var(--glass-bg);
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+    min-height: 140px;
+    justify-content: center;
+  }
+
+  .info-card::before {
+    content: '';
+    position: absolute;
+    top: -2px; left: -2px; right: -2px; bottom: -2px;
+    background: linear-gradient(45deg, var(--primary-color), transparent, var(--secondary-color));
+    border-radius: 15px;
+    opacity: 0;
+    z-index: -1;
+    transition: opacity 0.3s;
+  }
+
+  .info-card:hover {
+    transform: translateY(-8px) scale(1.03);
+    border-color: var(--primary-color);
+    box-shadow: 0 15px 35px rgba(0, 242, 255, 0.3), 0 0 25px rgba(0, 242, 255, 0.2);
+  }
+
+  .info-card:hover::before {
+    opacity: 0.3;
+  }
+
+  .info-card-icon {
+    font-size: 38px;
+    margin-bottom: 12px;
+    filter: drop-shadow(0 0 8px rgba(0, 242, 255, 0.6));
+    transition: transform 0.4s ease;
+  }
+
+  .info-card:hover .info-card-icon {
+    transform: scale(1.2) rotate(-5deg);
+  }
+
+  .info-card-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: center;
+    text-shadow: 0 2px 4px black;
+    line-height: 1.3;
+  }
+
+  .info-card-cta {
+    margin-top: 10px;
+    font-size: 11px;
+    color: var(--secondary-color);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0.8;
+    transition: opacity 0.3s;
+  }
+
+  .info-card:hover .info-card-cta {
+    opacity: 1;
+    color: var(--primary-color);
+  }
+
+  .footer-credit {
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 1px;
+  }
+
   @keyframes slideDown {
     from { transform: translateY(-50px); opacity: 0; }
     to { transform: translateY(0); opacity: 1; }
@@ -353,6 +454,10 @@
       max-width: 240px;
     }
     .sponsors-title { font-size: 12px; letter-spacing: 2px; }
+    .info-card { padding: 15px 10px; min-height: 120px; }
+    .info-card-icon { font-size: 32px; }
+    .info-card-title { font-size: 12px; }
+    .info-cards-container { gap: 10px; }
   }
 </style>
 </head>
@@ -373,22 +478,22 @@
     <div class="sponsors-title">Nhà Tài Trợ</div>
     <div class="sponsors-grid">
       <a href="https://www.facebook.com/nhathuocducnghia" target="_blank" rel="noopener" class="sponsor-item" title="Nhà tài trợ 1">
-        <img src="logo1.jpeg" alt="nhathuocducnghia" onerror="this.src='https://placehold.co/120x120/1a1a1a/00f2ff?text=Logo+1'">
+        <img src="logo1.jpeg" alt="Nhà tài trợ 1" onerror="this.src='https://placehold.co/120x120/1a1a1a/00f2ff?text=Logo+1'">
       </a>
       <a href="https://www.facebook.com/dtdlamdong" target="_blank" rel="noopener" class="sponsor-item" title="Nhà tài trợ 2">
-        <img src="logo2.jpeg" alt="dtdlamdong" onerror="this.src='https://placehold.co/120x120/1a1a1a/00f2ff?text=Logo+2'">
+        <img src="logo2.jpeg" alt="Nhà tài trợ 2" onerror="this.src='https://placehold.co/120x120/1a1a1a/00f2ff?text=Logo+2'">
       </a>
       <a href="https://www.facebook.com/batdongsanngocthientam" target="_blank" rel="noopener" class="sponsor-item" title="Nhà tài trợ 3">
-        <img src="logo3.jpeg" alt="batdongsanngocthientam" onerror="this.src='https://placehold.co/120x120/1a1a1a/00f2ff?text=Logo+3'">
+        <img src="logo3.jpeg" alt="Nhà tài trợ 3" onerror="this.src='https://placehold.co/120x120/1a1a1a/00f2ff?text=Logo+3'">
       </a>
       <a href="https://www.google.com/search?client=firefox-b-e&q=n%E1%BB%99i+th%E1%BA%A5t+minh+qu%C3%A2n" target="_blank" rel="noopener" class="sponsor-item" title="Nhà tài trợ 4">
-        <img src="logo4.jpeg" alt="Minh Quân" onerror="this.src='https://placehold.co/120x120/1a1a1a/00f2ff?text=Logo+4'">
+        <img src="logo4.jpeg" alt="Nhà tài trợ 4" onerror="this.src='https://placehold.co/120x120/1a1a1a/00f2ff?text=Logo+4'">
       </a>
       <a href="https://www.facebook.com/RITA.LamDong/" target="_blank" rel="noopener" class="sponsor-item" title="Nhà tài trợ 5">
-        <img src="logo5.jpeg" alt="RITA" onerror="this.src='https://placehold.co/120x120/1a1a1a/00f2ff?text=Logo+5'">
+        <img src="logo5.jpeg" alt="Nhà tài trợ 5" onerror="this.src='https://placehold.co/120x120/1a1a1a/00f2ff?text=Logo+5'">
       </a>
       <a href="https://tamphuclamdong.com" target="_blank" rel="noopener" class="sponsor-item" title="Nhà tài trợ 6">
-        <img src="logo6.jpeg" alt="TÂM PHÚC" onerror="this.src='https://placehold.co/120x120/1a1a1a/00f2ff?text=Logo+6'">
+        <img src="logo6.jpeg" alt="Nhà tài trợ 6" onerror="this.src='https://placehold.co/120x120/1a1a1a/00f2ff?text=Logo+6'">
       </a>
     </div>
   </div>
@@ -413,6 +518,25 @@
       </div>
       <div class="card-label">ĐÔI HỖN HỢP 5.25</div>
     </a>
+  </div>
+
+  <!-- ===== NEW SECTION: Vị trí sân thi đấu & Hình ảnh giải đấu ===== -->
+  <div class="info-cards-wrapper">
+    <div class="info-cards-container">
+      <a href="https://www.google.com/maps/place/Lego+8+-+Pickleball+%E2%80%A2+Coffee+%E2%80%A2+Gym/@11.7238852,108.3641467,17z/data=!4m6!3m5!1s0x317147002de8b2e1:0x7e9da88acc608d54!8m2!3d11.72388!4d108.3667216!16s%2Fg%2F11wvybln4s?entry=ttu&g_ep=EgoyMDI2MDgwNS4xIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener" class="info-card" title="Xem vị trí sân trên Google Maps">
+        <div class="info-card-icon">📍</div>
+        <div class="info-card-title">Vị trí<br>sân thi đấu</div>
+        <div class="info-card-cta">Xem bản đồ ›</div>
+      </a>
+
+      <a href="https://ritapick.github.io/pickleball/time.html" target="_blank" rel="noopener" class="info-card" title="Xem hình ảnh giải đấu">
+        <div class="info-card-icon">📸</div>
+        <div class="info-card-title">Hình ảnh<br>giải đấu</div>
+        <div class="info-card-cta">Xem album ›</div>
+      </a>
+    </div>
+
+    <div class="footer-credit">© 2026 DTD PICKLEBALL CUP</div>
   </div>
 
 <script>
